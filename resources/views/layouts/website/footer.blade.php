@@ -181,6 +181,18 @@
     mobileBackdrop.addEventListener('click', closeMobileSidebar);
   }
 
+  // Dark Mode Toggle Logic
+  function toggleDarkMode() {
+    const isDark = document.documentElement.classList.contains('dark');
+    if (isDark) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    }
+  }
+
   // Auto-close drawer when any link is clicked
   if (mobileNavLinks) {
     mobileNavLinks.forEach(link => {
