@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+    <circle cx="40" cy="40" r="38" fill="#111827" stroke="#9CA3AF" stroke-width="2" />
+    <circle cx="40" cy="40" r="22" fill="#FFFFFF" stroke="#9CA3AF" stroke-width="1.5" />
+    <path d="M40 18 A22 22 0 0 1 62 40 L40 40 Z" fill="#0066B1" />
+    <path d="M40 40 L18 40 A22 22 0 0 1 40 62 Z" fill="#0066B1" />
+    <text x="40" y="13" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="8.5" letter-spacing="3">BMW</text>
+</svg>

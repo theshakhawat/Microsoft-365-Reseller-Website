@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" fill="none">
+    <path d="M22 10 C 22 40, 20 65, 50 72 C 80 65, 78 40, 78 10 C 72 20, 68 30, 62 42 C 55 52, 45 52, 38 42 C 32 30, 28 20, 22 10 Z" fill="none" stroke="#1F36C7" stroke-width="7" stroke-linecap="round" />
+    <circle cx="28" cy="16" r="2.5" fill="#1F36C7" />
+    <circle cx="72" cy="16" r="2.5" fill="#1F36C7" />
+    <circle cx="50" cy="60" r="3" fill="#1F36C7" />
+    <text x="50" y="78" text-anchor="middle" font-family="'Times New Roman', serif" font-style="italic" font-weight="bold" font-size="9" fill="#1F36C7">Unilever</text>
+</svg>

@@ -99,6 +99,48 @@
                 <span>Pricing Plans</span>
             </a>
 
+            <!-- Key Features -->
+            <a href="{{ route('admin.key-features.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('admin.key-features.*') ? 'bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }} transition-colors">
+                <i class="fa-solid fa-wand-magic-sparkles text-sm w-5 text-center {{ request()->routeIs('admin.key-features.*') ? 'text-white' : 'text-slate-400 dark:text-slate-500' }}"></i>
+                <span>Key Features</span>
+            </a>
+
+            <!-- Included Apps (What's Included) -->
+            <a href="{{ route('admin.included-apps.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('admin.included-apps.*') ? 'bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }} transition-colors">
+                <i class="fa-solid fa-shapes text-sm w-5 text-center {{ request()->routeIs('admin.included-apps.*') ? 'text-white' : 'text-slate-400 dark:text-slate-500' }}"></i>
+                <span>Included Apps</span>
+            </a>
+
+            <!-- Trusted Brands (Trusted by millions) -->
+            <a href="{{ route('admin.trusted-brands.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('admin.trusted-brands.*') ? 'bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }} transition-colors">
+                <i class="fa-solid fa-award text-sm w-5 text-center {{ request()->routeIs('admin.trusted-brands.*') ? 'text-white' : 'text-slate-400 dark:text-slate-500' }}"></i>
+                <span>Trusted Brands</span>
+            </a>
+
+            <!-- More Benefits (Explore Even More) -->
+            <a href="{{ route('admin.more-benefits.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('admin.more-benefits.*') ? 'bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }} transition-colors">
+                <i class="fa-solid fa-grid-2-plus text-sm w-5 text-center {{ request()->routeIs('admin.more-benefits.*') ? 'text-white' : 'text-slate-400 dark:text-slate-500' }}"></i>
+                <span>More Benefits</span>
+            </a>
+
+            <!-- AI Features (Intelligent Capabilities) -->
+            <a href="{{ route('admin.ai-features.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('admin.ai-features.*') ? 'bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }} transition-colors">
+                <i class="fa-solid fa-robot text-sm w-5 text-center {{ request()->routeIs('admin.ai-features.*') ? 'text-white' : 'text-slate-400 dark:text-slate-500' }}"></i>
+                <span>AI Features</span>
+            </a>
+
+            <!-- FAQs (Did you know?) -->
+            <a href="{{ route('admin.faqs.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('admin.faqs.*') ? 'bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }} transition-colors">
+                <i class="fa-solid fa-circle-question text-sm w-5 text-center {{ request()->routeIs('admin.faqs.*') ? 'text-white' : 'text-slate-400 dark:text-slate-500' }}"></i>
+                <span>FAQs</span>
+            </a>
+
+            <!-- How It Works (4 Steps) -->
+            <a href="{{ route('admin.how-it-works.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('admin.how-it-works.*') ? 'bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }} transition-colors">
+                <i class="fa-solid fa-list-check text-sm w-5 text-center {{ request()->routeIs('admin.how-it-works.*') ? 'text-white' : 'text-slate-400 dark:text-slate-500' }}"></i>
+                <span>How It Works</span>
+            </a>
+
             <div class="px-3 pb-1.5 pt-4 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Administration
             </div>
