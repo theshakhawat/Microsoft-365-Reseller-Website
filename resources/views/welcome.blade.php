@@ -1018,33 +1018,34 @@
                 <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-1.5">Get In Touch</h3>
                 <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-6">Have questions regarding packages, renewals, or enterprise licenses? Send us a note.</p>
 
-                <form onsubmit="handleContactSubmit(event)" class="space-y-4">
+                <form id="storefront-contact-form" onsubmit="handleContactSubmit(event)" class="space-y-4">
+                    @csrf
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Your Name</label>
-                        <input type="text" id="contact-name" placeholder="e.g. Tanvir Hasan" required class="w-full bg-[#fbf9f6] dark:bg-slate-900 border border-slate-300/80 dark:border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#0067b8] dark:focus:border-sky-400 focus:bg-white dark:focus:bg-slate-900 transition-all">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Your Name <span class="text-rose-500">*</span></label>
+                        <input type="text" id="contact-name" name="name" placeholder="e.g. Tanvir Hasan" required class="w-full bg-[#fbf9f6] dark:bg-slate-900 border border-slate-300/80 dark:border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#0067b8] dark:focus:border-sky-400 focus:bg-white dark:focus:bg-slate-900 transition-all">
                     </div>
 
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
-                            <input type="email" id="contact-email" placeholder="name@domain.com" required class="w-full bg-[#fbf9f6] dark:bg-slate-900 border border-slate-300/80 dark:border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#0067b8] dark:focus:border-sky-400 focus:bg-white dark:focus:bg-slate-900 transition-all">
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Email Address <span class="text-rose-500">*</span></label>
+                            <input type="email" id="contact-email" name="email" placeholder="name@domain.com" required class="w-full bg-[#fbf9f6] dark:bg-slate-900 border border-slate-300/80 dark:border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#0067b8] dark:focus:border-sky-400 focus:bg-white dark:focus:bg-slate-900 transition-all">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Phone / WhatsApp Number</label>
-                            <input type="text" id="contact-phone" placeholder="017XXXXXXXX" required class="w-full bg-[#fbf9f6] dark:bg-slate-900 border border-slate-300/80 dark:border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#0067b8] dark:focus:border-sky-400 focus:bg-white dark:focus:bg-slate-900 transition-all">
+                            <input type="text" id="contact-phone" name="phone" placeholder="017XXXXXXXX" class="w-full bg-[#fbf9f6] dark:bg-slate-900 border border-slate-300/80 dark:border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#0067b8] dark:focus:border-sky-400 focus:bg-white dark:focus:bg-slate-900 transition-all">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Message / Requirement</label>
-                        <textarea id="contact-message" rows="3" placeholder="How can our Microsoft team assist you today?" required class="w-full bg-[#fbf9f6] dark:bg-slate-900 border border-slate-300/80 dark:border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#0067b8] dark:focus:border-sky-400 focus:bg-white dark:focus:bg-slate-900 transition-all"></textarea>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Message / Requirement <span class="text-rose-500">*</span></label>
+                        <textarea id="contact-message" name="message" rows="3" placeholder="How can our Microsoft team assist you today?" required class="w-full bg-[#fbf9f6] dark:bg-slate-900 border border-slate-300/80 dark:border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#0067b8] dark:focus:border-sky-400 focus:bg-white dark:focus:bg-slate-900 transition-all"></textarea>
                     </div>
 
                     <button type="submit" id="contact-submit-btn" class="w-full bg-[#0067b8] hover:bg-[#005da6] dark:bg-sky-600 dark:hover:bg-sky-500 text-white font-bold py-3.5 rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer">
-                        <i class="fa-regular fa-paper-plane text-xs"></i>
-                        <span>Send Message</span>
+                        <i id="contact-btn-icon" class="fa-regular fa-paper-plane text-xs"></i>
+                        <span id="contact-btn-text">Send Message</span>
                     </button>
-                    <p id="contact-status" class="hidden text-center text-xs font-semibold text-emerald-600 dark:text-emerald-400 pt-2"></p>
+                    <div id="contact-status" class="hidden text-center text-xs font-semibold p-3 rounded-xl"></div>
                 </form>
             </div>
 
@@ -1240,21 +1241,65 @@
         });
     }
 
-    // Contact Form Handler
-    function handleContactSubmit(e) {
+    // Dynamic Contact Form Handler
+    async function handleContactSubmit(e) {
         e.preventDefault();
-        const name = document.getElementById('contact-name').value;
-        const email = document.getElementById('contact-email').value;
-        const phone = document.getElementById('contact-phone').value;
-        const msg = document.getElementById('contact-message').value;
+        const form = document.getElementById('storefront-contact-form');
+        const submitBtn = document.getElementById('contact-submit-btn');
+        const btnIcon = document.getElementById('contact-btn-icon');
+        const btnText = document.getElementById('contact-btn-text');
         const status = document.getElementById('contact-status');
 
-        const waText = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${msg}`);
-        window.open(`https://wa.me/8801342325558?text=${waText}`, '_blank');
+        const name = document.getElementById('contact-name').value.trim();
+        const email = document.getElementById('contact-email').value.trim();
+        const phone = document.getElementById('contact-phone').value.trim();
+        const message = document.getElementById('contact-message').value.trim();
 
-        if (status) {
-            status.classList.remove('hidden');
-            status.innerText = 'Thank you! Redirecting to WhatsApp sales desk...';
+        if (!name || !email || !message) return;
+
+        // Set Loading State
+        submitBtn.disabled = true;
+        btnIcon.className = 'fa-solid fa-circle-notch fa-spin text-xs';
+        btnText.innerText = 'Sending message...';
+        status.className = 'hidden';
+
+        try {
+            const response = await fetch("{{ route('contact.store') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    message: message
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                status.className = 'block text-center text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 p-3.5 rounded-xl animate-in fade-in';
+                status.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> ${data.message}`;
+                form.reset();
+            } else {
+                let errorMsg = data.message || 'Something went wrong. Please try again.';
+                if (data.errors) {
+                    errorMsg = Object.values(data.errors).flat().join('<br>');
+                }
+                status.className = 'block text-center text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 p-3.5 rounded-xl animate-in fade-in';
+                status.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5"></i> ${errorMsg}`;
+            }
+        } catch (error) {
+            status.className = 'block text-center text-xs font-semibold bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 p-3.5 rounded-xl animate-in fade-in';
+            status.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5"></i> Unable to send message right now. Please reach us via WhatsApp or Phone.`;
+        } finally {
+            submitBtn.disabled = false;
+            btnIcon.className = 'fa-regular fa-paper-plane text-xs';
+            btnText.innerText = 'Send Message';
         }
     }
 

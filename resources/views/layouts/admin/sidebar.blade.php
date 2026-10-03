@@ -135,6 +135,22 @@
                 <span>FAQs</span>
             </a>
 
+            <!-- Contact Messages / Inquiries -->
+            @php
+                $unreadMessagesCount = \App\Models\ContactMessage::where('is_read', false)->count();
+            @endphp
+            <a href="{{ route('admin.contact-messages.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('admin.contact-messages.*') ? 'bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }} transition-colors">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-envelope text-sm w-5 text-center {{ request()->routeIs('admin.contact-messages.*') ? 'text-white' : 'text-slate-400 dark:text-slate-500' }}"></i>
+                    <span>Contact Inquiries</span>
+                </div>
+                @if($unreadMessagesCount > 0)
+                    <span class="px-2 py-0.5 text-[10px] font-black rounded-full {{ request()->routeIs('admin.contact-messages.*') ? 'bg-white text-[#0067b8]' : 'bg-rose-500 text-white' }} animate-pulse">
+                        {{ $unreadMessagesCount }}
+                    </span>
+                @endif
+            </a>
+
             <!-- How It Works (4 Steps) -->
             <a href="{{ route('admin.how-it-works.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold {{ request()->routeIs('admin.how-it-works.*') ? 'bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }} transition-colors">
                 <i class="fa-solid fa-list-check text-sm w-5 text-center {{ request()->routeIs('admin.how-it-works.*') ? 'text-white' : 'text-slate-400 dark:text-slate-500' }}"></i>

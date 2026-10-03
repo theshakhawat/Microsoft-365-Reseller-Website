@@ -23,6 +23,9 @@ Route::get('/', function () {
     return view('welcome', compact('plans', 'howItWorks', 'keyFeatures', 'productivityApps', 'securityApps', 'trustedBrands', 'moreBenefits', 'aiFeatures', 'faqs'));
 })->name('home');
 
+// Public Contact Form Submission Route
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+
 /*
 |--------------------------------------------------------------------------
 | Guest Authentication Routes
@@ -112,6 +115,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/faqs/{faq}', [App\Http\Controllers\AdminFaqController::class, 'update'])->name('faqs.update');
     Route::post('/faqs/{faq}/toggle', [App\Http\Controllers\AdminFaqController::class, 'toggleStatus'])->name('faqs.toggle');
     Route::delete('/faqs/{faq}', [App\Http\Controllers\AdminFaqController::class, 'destroy'])->name('faqs.destroy');
+
+    // Contact Messages & Inquiries Management CRUD Routes
+    Route::get('/contact-messages', [App\Http\Controllers\AdminContactMessageController::class, 'index'])->name('contact-messages.index');
+    Route::post('/contact-messages/mark-all-read', [App\Http\Controllers\AdminContactMessageController::class, 'markAllAsRead'])->name('contact-messages.mark-all-read');
+    Route::get('/contact-messages/{contactMessage}', [App\Http\Controllers\AdminContactMessageController::class, 'show'])->name('contact-messages.show');
+    Route::post('/contact-messages/{contactMessage}/toggle-read', [App\Http\Controllers\AdminContactMessageController::class, 'toggleRead'])->name('contact-messages.toggle-read');
+    Route::delete('/contact-messages/{contactMessage}', [App\Http\Controllers\AdminContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
 
     // Pricing Plans Management CRUD Routes
     Route::get('/plans', [App\Http\Controllers\AdminPricingPlanController::class, 'index'])->name('plans.index');
