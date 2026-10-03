@@ -5,121 +5,219 @@
 @section('content')
 
 <!-- ========================================== -->
-<!-- 1. HERO SECTION (Microsoft Style + Reseller) -->
+<!-- 1. HERO SECTION (Microsoft 365 All-in-One) -->
 <!-- ========================================== -->
-<section class="relative bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9] to-[#e2e8f0]/40 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 pt-10 pb-16 lg:pt-16 lg:pb-24 overflow-hidden border-b border-slate-200/80 dark:border-slate-800">
-    <!-- Subtle Microsoft ambient glows -->
-    <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-sky-200/40 dark:bg-sky-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
-    <div class="absolute top-40 right-10 w-[400px] h-[400px] bg-indigo-200/30 dark:bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<section class="relative bg-[#edf4fc] dark:bg-slate-950 pt-10 sm:pt-14 lg:pt-16 pb-12 sm:pb-16 lg:pb-20 overflow-hidden border-b border-slate-200/80 dark:border-slate-800">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Background Image with smooth light/dark overlay -->
+    <div class="absolute inset-0 z-0 pointer-events-none">
+        <img src="{{ asset('assets/img/bg.png') }}" alt="Background" class="w-full h-full object-cover object-center opacity-70 dark:opacity-20 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#edf4fc]/70 via-[#f5f9fe]/40 to-[#edf4fc]/90 dark:from-slate-950/90 dark:via-slate-900/85 dark:to-slate-950"></div>
+    </div>
 
-        <!-- Hero Header & Pill Selector -->
-        <div class="text-center max-w-4xl mx-auto space-y-5" data-aos="fade-up">
+    <!-- Ambient colorful background glows -->
+    <div class="absolute -top-16 left-1/4 w-[500px] h-[500px] bg-sky-300/20 dark:bg-sky-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="absolute top-10 right-10 w-[450px] h-[450px] bg-indigo-300/20 dark:bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="absolute -bottom-10 right-1/3 w-[350px] h-[350px] bg-amber-200/20 dark:bg-amber-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
 
-            <!-- Microsoft Official Reseller Tag -->
-            <div class="inline-flex items-center gap-2.5 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm px-4 py-1.5 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-200">
-                <div class="grid grid-cols-2 gap-0.5 w-3.5 h-3.5 shrink-0">
-                    <div class="bg-[#f25022] rounded-[1px]"></div>
-                    <div class="bg-[#7fba00] rounded-[1px]"></div>
-                    <div class="bg-[#00a4ef] rounded-[1px]"></div>
-                    <div class="bg-[#ffb900] rounded-[1px]"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Top Banner Grid: Left Headline & CTAs (5 cols) + Right Visual Mockup (7 cols) -->
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-8 items-center">
+
+            <!-- Left Column: Copy & Actions (5 cols) -->
+            <div class="lg:col-span-5 space-y-5 text-left" data-aos="fade-right">
+
+                <!-- Kicker / Category Tag -->
+                <p class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-[#0067b8] dark:text-sky-400">
+                    WORK SMARTER. TOGETHER.
+                </p>
+
+                <!-- Main Headline (moderated size) -->
+                <h1 class="text-3xl sm:text-4xl lg:text-[40px] xl:text-[46px] font-black text-slate-900 dark:text-white tracking-tight leading-[1.2] sm:leading-[1.18] lg:leading-[1.18]">
+                    The all-in-one<br />
+                    productivity platform<br />
+                    for <span class="text-[#0067b8] dark:text-sky-400">a more connected world</span>
+                </h1>
+
+                <!-- Subheading Description -->
+                <p class="text-sm sm:text-[15px] lg:text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-lg">
+                    Microsoft 365 brings together your favorite apps, AI-powered tools, cloud storage, and advanced security — all in one place, so you can create, collaborate, and get more done from anywhere.
+                </p>
+
+                <!-- Action CTA Buttons -->
+                <div class="flex flex-wrap items-center gap-3.5 pt-2">
+                    <a href="#plans" class="bg-[#0067b8] hover:bg-[#005a9e] text-white font-bold px-6 sm:px-7 py-3.5 rounded-xl text-sm sm:text-[15px] shadow-lg shadow-[#0067b8]/25 hover:shadow-xl transition-all flex items-center justify-center gap-2 group cursor-pointer active:scale-95">
+                        <span>Get Microsoft 365</span>
+                        <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                    </a>
+
+                    <a href="#plans" class="border border-[#0067b8] dark:border-sky-400 text-[#0067b8] dark:text-sky-300 hover:bg-[#0067b8]/5 dark:hover:bg-sky-950/40 bg-white/80 dark:bg-slate-900/60 font-bold px-6 sm:px-7 py-3.5 rounded-xl text-sm sm:text-[15px] transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-sm">
+                        <span>See plans and pricing</span>
+                    </a>
                 </div>
-                <span>Official Microsoft Cloud Partner & Reseller Bangladesh</span>
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+
             </div>
 
-            <!-- Main Headline (Inspired by PDF 1 & PDF 2) -->
-            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
-                Work smarter across <span class="text-brand-600 dark:text-sky-400">Microsoft 365</span><br class="hidden sm:inline" />
-                with <span class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-sky-500 bg-clip-text text-transparent">
-                    <svg class="w-8 h-8 sm:w-10 sm:h-10 inline-block -mt-1 text-purple-600 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="url(#copilot-grad)" />
-                        <defs>
-                            <linearGradient id="copilot-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#0078D4" />
-                                <stop offset="0.5" stop-color="#7B3FE4" />
-                                <stop offset="1" stop-color="#F25022" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    Copilot AI
-                </span>
-            </h1>
+            <!-- Right Column: Visual Mockup Illustration (7 cols - Larger & Expanded) -->
+            <div class="lg:col-span-7 relative flex items-center justify-center lg:justify-end" data-aos="fade-left" data-aos-delay="100">
+                <div class="relative w-full lg:-mr-4 xl:-mr-8 group">
+                    <img src="{{ asset('assets/img/banner.png') }}" alt="Microsoft 365 Productivity Platform & Copilot AI" class="w-full h-auto object-contain max-h-[520px] lg:max-h-[580px] drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
+                </div>
+            </div>
 
-            <!-- Subheadline -->
-            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed font-normal">
-                All the benefits of Microsoft 365 in one unified plan. Genuine cloud licensing, automated tenant onboarding, local BDT invoicing via bKash & Nagad, and 24/7 Service.
-            </p>
         </div>
 
-        <!-- 8 Product Elements Grid (Light Cards with Hover Effects) -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4 mt-10 items-stretch" data-aos="fade-up" data-aos-delay="100">
+        <!-- ==================================================== -->
+        <!-- Floating Bottom Apps Suite Strip (13 Microsoft Apps) -->
+        <!-- ==================================================== -->
+        <div class="mt-12 sm:mt-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none p-5 sm:p-7" data-aos="fade-up" data-aos-delay="150">
+            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 lg:grid-cols-13 gap-4 sm:gap-3 items-center text-center">
 
-            <!-- Word -->
-            <div class="group flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-blue-300 dark:hover:border-blue-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 flex items-center justify-center mb-2">
-                    <img src="{{ asset('assets/img/products/word.png') }}" alt="Microsoft Word" class="w-10 h-10 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
-                </div>
-                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#185abd] transition-colors">Word</h4>
+                <!-- 1. Copilot -->
+                <a href="#copilot-showcase" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <img src="{{ asset('assets/img/products/copilot.png') }}" alt="Copilot" class="w-9 h-9 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Copilot</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">AI assistant</span>
+                </a>
+
+                <!-- 2. Word -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <img src="{{ asset('assets/img/products/word.png') }}" alt="Word" class="w-9 h-9 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Word</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Create & edit</span>
+                </a>
+
+                <!-- 3. Excel -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <img src="{{ asset('assets/img/products/excel.png') }}" alt="Excel" class="w-9 h-9 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Excel</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Analyze & visualize</span>
+                </a>
+
+                <!-- 4. PowerPoint -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <img src="{{ asset('assets/img/products/powerpoint.png') }}" alt="PowerPoint" class="w-9 h-9 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">PowerPoint</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Present ideas</span>
+                </a>
+
+                <!-- 5. Outlook -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <img src="{{ asset('assets/img/products/outlook.png') }}" alt="Outlook" class="w-9 h-9 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Outlook</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Email & calendar</span>
+                </a>
+
+                <!-- 6. Teams -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <img src="{{ asset('assets/img/products/teams.png') }}" alt="Teams" class="w-9 h-9 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Teams</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Meet & collaborate</span>
+                </a>
+
+                <!-- 7. OneDrive -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <img src="{{ asset('assets/img/products/onedrive.png') }}" alt="OneDrive" class="w-9 h-9 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">OneDrive</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Cloud storage</span>
+                </a>
+
+                <!-- 8. SharePoint -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <svg class="w-9 h-9 transition-transform duration-200 group-hover:scale-110 drop-shadow-sm" viewBox="0 0 32 32" fill="none">
+                            <circle cx="21" cy="11" r="7" fill="#038387" fill-opacity="0.8" />
+                            <circle cx="11" cy="18" r="8" fill="#005B5E" />
+                            <circle cx="19" cy="20" r="9" fill="#00797C" />
+                            <rect x="2" y="7" width="14" height="18" rx="2.5" fill="#038387" />
+                            <path d="M11 11.5C11 10.7 10.3 10 9.5 10H6.5C5.7 10 5 10.7 5 11.5V13C5 13.8 5.7 14.5 6.5 14.5H9.5C10.3 14.5 11 15.2 11 16V17.5C11 18.3 10.3 19 9.5 19H6.5C5.7 19 5 18.3 5 17.5" stroke="white" stroke-width="1.6" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">SharePoint</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Content management</span>
+                </a>
+
+                <!-- 9. OneNote -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <svg class="w-9 h-9 transition-transform duration-200 group-hover:scale-110 drop-shadow-sm" viewBox="0 0 32 32" fill="none">
+                            <rect x="10" y="5" width="17" height="22" rx="3" fill="#7719AA" fill-opacity="0.85" />
+                            <rect x="5" y="7" width="14" height="18" rx="2.5" fill="#5C1387" />
+                            <path d="M8 19V13L13 19V13" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">OneNote</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Take notes</span>
+                </a>
+
+                <!-- 10. Forms -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <svg class="w-9 h-9 transition-transform duration-200 group-hover:scale-110 drop-shadow-sm" viewBox="0 0 32 32" fill="none">
+                            <rect x="10" y="5" width="17" height="22" rx="3" fill="#008272" fill-opacity="0.85" />
+                            <rect x="5" y="7" width="14" height="18" rx="2.5" fill="#025C51" />
+                            <path d="M12 11H7V21H9V17H11.5V15H9V13H12V11Z" fill="white" />
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Forms</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Create surveys</span>
+                </a>
+
+                <!-- 11. Planner -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <svg class="w-9 h-9 transition-transform duration-200 group-hover:scale-110 drop-shadow-sm" viewBox="0 0 32 32" fill="none">
+                            <rect x="6" y="6" width="20" height="20" rx="3" fill="#31752F" />
+                            <path d="M11 16L14 19L21 12" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Planner</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Plan & organize</span>
+                </a>
+
+                <!-- 12. Power Automate -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <svg class="w-9 h-9 transition-transform duration-200 group-hover:scale-110 drop-shadow-sm" viewBox="0 0 32 32" fill="none">
+                            <path d="M6 10L15 16L6 22V10Z" fill="#0066FF" />
+                            <path d="M15 10L24 16L15 22V10Z" fill="#0078D4" fill-opacity="0.85" />
+                            <path d="M24 10L28 13L24 16V10Z" fill="#002050" />
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Power Automate</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Automate workflows</span>
+                </a>
+
+                <!-- 13. Power BI -->
+                <a href="#included-apps" class="flex flex-col items-center justify-center group p-2 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center mb-2">
+                        <svg class="w-9 h-9 transition-transform duration-200 group-hover:scale-110 drop-shadow-sm" viewBox="0 0 32 32" fill="none">
+                            <rect x="6" y="18" width="4" height="8" rx="1" fill="#E6AD00" />
+                            <rect x="12" y="13" width="4" height="13" rx="1" fill="#F2C811" />
+                            <rect x="18" y="9" width="4" height="17" rx="1" fill="#F9DE66" />
+                            <rect x="24" y="6" width="4" height="20" rx="1" fill="#FCE999" />
+                        </svg>
+                    </div>
+                    <span class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Power BI</span>
+                    <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Business insights</span>
+                </a>
+
             </div>
-
-            <!-- Excel -->
-            <div class="group flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-emerald-300 dark:hover:border-emerald-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 flex items-center justify-center mb-2">
-                    <img src="{{ asset('assets/img/products/excel.png') }}" alt="Microsoft Excel" class="w-10 h-10 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
-                </div>
-                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#107c41] transition-colors">Excel</h4>
-            </div>
-
-            <!-- PowerPoint -->
-            <div class="group flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-orange-300 dark:hover:border-orange-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 flex items-center justify-center mb-2">
-                    <img src="{{ asset('assets/img/products/powerpoint.png') }}" alt="Microsoft PowerPoint" class="w-10 h-10 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
-                </div>
-                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#d83b01] transition-colors">PowerPoint</h4>
-            </div>
-
-            <!-- Outlook -->
-            <div class="group flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-sky-300 dark:hover:border-sky-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 flex items-center justify-center mb-2">
-                    <img src="{{ asset('assets/img/products/outlook.png') }}" alt="Microsoft Outlook" class="w-10 h-10 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
-                </div>
-                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#0078d4] transition-colors">Outlook</h4>
-            </div>
-
-            <!-- Teams -->
-            <div class="group flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 flex items-center justify-center mb-2">
-                    <img src="{{ asset('assets/img/products/teams.png') }}" alt="Microsoft Teams" class="w-10 h-10 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
-                </div>
-                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#6264a7] transition-colors">Teams</h4>
-            </div>
-
-            <!-- OneDrive -->
-            <div class="group flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-sky-300 dark:hover:border-sky-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 flex items-center justify-center mb-2">
-                    <img src="{{ asset('assets/img/products/onedrive.png') }}" alt="Microsoft OneDrive" class="w-10 h-10 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
-                </div>
-                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#0078d4] transition-colors">OneDrive 1TB</h4>
-            </div>
-
-            <!-- Copilot AI -->
-            <div class="group flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-purple-300 dark:hover:border-purple-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 flex items-center justify-center mb-2">
-                    <img src="{{ asset('assets/img/products/copilot.png') }}" alt="Microsoft Copilot AI" class="w-10 h-10 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-md">
-                </div>
-                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-purple-600 transition-colors">Copilot AI</h4>
-            </div>
-
-            <!-- Defender -->
-            <div class="group flex flex-col items-center justify-center text-center p-4 rounded-2xl bg-white/90 hover:bg-white dark:bg-slate-900/90 dark:hover:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-emerald-300 dark:hover:border-emerald-500 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 flex items-center justify-center mb-2">
-                    <img src="{{ asset('assets/img/products/defender.png') }}" alt="Microsoft Defender" class="w-10 h-10 object-contain transition-transform duration-200 group-hover:scale-110 drop-shadow-sm">
-                </div>
-                <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-700 transition-colors">Defender</h4>
-            </div>
-
         </div>
 
     </div>
@@ -537,162 +635,78 @@
             </p>
         </div>
 
-        <!-- 2 Annual Plan Cards Grid -->
+        <!-- Dynamic Plan Cards Grid -->
         <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
-
-            <!-- Plan 1: Microsoft 365 Basic -->
-            <div class="bg-white dark:bg-slate-800/90 rounded-3xl border border-slate-200 dark:border-slate-700 p-8 sm:p-9 flex flex-col justify-between shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600 transition-all relative" data-aos="fade-up" data-aos-delay="50">
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Microsoft 365 Basic</h3>
-
-                    <!-- Price -->
-                    <div class="mt-4 mb-1">
-                        <span class="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">৳2,490</span>
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">/year</span>
-                        <span class="text-xs text-slate-400 dark:text-slate-500 font-normal ml-1">($19.99/yr)</span>
-                    </div>
-
-                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
-                        Subscription automatically renews unless canceled in Microsoft account. <a href="#faq" class="underline text-brand-600 dark:text-sky-400">See terms</a>.
-                    </p>
-
-                    <!-- Action Button -->
-                    <div class="mb-8">
-                        <a href="https://wa.me/8801342325558?text=Hello%20I%20want%20to%20buy%20Microsoft%20365%20Basic%20Annual%20Plan" target="_blank" class="w-full bg-[#0f172a] dark:bg-slate-700 hover:bg-[#0067b8] dark:hover:bg-sky-600 text-white font-bold px-7 py-3.5 rounded-xl text-sm transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2 group">
-                            <span>Buy now</span>
-                            <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
-                        </a>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="h-px bg-slate-200/80 dark:bg-slate-700 mb-6"></div>
-
-                    <!-- Features List -->
-                    <div class="space-y-3.5 text-xs text-slate-700 dark:text-slate-300">
-                        <p class="font-bold text-slate-900 dark:text-white text-sm">Microsoft 365 Basic includes:</p>
-
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-slate-800 dark:text-slate-200 text-xs mt-0.5 shrink-0"></i>
-                            <span>For 1 person</span>
+            @forelse($plans as $plan)
+                <div class="bg-white dark:bg-slate-800/90 rounded-3xl {{ $plan->is_featured ? 'border-2 border-[#0067b8] dark:border-sky-500 shadow-xl hover:shadow-2xl' : 'border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600' }} p-8 sm:p-9 pt-10 flex flex-col justify-between transition-all relative mt-4 md:mt-0" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    
+                    @if($plan->badge)
+                        <div class="absolute -top-3.5 left-8 bg-[#0067b8] dark:bg-sky-500 text-white text-[11px] font-bold uppercase px-4 py-1 rounded-full tracking-wider shadow-md z-20 flex items-center gap-1.5 border border-white/40 dark:border-slate-900/40">
+                            <i class="fa-solid fa-fire text-amber-300 dark:text-amber-200 text-xs"></i>
+                            <span>{{ $plan->badge }}</span>
                         </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-slate-800 dark:text-slate-200 text-xs mt-0.5 shrink-0"></i>
-                            <span>Works on web, iOS, and Android</span>
+                    @endif
+
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">{{ $plan->name }}</h3>
+
+                        <!-- Price -->
+                        <div class="mt-4 mb-1">
+                            <span class="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">{{ $plan->price_bdt }}</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">/{{ $plan->billing_period }}</span>
+                            @if($plan->price_usd)
+                                <span class="text-xs text-slate-400 dark:text-slate-500 font-normal ml-1">({{ $plan->price_usd }})</span>
+                            @endif
                         </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-slate-800 dark:text-slate-200 text-xs mt-0.5 shrink-0"></i>
-                            <span><strong>100 GB</strong> of secure cloud storage</span>
+
+                        @if($plan->terms_text)
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+                                {{ $plan->terms_text }}
+                            </p>
+                        @endif
+
+                        <!-- Action Button -->
+                        <div class="mb-8">
+                            <a href="{{ $plan->button_url ?? '#order' }}" target="_blank" class="w-full {{ $plan->is_featured ? 'bg-[#0067b8] hover:bg-[#005da6] dark:bg-sky-600 dark:hover:bg-sky-500 text-white shadow-md hover:shadow-lg' : 'bg-[#0f172a] dark:bg-slate-700 hover:bg-[#0067b8] dark:hover:bg-sky-600 text-white shadow-sm hover:shadow-md' }} font-bold px-7 py-3.5 rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2 group">
+                                <span>{{ $plan->button_text }}</span>
+                                <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                            </a>
                         </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-slate-800 dark:text-slate-200 text-xs mt-0.5 shrink-0"></i>
-                            <span>OneDrive ransomware protection for your photos and files</span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-slate-800 dark:text-slate-200 text-xs mt-0.5 shrink-0"></i>
-                            <span>Outlook ad-free secure email</span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-slate-800 dark:text-slate-200 text-xs mt-0.5 shrink-0"></i>
-                            <span>Ongoing support for help when you need it</span>
+
+                        <!-- Divider -->
+                        <div class="h-px bg-slate-200/80 dark:bg-slate-700 mb-6"></div>
+
+                        <!-- Features List -->
+                        <div class="space-y-3.5 text-xs text-slate-700 dark:text-slate-300">
+                            @if($plan->features_heading)
+                                <p class="font-bold text-slate-900 dark:text-white text-sm">{{ $plan->features_heading }}</p>
+                            @endif
+
+                            @if(is_array($plan->features))
+                                @foreach($plan->features as $feature)
+                                    <div class="flex items-start gap-2.5">
+                                        <i class="fa-solid fa-check {{ $plan->is_featured ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-800 dark:text-slate-200' }} text-xs mt-0.5 shrink-0"></i>
+                                        <span>{!! $feature !!}</span>
+                                    </div>
+                                @endforeach
+                            @endif
                         </div>
                     </div>
+
+                    <!-- Bottom Included App Logos Strip -->
+                    @if(!empty($plan->included_apps) && is_array($plan->included_apps))
+                        <div class="mt-8 pt-5 border-t border-slate-100 dark:border-slate-700 flex flex-wrap items-center gap-2">
+                            @foreach($plan->included_apps as $appKey)
+                                <img src="{{ asset('assets/img/products/' . strtolower($appKey) . '.png') }}" class="w-6 h-6 object-contain" alt="{{ ucfirst($appKey) }}" title="{{ ucfirst($appKey) }}">
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
-
-                <!-- Bottom Included App Logos Strip -->
-                <div class="mt-8 pt-5 border-t border-slate-100 dark:border-slate-700 flex items-center gap-2">
-                    <img src="{{ asset('assets/img/products/onedrive.png') }}" class="w-6 h-6 object-contain" alt="OneDrive" title="OneDrive 100GB">
-                    <img src="{{ asset('assets/img/products/outlook.png') }}" class="w-6 h-6 object-contain" alt="Outlook" title="Outlook Secure Email">
+            @empty
+                <div class="col-span-2 py-12 text-center text-slate-400">
+                    No active pricing plans configured yet.
                 </div>
-            </div>
-
-            <!-- Plan 2: Microsoft 365 Personal (Full Featured) -->
-            <div class="bg-white dark:bg-slate-800/90 rounded-3xl border-2 border-[#0067b8] dark:border-sky-500 p-8 sm:p-9 pt-10 flex flex-col justify-between shadow-xl hover:shadow-2xl transition-all relative mt-4 md:mt-0" data-aos="fade-up" data-aos-delay="100">
-                <div class="absolute -top-3.5 left-8 bg-[#0067b8] dark:bg-sky-500 text-white text-[11px] font-bold uppercase px-4 py-1 rounded-full tracking-wider shadow-md z-20 flex items-center gap-1.5 border border-white/40 dark:border-slate-900/40">
-                    <i class="fa-solid fa-fire text-amber-300 dark:text-amber-200 text-xs"></i>
-                    <span>Most Popular</span>
-                </div>
-
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Microsoft 365 Personal</h3>
-
-                    <!-- Price -->
-                    <div class="mt-4 mb-1">
-                        <span class="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white">৳6,500</span>
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">/year</span>
-                        <span class="text-xs text-slate-400 dark:text-slate-500 font-normal ml-1">($99.99/yr)</span>
-                    </div>
-
-                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
-                        Subscription automatically renews unless canceled in Microsoft account. <a href="#faq" class="underline text-brand-600 dark:text-sky-400">See terms</a>.
-                    </p>
-
-                    <!-- Action Button -->
-                    <div class="mb-8">
-                        <a href="https://wa.me/8801342325558?text=Hello%20I%20want%20to%20buy%20Microsoft%20365%20Personal%20Annual%20Plan" target="_blank" class="w-full bg-[#0067b8] hover:bg-[#005da6] dark:bg-sky-600 dark:hover:bg-sky-500 text-white font-bold px-7 py-3.5 rounded-xl text-sm transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 group">
-                            <span>Buy now</span>
-                            <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
-                        </a>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="h-px bg-slate-200/80 dark:bg-slate-700 mb-6"></div>
-
-                    <!-- Features List -->
-                    <div class="space-y-3.5 text-xs text-slate-700 dark:text-slate-300">
-                        <p class="font-bold text-slate-900 dark:text-white text-sm">Everything in Basic, plus:</p>
-
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0"></i>
-                            <span>Use on up to <strong>5 devices simultaneously</strong></span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0"></i>
-                            <span>Works on PC, Mac, iPhone, iPad, and Android phones and tablets</span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0"></i>
-                            <span><strong>1 TB (1000 GB)</strong> of secure cloud storage</span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0"></i>
-                            <span><strong>Word, Excel, PowerPoint, Outlook, and OneNote</strong> desktop apps with Microsoft Copilot</span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0"></i>
-                            <span>Higher usage limits than free for select Copilot features</span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0"></i>
-                            <span>Use Copilot in select apps with work files in a secure way</span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0"></i>
-                            <span>Higher usage for AI image creation in Copilot</span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0"></i>
-                            <span><strong>Microsoft Defender</strong> advanced security for your identity & devices</span>
-                        </div>
-                        <div class="flex items-start gap-2.5">
-                            <i class="fa-solid fa-check text-emerald-600 dark:text-emerald-400 text-xs mt-0.5 shrink-0"></i>
-                            <span><strong>Microsoft Teams with Copilot</strong> to call, chat, and collaborate</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bottom Included App Logos Strip -->
-                <div class="mt-8 pt-5 border-t border-slate-100 dark:border-slate-700 flex flex-wrap items-center gap-2">
-                    <img src="{{ asset('assets/img/products/copilot.png') }}" class="w-6 h-6 object-contain" alt="Copilot" title="Copilot AI">
-                    <img src="{{ asset('assets/img/products/word.png') }}" class="w-6 h-6 object-contain" alt="Word" title="Word">
-                    <img src="{{ asset('assets/img/products/excel.png') }}" class="w-6 h-6 object-contain" alt="Excel" title="Excel">
-                    <img src="{{ asset('assets/img/products/powerpoint.png') }}" class="w-6 h-6 object-contain" alt="PowerPoint" title="PowerPoint">
-                    <img src="{{ asset('assets/img/products/outlook.png') }}" class="w-6 h-6 object-contain" alt="Outlook" title="Outlook">
-                    <img src="{{ asset('assets/img/products/teams.png') }}" class="w-6 h-6 object-contain" alt="Teams" title="Teams">
-                    <img src="{{ asset('assets/img/products/onedrive.png') }}" class="w-6 h-6 object-contain" alt="OneDrive" title="OneDrive 1TB">
-                    <img src="{{ asset('assets/img/products/defender.png') }}" class="w-6 h-6 object-contain" alt="Defender" title="Defender Security">
-                </div>
-            </div>
-
+            @endforelse
         </div>
 
     </div>

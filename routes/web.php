@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    return view('welcome');
+    $plans = App\Models\PricingPlan::where('is_active', true)->orderBy('sort_order', 'asc')->get();
+    return view('welcome', compact('plans'));
 })->name('home');
 
 /*
@@ -41,7 +42,32 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 */
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
-    // Future admin routes (orders, users, licenses, settings) can be grouped here
+
+    // Dedicated Admin Profile Update Routes
+    Route::get('/profile', [App\Http\Controllers\AdminProfileController::class, 'profile'])->name('profile');
+    Route::post('/profile', [App\Http\Controllers\AdminProfileController::class, 'updateProfile'])->name('profile.update');
+
+    // Dedicated Admin Change Password Routes
+    Route::get('/change-password', [App\Http\Controllers\AdminProfileController::class, 'changePassword'])->name('password');
+    Route::post('/change-password', [App\Http\Controllers\AdminProfileController::class, 'updatePassword'])->name('password.update');
+
+    // Pricing Plans Management CRUD Routes
+    Route::get('/plans', [App\Http\Controllers\AdminPricingPlanController::class, 'index'])->name('plans.index');
+    Route::get('/plans/create', [App\Http\Controllers\AdminPricingPlanController::class, 'create'])->name('plans.create');
+    Route::post('/plans', [App\Http\Controllers\AdminPricingPlanController::class, 'store'])->name('plans.store');
+    Route::get('/plans/{plan}/edit', [App\Http\Controllers\AdminPricingPlanController::class, 'edit'])->name('plans.edit');
+    Route::put('/plans/{plan}', [App\Http\Controllers\AdminPricingPlanController::class, 'update'])->name('plans.update');
+    Route::post('/plans/{plan}/toggle', [App\Http\Controllers\AdminPricingPlanController::class, 'toggleStatus'])->name('plans.toggle');
+    Route::delete('/plans/{plan}', [App\Http\Controllers\AdminPricingPlanController::class, 'destroy'])->name('plans.destroy');
+
+    // Users & Customers Management CRUD Routes
+    Route::get('/users', [App\Http\Controllers\AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [App\Http\Controllers\AdminUserController::class, 'create'])->name('users.create');
+    Route::post('/users', [App\Http\Controllers\AdminUserController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [App\Http\Controllers\AdminUserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [App\Http\Controllers\AdminUserController::class, 'update'])->name('users.update');
+    Route::post('/users/{user}/toggle', [App\Http\Controllers\AdminUserController::class, 'toggleStatus'])->name('users.toggle');
+    Route::delete('/users/{user}', [App\Http\Controllers\AdminUserController::class, 'destroy'])->name('users.destroy');
 });
 
 /*

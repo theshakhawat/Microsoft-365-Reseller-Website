@@ -15,11 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Admin User
         User::updateOrCreate(
-            ['email' => 'admin@microsoftclub.com.bd'],
+            ['email' => 'shakhawat9083@gmail.com'],
             [
                 'name' => 'System Administrator',
                 'phone' => '01342325558',
-                'password' => Hash::make('password'),
+                'password' => Hash::make('shakhawat9083@gmail.com'),
                 'role' => 'admin',
                 'status' => true,
             ]
