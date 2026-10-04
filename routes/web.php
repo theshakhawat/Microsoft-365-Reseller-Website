@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Payment\MoneybagPaymentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Route;
 | Public Routes
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', function () {
     $plans = App\Models\PricingPlan::where('is_active', true)->orderBy('sort_order', 'asc')->get();
     $howItWorks = App\Models\HowItWork::where('is_active', true)->orderBy('sort_order', 'asc')->get();
@@ -37,6 +39,12 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
+
+    // Password Reset Routes
+    Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'reset'])->name('password.store');
 });
 
 /*
@@ -53,6 +61,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 */
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
+    Route::match(['get', 'post'], '/clear-cache', [DashboardController::class, 'clearCache'])->name('clear-cache');
 
     // Dedicated Admin Profile Update Routes
     Route::get('/profile', [App\Http\Controllers\AdminProfileController::class, 'profile'])->name('profile');
@@ -149,6 +158,81 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/users/{user}', [App\Http\Controllers\AdminUserController::class, 'update'])->name('users.update');
     Route::post('/users/{user}/toggle', [App\Http\Controllers\AdminUserController::class, 'toggleStatus'])->name('users.toggle');
     Route::delete('/users/{user}', [App\Http\Controllers\AdminUserController::class, 'destroy'])->name('users.destroy');
+
+    // Coupons & Discounts Management CRUD Routes
+    Route::get('/coupons', [App\Http\Controllers\AdminCouponController::class, 'index'])->name('coupons.index');
+    Route::get('/coupons/create', [App\Http\Controllers\AdminCouponController::class, 'create'])->name('coupons.create');
+    Route::post('/coupons', [App\Http\Controllers\AdminCouponController::class, 'store'])->name('coupons.store');
+    Route::get('/coupons/{coupon}/edit', [App\Http\Controllers\AdminCouponController::class, 'edit'])->name('coupons.edit');
+    Route::put('/coupons/{coupon}', [App\Http\Controllers\AdminCouponController::class, 'update'])->name('coupons.update');
+    Route::post('/coupons/{coupon}/toggle', [App\Http\Controllers\AdminCouponController::class, 'toggleStatus'])->name('coupons.toggle');
+    Route::delete('/coupons/{coupon}', [App\Http\Controllers\AdminCouponController::class, 'destroy'])->name('coupons.destroy');
+
+    // Payment Methods Management CRUD Routes
+    Route::get('/payment-methods', [App\Http\Controllers\AdminPaymentMethodController::class, 'index'])->name('payment-methods.index');
+    Route::get('/payment-methods/create', [App\Http\Controllers\AdminPaymentMethodController::class, 'create'])->name('payment-methods.create');
+    Route::post('/payment-methods', [App\Http\Controllers\AdminPaymentMethodController::class, 'store'])->name('payment-methods.store');
+    Route::get('/payment-methods/{paymentMethod}/edit', [App\Http\Controllers\AdminPaymentMethodController::class, 'edit'])->name('payment-methods.edit');
+    Route::put('/payment-methods/{paymentMethod}', [App\Http\Controllers\AdminPaymentMethodController::class, 'update'])->name('payment-methods.update');
+    Route::post('/payment-methods/{paymentMethod}/toggle', [App\Http\Controllers\AdminPaymentMethodController::class, 'toggleStatus'])->name('payment-methods.toggle');
+    Route::delete('/payment-methods/{paymentMethod}', [App\Http\Controllers\AdminPaymentMethodController::class, 'destroy'])->name('payment-methods.destroy');
+
+    // Orders & Invoices Management
+    Route::get('/orders', [App\Http\Controllers\AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [App\Http\Controllers\AdminOrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/approve', [App\Http\Controllers\AdminOrderController::class, 'approve'])->name('orders.approve');
+    Route::post('/orders/{order}/cancel', [App\Http\Controllers\AdminOrderController::class, 'cancel'])->name('orders.cancel');
+
+    // Customer Subscriptions & Licenses Management
+    Route::get('/subscriptions', [App\Http\Controllers\AdminSubscriptionController::class, 'index'])->name('subscriptions.index');
+    Route::get('/subscriptions/create', [App\Http\Controllers\AdminSubscriptionController::class, 'create'])->name('subscriptions.create');
+    Route::post('/subscriptions', [App\Http\Controllers\AdminSubscriptionController::class, 'store'])->name('subscriptions.store');
+    Route::get('/subscriptions/{subscription}/edit', [App\Http\Controllers\AdminSubscriptionController::class, 'edit'])->name('subscriptions.edit');
+    Route::put('/subscriptions/{subscription}', [App\Http\Controllers\AdminSubscriptionController::class, 'update'])->name('subscriptions.update');
+    Route::post('/subscriptions/{subscription}/status', [App\Http\Controllers\AdminSubscriptionController::class, 'updateStatus'])->name('subscriptions.status');
+    Route::post('/subscriptions/{subscription}/extend', [App\Http\Controllers\AdminSubscriptionController::class, 'extend'])->name('subscriptions.extend');
+    Route::delete('/subscriptions/{subscription}', [App\Http\Controllers\AdminSubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
+
+    // Payments & Transactions Log
+    Route::get('/payments', [App\Http\Controllers\AdminPaymentController::class, 'index'])->name('payments.index');
+
+    // Support Tickets Administration
+    Route::get('/tickets', [App\Http\Controllers\AdminTicketController::class, 'index'])->name('tickets.index');
+    Route::get('/tickets/{ticket}', [App\Http\Controllers\AdminTicketController::class, 'show'])->name('tickets.show');
+    Route::post('/tickets/{ticket}/reply', [App\Http\Controllers\AdminTicketController::class, 'reply'])->name('tickets.reply');
+    Route::post('/tickets/{ticket}/status', [App\Http\Controllers\AdminTicketController::class, 'updateStatus'])->name('tickets.status');
+    Route::delete('/tickets/{ticket}', [App\Http\Controllers\AdminTicketController::class, 'destroy'])->name('tickets.destroy');
+
+    // Dedicated Admin Notifications Page & Actions
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'adminIndex'])->name('notifications.index');
+    Route::get('/notifications/{notification}/go', [App\Http\Controllers\NotificationController::class, 'adminReadAndRedirect'])->name('notifications.read-and-redirect');
+    Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'adminMarkAllRead'])->name('notifications.mark-all-read');
+    Route::post('/notifications/delete-all', [App\Http\Controllers\NotificationController::class, 'adminDeleteAll'])->name('notifications.delete-all');
+    Route::post('/notifications/{notification}/toggle-read', [App\Http\Controllers\NotificationController::class, 'adminToggleRead'])->name('notifications.toggle-read');
+    Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'adminDestroy'])->name('notifications.destroy');
+
+    // Dedicated Site, Footer, Branding & SEO Settings
+    Route::get('/site-settings', [App\Http\Controllers\AdminSiteSettingController::class, 'index'])->name('site-settings.index');
+    Route::post('/site-settings', [App\Http\Controllers\AdminSiteSettingController::class, 'update'])->name('site-settings.update');
+
+    // Dedicated SMTP & Mail Server Configuration
+    Route::get('/smtp', [App\Http\Controllers\AdminSmtpController::class, 'edit'])->name('smtp.edit');
+    Route::put('/smtp', [App\Http\Controllers\AdminSmtpController::class, 'update'])->name('smtp.update');
+    Route::post('/smtp/test', [App\Http\Controllers\AdminSmtpController::class, 'testMail'])->name('smtp.test');
+
+    // System & Application Logs Viewer
+    Route::get('/logs', [App\Http\Controllers\AdminLogController::class, 'index'])->name('logs.index');
+    Route::get('/logs/download', [App\Http\Controllers\AdminLogController::class, 'download'])->name('logs.download');
+    Route::post('/logs/clear', [App\Http\Controllers\AdminLogController::class, 'clear'])->name('logs.clear');
+
+    // Background Jobs & Queue Monitor
+    Route::get('/queue-jobs', [App\Http\Controllers\AdminQueueController::class, 'index'])->name('queue.index');
+    Route::post('/queue-jobs/restart', [App\Http\Controllers\AdminQueueController::class, 'restartWorkers'])->name('queue.restart');
+    Route::post('/queue-jobs/retry-all', [App\Http\Controllers\AdminQueueController::class, 'retryAll'])->name('queue.retry-all');
+    Route::post('/queue-jobs/flush-failed', [App\Http\Controllers\AdminQueueController::class, 'flushFailedJobs'])->name('queue.flush-failed');
+    Route::post('/queue-jobs/failed/{id}/retry', [App\Http\Controllers\AdminQueueController::class, 'retryJob'])->name('queue.failed.retry');
+    Route::delete('/queue-jobs/failed/{id}', [App\Http\Controllers\AdminQueueController::class, 'deleteFailedJob'])->name('queue.failed.destroy');
+    Route::delete('/queue-jobs/pending/{id}', [App\Http\Controllers\AdminQueueController::class, 'deletePendingJob'])->name('queue.pending.destroy');
 });
 
 /*
@@ -166,4 +250,45 @@ Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(f
     // Dedicated Change Password Routes
     Route::get('/change-password', [UserController::class, 'changePassword'])->name('password');
     Route::post('/change-password', [UserController::class, 'updatePassword'])->name('password.update');
+
+    // Available Active Pricing Plans
+    Route::get('/plans', [UserController::class, 'plans'])->name('plans');
+
+    // User Subscriptions, Orders & Payments
+    Route::get('/subscriptions', [UserController::class, 'subscriptions'])->name('subscriptions');
+    Route::get('/orders', [UserController::class, 'orders'])->name('orders');
+    Route::post('/orders/{order}/cancel', [UserController::class, 'cancelOrder'])->name('orders.cancel');
+    Route::get('/payments', [UserController::class, 'payments'])->name('payments');
+    Route::get('/orders/{order}/invoice', [UserController::class, 'invoice'])->name('invoice');
+
+    // Dedicated User Notifications Page & Actions
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'userIndex'])->name('notifications');
+    Route::get('/notifications/{notification}/go', [App\Http\Controllers\NotificationController::class, 'userReadAndRedirect'])->name('notifications.read-and-redirect');
+    Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'userMarkAllRead'])->name('notifications.mark-all-read');
+    Route::post('/notifications/delete-all', [App\Http\Controllers\NotificationController::class, 'userDeleteAll'])->name('notifications.delete-all');
+    Route::post('/notifications/{notification}/toggle-read', [App\Http\Controllers\NotificationController::class, 'userToggleRead'])->name('notifications.toggle-read');
+    Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'userDestroy'])->name('notifications.destroy');
+
+    // User Support Tickets
+    Route::get('/tickets', [App\Http\Controllers\UserTicketController::class, 'index'])->name('tickets');
+    Route::get('/tickets/create', [App\Http\Controllers\UserTicketController::class, 'create'])->name('tickets.create');
+    Route::post('/tickets', [App\Http\Controllers\UserTicketController::class, 'store'])->name('tickets.store');
+    Route::get('/tickets/{ticket}', [App\Http\Controllers\UserTicketController::class, 'show'])->name('tickets.show');
+    Route::post('/tickets/{ticket}/reply', [App\Http\Controllers\UserTicketController::class, 'reply'])->name('tickets.reply');
+    Route::post('/tickets/{ticket}/close', [App\Http\Controllers\UserTicketController::class, 'close'])->name('tickets.close');
+
+    // Checkout & Payment Processing
+    Route::get('/checkout/{plan?}', [UserController::class, 'checkout'])->name('checkout');
+    Route::post('/checkout/apply-coupon', [UserController::class, 'applyCoupon'])->name('checkout.apply-coupon');
+    Route::post('/checkout/remove-coupon', [UserController::class, 'removeCoupon'])->name('checkout.remove-coupon');
+    Route::post('/checkout/process', [UserController::class, 'processCheckout'])->name('checkout.process');
+
+    // Moneybag Payment Gateway Routes
+    Route::get('/payment/initiate', [MoneybagPaymentController::class, 'initiatePayment'])->name('payment.initiate');
+    Route::match(['get', 'post'], '/payment/success', [MoneybagPaymentController::class, 'success'])->name('payment.success');
+    Route::match(['get', 'post'], '/payment/fail', [MoneybagPaymentController::class, 'fail'])->name('payment.fail');
+    Route::match(['get', 'post'], '/payment/cancel', [MoneybagPaymentController::class, 'cancel'])->name('payment.cancel');
 });
+
+// Moneybag Webhook / IPN (CSRF-exempt & accessible by gateway servers)
+Route::post('/payment/moneybag/ipn', [MoneybagPaymentController::class, 'handleIpn'])->name('user.payment.ipn');

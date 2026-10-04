@@ -122,6 +122,44 @@
         </div>
     </div>
 
+    <!-- ==================================================== -->
+    <!-- REUSABLE CUSTOM ACTION CONFIRMATION MODAL (Approve, Action, General) -->
+    <!-- ==================================================== -->
+    <div id="custom-action-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs opacity-0 pointer-events-none transition-opacity duration-200">
+        <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-2xl p-6 sm:p-7 text-center transform scale-95 transition-all duration-200" id="custom-action-modal-card">
+            
+            <!-- Dynamic Icon Container -->
+            <div id="action-modal-icon-wrapper" class="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs">
+                <i id="action-modal-icon" class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <!-- Title & Message -->
+            <h3 class="text-lg font-black text-slate-900 dark:text-white" id="action-modal-title">
+                Confirm Action
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed" id="action-modal-message">
+                Are you sure you want to proceed?
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="mt-6 flex items-center justify-center gap-3">
+                <button type="button" onclick="closeActionModal()" class="flex-1 py-3 px-4 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer">
+                    Cancel
+                </button>
+
+                <form id="action-modal-form" method="POST" class="flex-1">
+                    @csrf
+                    <input type="hidden" name="_method" id="action-modal-method" value="POST">
+                    <button type="submit" id="action-modal-btn" class="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-md shadow-emerald-600/25 cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
+                        <i id="action-modal-btn-icon" class="fa-solid fa-check text-xs"></i>
+                        <span id="action-modal-btn-text">Confirm</span>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
     <!-- Dropdown & Modal Interaction Global Scripts -->
     <script>
         function toggleSidebar() {
@@ -177,10 +215,69 @@
             card.classList.add('scale-95');
         }
 
+        // Custom General Action Confirmation Modal Handlers (Approve, Extend, Cancel, etc.)
+        function openActionModal(options) {
+            const modal = document.getElementById('custom-action-modal');
+            const card = document.getElementById('custom-action-modal-card');
+            const form = document.getElementById('action-modal-form');
+            const title = document.getElementById('action-modal-title');
+            const message = document.getElementById('action-modal-message');
+            const iconWrapper = document.getElementById('action-modal-icon-wrapper');
+            const icon = document.getElementById('action-modal-icon');
+            const btn = document.getElementById('action-modal-btn');
+            const btnIcon = document.getElementById('action-modal-btn-icon');
+            const btnText = document.getElementById('action-modal-btn-text');
+            const methodInput = document.getElementById('action-modal-method');
+
+            form.action = options.actionUrl;
+            title.innerText = options.title || 'Confirm Action';
+            message.innerText = options.message || 'Are you sure you want to proceed?';
+            btnText.innerText = options.btnText || 'Confirm';
+            methodInput.value = options.method || 'POST';
+
+            // Theme colors (emerald, amber, rose, blue)
+            const type = options.type || 'emerald';
+            if (type === 'emerald') {
+                iconWrapper.className = 'w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs';
+                icon.className = options.icon || 'fa-solid fa-circle-check';
+                btn.className = 'w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-md shadow-emerald-600/25 cursor-pointer flex items-center justify-center gap-1.5 active:scale-95';
+                btnIcon.className = 'fa-solid fa-check text-xs';
+            } else if (type === 'rose') {
+                iconWrapper.className = 'w-16 h-16 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs';
+                icon.className = options.icon || 'fa-solid fa-circle-xmark';
+                btn.className = 'w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition-colors shadow-md shadow-rose-600/25 cursor-pointer flex items-center justify-center gap-1.5 active:scale-95';
+                btnIcon.className = 'fa-solid fa-xmark text-xs';
+            } else if (type === 'blue') {
+                iconWrapper.className = 'w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-[#0067b8] dark:text-sky-400 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs';
+                icon.className = options.icon || 'fa-solid fa-arrow-rotate-right';
+                btn.className = 'w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-[#0067b8] hover:bg-[#005a9e] transition-colors shadow-md shadow-[#0067b8]/25 cursor-pointer flex items-center justify-center gap-1.5 active:scale-95';
+                btnIcon.className = 'fa-solid fa-check text-xs';
+            }
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+        }
+
+        function closeActionModal() {
+            const modal = document.getElementById('custom-action-modal');
+            const card = document.getElementById('custom-action-modal-card');
+            
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+        }
+
         // Close modal when clicking on backdrop
         document.getElementById('custom-delete-modal')?.addEventListener('click', function(e) {
             if (e.target === this) {
                 closeDeleteModal();
+            }
+        });
+
+        document.getElementById('custom-action-modal')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeActionModal();
             }
         });
 

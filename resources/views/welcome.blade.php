@@ -11,7 +11,7 @@
 
     <!-- Background Image with smooth light/dark overlay -->
     <div class="absolute inset-0 z-0 pointer-events-none">
-        <img src="{{ asset('assets/img/bg.png') }}" alt="Background" class="w-full h-full object-cover object-center opacity-70 dark:opacity-20 transition-opacity duration-300">
+        <img src="{{ site_file_url('hero_bg_image', 'assets/img/bg.png') }}" alt="Background" class="w-full h-full object-cover object-center opacity-70 dark:opacity-20 transition-opacity duration-300">
         <div class="absolute inset-0 bg-gradient-to-b from-[#edf4fc]/70 via-[#f5f9fe]/40 to-[#edf4fc]/90 dark:from-slate-950/90 dark:via-slate-900/85 dark:to-slate-950"></div>
     </div>
 
@@ -30,30 +30,37 @@
 
                 <!-- Kicker / Category Tag -->
                 <p class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-[#0067b8] dark:text-sky-400">
-                    WORK SMARTER. TOGETHER.
+                    {{ site_setting('hero_badge_text', 'WORK SMARTER. TOGETHER.') }}
                 </p>
 
-                <!-- Main Headline (moderated size) -->
+                <!-- Main Headline -->
+                @php
+                    $heroTitle = site_setting('hero_title', 'The all-in-one productivity platform for a more connected world');
+                    $heroHighlight = site_setting('hero_highlight_text', 'a more connected world');
+                    if (!empty($heroHighlight) && str_contains($heroTitle, $heroHighlight)) {
+                        $formattedHeroTitle = str_replace($heroHighlight, '<span class="text-[#0067b8] dark:text-sky-400">' . e($heroHighlight) . '</span>', e($heroTitle));
+                    } else {
+                        $formattedHeroTitle = e($heroTitle);
+                    }
+                @endphp
                 <h1 class="text-3xl sm:text-4xl lg:text-[40px] xl:text-[46px] font-black text-slate-900 dark:text-white tracking-tight leading-[1.2] sm:leading-[1.18] lg:leading-[1.18]">
-                    The all-in-one<br />
-                    productivity platform<br />
-                    for <span class="text-[#0067b8] dark:text-sky-400">a more connected world</span>
+                    {!! $formattedHeroTitle !!}
                 </h1>
 
                 <!-- Subheading Description -->
                 <p class="text-sm sm:text-[15px] lg:text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed font-normal max-w-lg">
-                    Microsoft 365 brings together your favorite apps, AI-powered tools, cloud storage, and advanced security — all in one place, so you can create, collaborate, and get more done from anywhere.
+                    {{ site_setting('hero_description', 'Microsoft 365 brings together your favorite apps, AI-powered tools, cloud storage, and advanced security — all in one place, so you can create, collaborate, and get more done from anywhere.') }}
                 </p>
 
                 <!-- Action CTA Buttons -->
                 <div class="flex flex-wrap items-center gap-3.5 pt-2">
-                    <a href="#plans" class="bg-[#0067b8] hover:bg-[#005a9e] text-white font-bold px-6 sm:px-7 py-3.5 rounded-xl text-sm sm:text-[15px] shadow-lg shadow-[#0067b8]/25 hover:shadow-xl transition-all flex items-center justify-center gap-2 group cursor-pointer active:scale-95">
-                        <span>Get Microsoft 365</span>
+                    <a href="{{ site_setting('hero_btn1_url', '#plans') }}" class="bg-[#0067b8] hover:bg-[#005a9e] text-white font-bold px-6 sm:px-7 py-3.5 rounded-xl text-sm sm:text-[15px] shadow-lg shadow-[#0067b8]/25 hover:shadow-xl transition-all flex items-center justify-center gap-2 group cursor-pointer active:scale-95">
+                        <span>{{ site_setting('hero_btn1_text', 'Get Microsoft 365') }}</span>
                         <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
                     </a>
 
-                    <a href="#plans" class="border border-[#0067b8] dark:border-sky-400 text-[#0067b8] dark:text-sky-300 hover:bg-[#0067b8]/5 dark:hover:bg-sky-950/40 bg-white/80 dark:bg-slate-900/60 font-bold px-6 sm:px-7 py-3.5 rounded-xl text-sm sm:text-[15px] transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-sm">
-                        <span>See plans and pricing</span>
+                    <a href="{{ site_setting('hero_btn2_url', '#plans') }}" class="border border-[#0067b8] dark:border-sky-400 text-[#0067b8] dark:text-sky-300 hover:bg-[#0067b8]/5 dark:hover:bg-sky-950/40 bg-white/80 dark:bg-slate-900/60 font-bold px-6 sm:px-7 py-3.5 rounded-xl text-sm sm:text-[15px] transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-sm">
+                        <span>{{ site_setting('hero_btn2_text', 'See plans and pricing') }}</span>
                     </a>
                 </div>
 
@@ -62,12 +69,13 @@
             <!-- Right Column: Visual Mockup Illustration (7 cols - Larger & Expanded) -->
             <div class="lg:col-span-7 relative flex items-center justify-center lg:justify-end" data-aos="fade-left" data-aos-delay="100">
                 <div class="relative w-full group">
-                    <img src="{{ asset('assets/img/banner.png') }}" alt="Microsoft 365 Productivity Platform & Copilot AI" class="w-full h-auto object-contain max-h-[560px] lg:max-h-[640px] drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
+                    <img src="{{ site_file_url('hero_banner_image', 'assets/img/banner.png') }}" alt="{{ site_setting('hero_title', 'Microsoft 365 Productivity Platform & Copilot AI') }}" class="w-full h-auto object-contain max-h-[560px] lg:max-h-[640px] drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
                 </div>
             </div>
 
         </div>
 
+        @if(site_is_enabled('hero_apps_strip_enabled', true))
         <!-- ==================================================== -->
         <!-- Floating Bottom Apps Suite Strip (13 Microsoft Apps) -->
         <!-- ==================================================== -->
@@ -193,6 +201,7 @@
 
             </div>
         </div>
+        @endif
 
     </div>
 </section>
@@ -873,10 +882,11 @@
 <!-- ============================================================ -->
 <!-- 9. READY TO GET STARTED BANNER (Pastel Aurora Ribbon Waves)  -->
 <!-- ============================================================ -->
+@if(site_is_enabled('cta_banner_enabled', true))
 <section class="w-full relative overflow-hidden bg-gradient-to-r from-[#eef4fd] via-[#f1f6fd] to-[#e4eefb] dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 border-t border-b border-slate-200/90 dark:border-slate-800 min-h-[300px] sm:min-h-[340px] flex items-center justify-center">
 
     <!-- Background Aurora Ribbon Waves (Right Aligned Edge-to-Edge) -->
-    <div class="absolute inset-0 bg-no-repeat bg-right bg-cover sm:bg-contain pointer-events-none opacity-90 sm:opacity-95 dark:opacity-35 transition-all duration-300" style="background-image: url('{{ asset('assets/img/Pastel Aurora Ribbon Waves.png') }}'); background-position: right center;"></div>
+    <div class="absolute inset-0 bg-no-repeat bg-right bg-cover sm:bg-contain pointer-events-none opacity-90 sm:opacity-95 dark:opacity-35 transition-all duration-300" style="background-image: url('{{ site_file_url('cta_banner_bg_image', 'assets/img/Pastel Aurora Ribbon Waves.png') }}'); background-position: right center;"></div>
 
     <!-- Soft Ambient Fade Overlay to ensure crisp text readability in center -->
     <div class="absolute inset-0 bg-gradient-to-r from-[#eef4fd]/90 via-[#eef4fd]/70 to-transparent dark:from-slate-900/95 dark:via-slate-900/70 dark:to-transparent pointer-events-none"></div>
@@ -884,26 +894,27 @@
     <!-- Content Area (Centered) -->
     <div class="relative z-10 w-full max-w-4xl mx-auto px-6 sm:px-10 lg:px-16 py-12 sm:py-16 lg:py-20 text-center" data-aos="fade-up">
         <h2 class="text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.18]">
-            Ready to get started with Microsoft 365?
+            {{ site_setting('cta_banner_title', 'Ready to get started with Microsoft 365?') }}
         </h2>
 
         <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm md:text-base mt-2.5 sm:mt-3 max-w-xl mx-auto leading-relaxed">
-            Join millions of people and organizations who are doing more with Microsoft 365.
+            {{ site_setting('cta_banner_description', 'Join millions of people and organizations who are doing more with Microsoft 365.') }}
         </p>
 
         <!-- Action Buttons (Centered) -->
         <div class="flex flex-wrap items-center justify-center gap-3.5 sm:gap-4 pt-6 sm:pt-7">
-            <a href="#plans" class="inline-flex items-center justify-center gap-2 bg-[#0067b8] hover:bg-[#005da6] dark:bg-sky-600 dark:hover:bg-sky-500 text-white font-bold text-xs sm:text-sm px-6 sm:px-7 py-3 rounded-lg shadow-sm hover:shadow-md transition-all active:scale-95 cursor-pointer group">
-                <span>Get Microsoft 365</span>
+            <a href="{{ site_setting('cta_banner_btn1_url', '#plans') }}" class="inline-flex items-center justify-center gap-2 bg-[#0067b8] hover:bg-[#005da6] dark:bg-sky-600 dark:hover:bg-sky-500 text-white font-bold text-xs sm:text-sm px-6 sm:px-7 py-3 rounded-lg shadow-sm hover:shadow-md transition-all active:scale-95 cursor-pointer group">
+                <span>{{ site_setting('cta_banner_btn1_text', 'Get Microsoft 365') }}</span>
                 <i class="fa-solid fa-arrow-right text-[11px] transition-transform duration-200 group-hover:translate-x-1"></i>
             </a>
 
-            <a href="#plans" class="inline-flex items-center justify-center bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 text-[#0067b8] dark:text-sky-300 border border-[#0067b8] dark:border-sky-500/80 font-bold text-xs sm:text-sm px-6 sm:px-7 py-3 rounded-lg shadow-xs hover:shadow-sm transition-all active:scale-95 cursor-pointer backdrop-blur-xs">
-                <span>Compare plans</span>
+            <a href="{{ site_setting('cta_banner_btn2_url', '#plans') }}" class="inline-flex items-center justify-center bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 text-[#0067b8] dark:text-sky-300 border border-[#0067b8] dark:border-sky-500/80 font-bold text-xs sm:text-sm px-6 sm:px-7 py-3 rounded-lg shadow-xs hover:shadow-sm transition-all active:scale-95 cursor-pointer backdrop-blur-xs">
+                <span>{{ site_setting('cta_banner_btn2_text', 'Compare plans') }}</span>
             </a>
         </div>
     </div>
 </section>
+@endif
 
 <!-- ========================================== -->
 <!-- 10. DID YOU KNOW? FAQ (From PDF 2 & PDF 3) -->
@@ -988,23 +999,23 @@
 
                 <!-- Direct Contact Cards -->
                 <div class="grid sm:grid-cols-2 gap-4 pt-3">
-                    <a href="tel:096490123756" class="p-4 bg-white dark:bg-slate-800/90 rounded-2xl border border-[#e8e2d8] dark:border-slate-700 shadow-xs hover:shadow-md hover:border-[#0067b8] dark:hover:border-sky-400 transition-all flex items-center gap-3.5 group">
+                    <a href="tel:{{ site_setting('contact_phone_raw', '+88096490123756') }}" class="p-4 bg-white dark:bg-slate-800/90 rounded-2xl border border-[#e8e2d8] dark:border-slate-700 shadow-xs hover:shadow-md hover:border-[#0067b8] dark:hover:border-sky-400 transition-all flex items-center gap-3.5 group">
                         <div class="w-11 h-11 rounded-xl bg-sky-50 dark:bg-slate-800 border border-sky-100 dark:border-slate-700 flex items-center justify-center text-[#0067b8] dark:text-sky-400 text-lg shrink-0 group-hover:scale-105 transition-transform">
                             <i class="fa-solid fa-phone"></i>
                         </div>
                         <div>
                             <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Customer Support</p>
-                            <p class="text-sm font-extrabold text-slate-900 dark:text-white">096490123756</p>
+                            <p class="text-sm font-extrabold text-slate-900 dark:text-white">{{ site_setting('contact_phone', '096490123756') }}</p>
                         </div>
                     </a>
 
-                    <a href="https://wa.me/8801342325558" target="_blank" class="p-4 bg-white dark:bg-slate-800/90 rounded-2xl border border-[#e8e2d8] dark:border-slate-700 shadow-xs hover:shadow-md hover:border-emerald-500 dark:hover:border-emerald-400 transition-all flex items-center gap-3.5 group">
+                    <a href="https://wa.me/{{ site_setting('whatsapp_raw_number', '8801342325558') }}?text={{ urlencode(site_setting('whatsapp_chat_message', 'Hello I want to order Microsoft 365 Subscription')) }}" target="_blank" class="p-4 bg-white dark:bg-slate-800/90 rounded-2xl border border-[#e8e2d8] dark:border-slate-700 shadow-xs hover:shadow-md hover:border-emerald-500 dark:hover:border-emerald-400 transition-all flex items-center gap-3.5 group">
                         <div class="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-slate-800 border border-emerald-100 dark:border-slate-700 flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-lg shrink-0 group-hover:scale-105 transition-transform">
                             <i class="fa-brands fa-whatsapp"></i>
                         </div>
                         <div>
                             <p class="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">WhatsApp Support</p>
-                            <p class="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">+880 1342-325558</p>
+                            <p class="text-sm font-extrabold text-emerald-600 dark:text-emerald-400">{{ site_setting('whatsapp_number', '+880 1342-325558') }}</p>
                         </div>
                     </a>
                 </div>

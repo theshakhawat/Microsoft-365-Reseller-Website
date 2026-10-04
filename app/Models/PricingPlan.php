@@ -33,4 +33,30 @@ class PricingPlan extends Model
         'is_active'     => 'boolean',
         'sort_order'    => 'integer',
     ];
+
+    /**
+     * Get numeric price in BDT extracted from price_bdt string.
+     * E.g. "৳2,490" => 2490.00
+     */
+    public function getNumericPriceAttribute(): float
+    {
+        $clean = preg_replace('/[^\d.]/', '', (string) $this->price_bdt);
+        return (float) ($clean ?: 0);
+    }
+
+    /**
+     * Get all orders for this plan.
+     */
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get all subscriptions for this plan.
+     */
+    public function subscriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }

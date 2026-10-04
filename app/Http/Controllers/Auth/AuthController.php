@@ -101,6 +101,9 @@ class AuthController extends Controller
             'status' => true,
         ]);
 
+        // Dispatch asynchronous Welcome Email via Laravel Queue
+        \App\Jobs\SendWelcomeEmailJob::dispatch($user);
+
         Auth::login($user);
 
         return redirect()->route('user.dashboard');

@@ -1,864 +1,605 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Portal | Microsoft Office Club Bangladesh</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}">
-    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}">
-    
-    <!-- Dark Mode Initializer -->
-    <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+@extends('layouts.user.user')
 
-        function toggleDarkMode() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        }
-    </script>
+@section('title', 'User Portal Dashboard - Microsoft Office Club')
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        ms: {
-                            blue: '#0067b8',
-                            darkblue: '#005a9e',
-                            hover: '#106ebe',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Segoe UI', 'Plus Jakarta Sans', 'Inter', '-apple-system', 'system-ui', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Typography & Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+@section('breadcrumb')
+    <div>
+        <h1 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+            Portal Dashboard
+        </h1>
+        <p class="text-xs text-slate-400 dark:text-slate-500 hidden sm:block">
+            Manage your Microsoft 365 licenses, cloud storage, orders & support
+        </p>
+    </div>
+@endsection
 
-    <style>
-        body { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; }
-        
-        /* Modern Slim Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(203, 213, 225, 0.8);
-            border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(148, 163, 184, 0.9);
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background: rgba(51, 65, 85, 0.7);
-        }
-        .dark ::-webkit-scrollbar-thumb:hover {
-            background: rgba(71, 85, 105, 0.9);
-        }
-    </style>
-</head>
-<body class="h-full text-slate-800 dark:text-slate-100 antialiased flex bg-[#f8fafc] dark:bg-slate-950 transition-colors duration-200 overflow-hidden">
+@section('content')
+<div class="space-y-6 sm:space-y-8">
 
-    <!-- ========================================== -->
-    <!-- 1. SIDEBAR (Desktop & Mobile Drawer)       -->
-    <!-- ========================================== -->
-    
-    <!-- Mobile Backdrop Overlay -->
-    <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 lg:hidden opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <!-- ================================================================= -->
+    <!-- 1. MODERN WELCOME HERO BANNER                                     -->
+    <!-- ================================================================= -->
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-[#072448] to-[#0067b8] text-white p-6 sm:p-9 shadow-lg">
+        <!-- Decorative Glow Background Circles -->
+        <div class="absolute -right-12 -top-12 w-64 h-64 rounded-full bg-sky-500/20 blur-3xl pointer-events-none"></div>
+        <div class="absolute right-1/3 -bottom-16 w-64 h-64 rounded-full bg-blue-600/20 blur-3xl pointer-events-none"></div>
 
-    <!-- Sidebar Aside -->
-    <aside id="main-sidebar" class="fixed lg:static top-0 bottom-0 left-0 w-64 sm:w-72 bg-white dark:bg-slate-900 border-r border-slate-200/90 dark:border-slate-800 z-50 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shrink-0">
-        
-        <!-- Sidebar Top: Brand & Navigation -->
-        <div class="flex-1 flex flex-col overflow-y-auto">
-            
-            <!-- Brand Logo Header -->
-            <div class="h-16 sm:h-20 px-6 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80">
-                <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-                    <img class="h-8 sm:h-9 w-auto object-contain" src="{{ asset('assets/img/Microsoft Office Club Logo.png') }}" alt="Microsoft Office Club" />
-                </a>
-                <button onclick="toggleSidebar()" type="button" class="lg:hidden p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-sky-200 border border-white/15 mb-3">
+                    @if($activeSubscription)
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>Active Microsoft 365 License</span>
+                    @else
+                        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                        <span>Account Registered • No Active Plan</span>
+                    @endif
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                    Hello, {{ $user->name }}!
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
+                    Welcome to your Microsoft 365 cloud management portal. Manage genuine licenses, access official desktop software, and monitor 1 TB OneDrive storage.
+                </p>
             </div>
 
-            <!-- Navigation Menu Items -->
-            <nav class="px-4 pt-4 space-y-1.5 flex-1">
-                <div class="px-3 pb-2 pt-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                    Main Menu
+            <div class="flex flex-wrap items-center gap-3">
+                @if(!$activeSubscription)
+                    <a href="{{ route('user.plans') }}" class="bg-white hover:bg-slate-100 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md active:scale-95">
+                        <i class="fa-solid fa-cart-shopping text-xs text-[#0067b8]"></i>
+                        <span>Order New Plan</span>
+                    </a>
+                @else
+                    <a href="{{ route('user.subscriptions') }}" class="bg-white hover:bg-slate-100 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md active:scale-95">
+                        <i class="fa-solid fa-shield-halved text-xs text-[#0067b8]"></i>
+                        <span>Manage Subscription</span>
+                    </a>
+                    <a href="https://portal.office.com" target="_blank" class="bg-sky-500/30 hover:bg-sky-500/40 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-sky-400/40 flex items-center gap-2 transition-all active:scale-95">
+                        <span>Office.com Portal</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                    </a>
+                @endif
+                <a href="https://wa.me/8801342325558" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md active:scale-95">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>WhatsApp Desk</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- 2. TOP 4 DYNAMIC KPI STAT METRIC CARDS                            -->
+    <!-- ================================================================= -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        
+        <!-- Stat 1: License Status -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-xs flex items-center gap-4 transition-all hover:border-[#0067b8]/40 dark:hover:border-sky-500/40">
+            <div class="w-12 h-12 rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-[#0067b8] dark:text-sky-400 flex items-center justify-center text-xl shrink-0">
+                <i class="fa-solid fa-key"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">License Status</p>
+                <p class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mt-0.5 truncate">
+                    {{ $activeSubscription ? ($activeSubscription->plan_name ?: 'Microsoft 365') : 'No Active Plan' }}
+                </p>
+                @if($activeSubscription)
+                    <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
+                        <i class="fa-solid fa-circle-check text-[10px]"></i> Active & CSP Linked
+                    </span>
+                @else
+                    <span class="text-[11px] text-slate-400 font-semibold flex items-center gap-1 mt-0.5">
+                        <i class="fa-solid fa-circle-info text-[10px]"></i> Ready to Subscribe
+                    </span>
+                @endif
+            </div>
+        </div>
+
+        <!-- Stat 2: Cloud Storage -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-xs flex items-center gap-4 transition-all hover:border-purple-500/40">
+            <div class="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl shrink-0">
+                <i class="fa-solid fa-cloud"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cloud Storage</p>
+                <p class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mt-0.5">
+                    {{ $activeSubscription ? $activeSubscription->cloud_storage : '0 GB' }}
+                </p>
+                <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                    <div class="bg-purple-500 h-1.5 rounded-full {{ $activeSubscription ? 'w-[20%]' : 'w-0' }}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stat 3: Orders & Spending -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-xs flex items-center gap-4 transition-all hover:border-emerald-500/40">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shrink-0">
+                <i class="fa-solid fa-receipt"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Orders</p>
+                <p class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mt-0.5">
+                    {{ $stats['total_orders'] }} {{ Str::plural('Order', $stats['total_orders']) }}
+                </p>
+                <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
+                    ৳{{ number_format($stats['total_spent'], 2) }} Paid Total
+                </span>
+            </div>
+        </div>
+
+        <!-- Stat 4: Support & Tickets -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-xs flex items-center gap-4 transition-all hover:border-amber-500/40">
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl shrink-0">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Help Desk</p>
+                <p class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mt-0.5">
+                    {{ $stats['open_tickets'] }} Open {{ Str::plural('Ticket', $stats['open_tickets']) }}
+                </p>
+                <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                    {{ $stats['unread_notifs'] }} unread notifications
+                </span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- 3. MAIN CONTENT 2-COLUMN GRID                                     -->
+    <!-- ================================================================= -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- ============================================================= -->
+        <!-- LEFT COLUMN (2 Cols): Active License, Apps & Quick Setup      -->
+        <!-- ============================================================= -->
+        <div class="lg:col-span-2 space-y-8">
+            
+            <!-- 3.1 ACTIVE LICENSE / SUBSCRIPTION OVERVIEW -->
+            @if($activeSubscription)
+                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 shadow-xs">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-full">
+                                Official Microsoft Partner License
+                            </span>
+                            <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mt-2">
+                                {{ $activeSubscription->plan_name }}
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                License Account: <span class="font-semibold text-slate-800 dark:text-slate-200">{{ $activeSubscription->license_email ?: $user->email }}</span>
+                            </p>
+                        </div>
+                        <div class="text-left sm:text-right">
+                            <span class="text-xs font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3.5 py-2 rounded-xl inline-block">
+                                <i class="fa-solid fa-clock text-amber-500 mr-1.5"></i>
+                                {{ $activeSubscription->remaining_days }} Days Validity Left
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Key Metadata & Progress Bar -->
+                    <div class="mt-5 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-400 font-bold">Subscription ID:</span>
+                                <span class="font-mono font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700">
+                                    {{ $activeSubscription->subscription_key }}
+                                </span>
+                            </div>
+                            <div class="text-slate-500 dark:text-slate-400 text-[11px]">
+                                Cycle: <span class="font-bold text-slate-700 dark:text-slate-300">{{ $activeSubscription->starts_at ? $activeSubscription->starts_at->format('M d, Y') : 'Active' }}</span> &rarr; 
+                                <span class="font-bold text-slate-700 dark:text-slate-300">{{ $activeSubscription->expires_at ? $activeSubscription->expires_at->format('M d, Y') : 'Perpetual' }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Remaining Days Visual Bar -->
+                        <div class="mt-3">
+                            <div class="flex items-center justify-between text-[11px] text-slate-400 font-bold mb-1">
+                                <span>Validity Progress</span>
+                                <span>{{ $activeSubscription->remaining_days }} Days Remaining</span>
+                            </div>
+                            @php
+                                $totalCycleDays = 365;
+                                $remDays = max(0, (int) $activeSubscription->remaining_days);
+                                $percent = min(100, max(5, round(($remDays / $totalCycleDays) * 100)));
+                            @endphp
+                            <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-emerald-500 to-[#0067b8] h-2 rounded-full transition-all duration-500" style="width: {{ $percent }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Included Office Apps Grid -->
+                    <div class="mt-6" id="apps-suite">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Included Apps & Premium Cloud Features</h4>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
+                            
+                            <!-- Word -->
+                            <a href="https://word.office.com" target="_blank" class="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-800 flex items-center gap-3 transition-all group">
+                                <div class="w-9 h-9 rounded-xl bg-[#185abd] text-white flex items-center justify-center font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
+                                    W
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Word</p>
+                                    <p class="text-[11px] text-slate-400">Desktop & Web</p>
+                                </div>
+                            </a>
+
+                            <!-- Excel -->
+                            <a href="https://excel.office.com" target="_blank" class="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-800 flex items-center gap-3 transition-all group">
+                                <div class="w-9 h-9 rounded-xl bg-[#107c41] text-white flex items-center justify-center font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
+                                    X
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Excel</p>
+                                    <p class="text-[11px] text-slate-400">Full Premium</p>
+                                </div>
+                            </a>
+
+                            <!-- PowerPoint -->
+                            <a href="https://powerpoint.office.com" target="_blank" class="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-800 flex items-center gap-3 transition-all group">
+                                <div class="w-9 h-9 rounded-xl bg-[#c43e1c] text-white flex items-center justify-center font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
+                                    P
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">PowerPoint</p>
+                                    <p class="text-[11px] text-slate-400">Templates & AI</p>
+                                </div>
+                            </a>
+
+                            <!-- Outlook -->
+                            <a href="https://outlook.office.com" target="_blank" class="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-800 flex items-center gap-3 transition-all group">
+                                <div class="w-9 h-9 rounded-xl bg-[#0078d4] text-white flex items-center justify-center font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
+                                    O
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Outlook</p>
+                                    <p class="text-[11px] text-slate-400">Ad-Free Mail</p>
+                                </div>
+                            </a>
+
+                            <!-- OneDrive -->
+                            <a href="https://onedrive.live.com" target="_blank" class="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-800 flex items-center gap-3 transition-all group">
+                                <div class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-cloud text-xs"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">OneDrive</p>
+                                    <p class="text-[11px] text-slate-400">1 TB Cloud</p>
+                                </div>
+                            </a>
+
+                            <!-- Copilot AI -->
+                            <a href="https://copilot.microsoft.com" target="_blank" class="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-800 flex items-center gap-3 transition-all group">
+                                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-500 via-pink-500 to-amber-400 text-white flex items-center justify-center font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
+                                    <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Copilot AI</p>
+                                    <p class="text-[11px] text-slate-400">AI Assistant</p>
+                                </div>
+                            </a>
+
+                        </div>
+                    </div>
+
+                    <!-- Direct Launch Office Portal Action -->
+                    <div class="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <p class="text-xs text-slate-500 dark:text-slate-400">
+                            Access your Microsoft account to download Office desktop apps:
+                        </p>
+                        <a href="https://portal.office.com" target="_blank" class="w-full sm:w-auto bg-[#0067b8] hover:bg-[#005a9e] text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-md">
+                            <span>Launch Office.com Portal</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+            @else
+                <!-- No Active Subscription Hero Callout -->
+                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 p-8 text-center shadow-xs">
+                    <div class="w-16 h-16 rounded-3xl bg-sky-50 dark:bg-sky-950/60 text-[#0067b8] dark:text-sky-400 flex items-center justify-center text-2xl mx-auto shadow-inner mb-4">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Get Genuine Microsoft 365 License</h3>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-md mx-auto">
+                        Unlock Word, Excel, PowerPoint, Outlook, and 1,000 GB OneDrive cloud storage for your PC, Mac, iPad, and Smartphone.
+                    </p>
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+                        <a href="{{ route('user.plans') }}" class="bg-[#0067b8] hover:bg-[#005a9e] text-white font-extrabold px-6 py-3 rounded-2xl text-xs sm:text-sm flex items-center gap-2 transition-all shadow-lg shadow-[#0067b8]/25 active:scale-95">
+                            <i class="fa-solid fa-cart-shopping text-sm"></i>
+                            <span>Browse Official Plans</span>
+                        </a>
+                    </div>
+                </div>
+            @endif
+
+            <!-- 3.2 STEP-BY-STEP LICENSE SETUP GUIDE ACCORDION -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 shadow-xs">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900 dark:text-white">
+                            <i class="fa-solid fa-circle-question text-[#0067b8] dark:text-sky-400 mr-1.5"></i>
+                            How to Activate & Install Office 365
+                        </h3>
+                        <p class="text-xs text-slate-400">4 easy steps to start using your Microsoft license</p>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-full">
+                        Official Guide
+                    </span>
                 </div>
 
-                <a href="{{ route('user.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold bg-[#0067b8] text-white shadow-sm shadow-[#0067b8]/20 transition-colors">
-                    <i class="fa-solid fa-gauge-high text-sm w-5 text-center"></i>
-                    <span>Overview</span>
-                </a>
+                <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <!-- Step 1 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex items-start gap-3.5">
+                        <div class="w-8 h-8 rounded-xl bg-[#0067b8] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
+                            1
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 dark:text-white">License Email Verification</h4>
+                            <p class="text-slate-500 dark:text-slate-400 mt-1 leading-relaxed text-[11px]">
+                                Once your order is approved, check your Microsoft email inbox for the official CSP activation invitation.
+                            </p>
+                        </div>
+                    </div>
 
-                <a href="#subscriptions" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors">
-                    <i class="fa-solid fa-shield-halved text-sm w-5 text-center text-slate-400 dark:text-slate-500"></i>
-                    <span>My Subscriptions</span>
-                </a>
+                    <!-- Step 2 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex items-start gap-3.5">
+                        <div class="w-8 h-8 rounded-xl bg-[#0067b8] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
+                            2
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 dark:text-white">Sign In to Microsoft Portal</h4>
+                            <p class="text-slate-500 dark:text-slate-400 mt-1 leading-relaxed text-[11px]">
+                                Visit <a href="https://portal.office.com" target="_blank" class="text-[#0067b8] dark:text-sky-400 font-bold underline">portal.office.com</a> and login with your registered account.
+                            </p>
+                        </div>
+                    </div>
 
-                <a href="#cloud-storage" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors">
-                    <i class="fa-solid fa-cloud text-sm w-5 text-center text-slate-400 dark:text-slate-500"></i>
-                    <span>1 TB OneDrive</span>
-                    <span class="ml-auto text-[10px] font-bold bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-md">Cloud</span>
-                </a>
+                    <!-- Step 3 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex items-start gap-3.5">
+                        <div class="w-8 h-8 rounded-xl bg-[#0067b8] text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
+                            3
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 dark:text-white">Download Office Apps</h4>
+                            <p class="text-slate-500 dark:text-slate-400 mt-1 leading-relaxed text-[11px]">
+                                Click "Install Office" at the top right corner to download the complete 64-bit installer for PC or Mac.
+                            </p>
+                        </div>
+                    </div>
 
-                <a href="#apps-suite" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors">
-                    <i class="fa-solid fa-download text-sm w-5 text-center text-slate-400 dark:text-slate-500"></i>
-                    <span>Download Apps</span>
-                </a>
+                    <!-- Step 4 -->
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex items-start gap-3.5">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-xs shrink-0 mt-0.5">
+                            4
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 dark:text-white">Enjoy 1TB OneDrive & AI</h4>
+                            <p class="text-slate-500 dark:text-slate-400 mt-1 leading-relaxed text-[11px]">
+                                Open Word or Excel, sign in once, and your PC will automatically unlock genuine activation and 1,000 GB cloud sync.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                <div class="px-3 pb-2 pt-5 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                    Account & Security
+            <!-- 3.3 RECENT ORDERS & TRANSACTIONS (100% REAL DATABASE DATA) -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 shadow-xs" id="transactions">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Recent License Orders & Invoices</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Real-time status of your license purchases and payment receipts.</p>
+                    </div>
+                    <a href="{{ route('user.orders') }}" class="text-xs font-bold text-[#0067b8] dark:text-sky-400 hover:underline flex items-center gap-1">
+                        <span>View All Orders</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
                 </div>
 
-                <a href="#transactions" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors">
-                    <i class="fa-solid fa-file-invoice-dollar text-sm w-5 text-center text-slate-400 dark:text-slate-500"></i>
-                    <span>Invoices & Receipts</span>
-                </a>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                <th class="pb-3">Order ID</th>
+                                <th class="pb-3">Plan</th>
+                                <th class="pb-3">Payment Method</th>
+                                <th class="pb-3">Amount</th>
+                                <th class="pb-3">Status</th>
+                                <th class="pb-3 text-right">Invoice</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                            @forelse($recentOrders as $order)
+                                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                    <td class="py-3.5 font-mono font-bold text-slate-900 dark:text-white">
+                                        #{{ $order->order_number }}
+                                        <div class="text-[10px] text-slate-400 font-normal">{{ $order->created_at->format('M d, Y') }}</div>
+                                    </td>
+                                    <td class="py-3.5 font-semibold text-slate-900 dark:text-white">
+                                        {{ $order->plan_name }}
+                                    </td>
+                                    <td class="py-3.5">
+                                        <span class="inline-flex items-center gap-1.5 font-semibold text-slate-800 dark:text-slate-200">
+                                            @if($order->paymentMethod && $order->paymentMethod->logo_url)
+                                                <img src="{{ $order->paymentMethod->logo_url }}" alt="{{ $order->paymentMethod->name }}" class="w-3.5 h-3.5 object-contain">
+                                            @else
+                                                <i class="fa-solid fa-wallet text-slate-400 text-xs"></i>
+                                            @endif
+                                            <span>{{ strtoupper($order->paymentMethod->name ?? $order->payment_method_slug ?: 'Manual') }}</span>
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 font-extrabold text-slate-900 dark:text-white">
+                                        ৳{{ number_format($order->payable_amount, 2) }}
+                                    </td>
+                                    <td class="py-3.5">
+                                        @if($order->payment_status === 'paid')
+                                            <span class="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Paid
+                                            </span>
+                                        @elseif($order->payment_status === 'pending')
+                                            <span class="inline-flex items-center gap-1.5 text-amber-700 dark:text-amber-400 font-bold text-[10px] bg-amber-50 dark:bg-amber-950/60 px-2.5 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Pending Approval
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center gap-1.5 text-rose-700 dark:text-rose-400 font-bold text-[10px] bg-rose-50 dark:bg-rose-950/60 px-2.5 py-0.5 rounded-full border border-rose-200 dark:border-rose-800">
+                                                <span>{{ ucfirst($order->payment_status) }}</span>
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="py-3.5 text-right">
+                                        <a href="{{ route('user.invoice', $order->id) }}" target="_blank" class="text-[#0067b8] dark:text-sky-400 hover:underline font-bold text-xs inline-flex items-center gap-1">
+                                            <i class="fa-solid fa-file-invoice text-xs"></i>
+                                            <span>Invoice</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="py-8 text-center text-slate-400">
+                                        <p class="font-bold text-slate-600 dark:text-slate-300">No Orders Found</p>
+                                        <p class="text-[11px] text-slate-400 mt-0.5">Explore our Microsoft 365 plans to get genuine licenses.</p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                <a href="{{ route('user.profile') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors">
-                    <i class="fa-regular fa-user text-sm w-5 text-center text-slate-400 dark:text-slate-500"></i>
-                    <span>Profile Settings</span>
-                </a>
+        </div>
 
-                <a href="{{ route('user.password') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors">
-                    <i class="fa-solid fa-key text-sm w-5 text-center text-slate-400 dark:text-slate-500"></i>
+        <!-- ============================================================= -->
+        <!-- RIGHT COLUMN (1 Col): Profile, Tickets, Notifications & Help  -->
+        <!-- ============================================================= -->
+        <div class="space-y-6">
+
+            <!-- 1. Profile Information Summary Box -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Profile Information</h3>
+                    <span class="text-[10px] font-bold uppercase bg-sky-50 dark:bg-sky-950/60 text-[#0067b8] dark:text-sky-400 border border-sky-100 dark:border-sky-800 px-2 py-0.5 rounded-md">
+                        {{ strtoupper($user->role) }}
+                    </span>
+                </div>
+
+                <div class="mt-4 space-y-3.5 text-xs">
+                    <div>
+                        <p class="text-slate-400 font-bold uppercase text-[10px]">Full Name</p>
+                        <p class="text-slate-900 dark:text-white font-bold mt-0.5 text-sm">{{ $user->name }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-slate-400 font-bold uppercase text-[10px]">Microsoft Account Email</p>
+                        <p class="text-slate-900 dark:text-white font-medium mt-0.5 break-all">{{ $user->email }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-slate-400 font-bold uppercase text-[10px]">Phone Number</p>
+                        <p class="text-slate-900 dark:text-white font-medium mt-0.5">{{ $user->phone ?: 'Not provided' }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-slate-400 font-bold uppercase text-[10px]">Member Since</p>
+                        <p class="text-slate-900 dark:text-white font-medium mt-0.5">{{ $user->created_at->format('M d, Y') }}</p>
+                    </div>
+
+                    <div class="pt-2">
+                        <a href="{{ route('user.profile') }}" class="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-pen-to-square text-xs"></i>
+                            <span>Edit Profile Details</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Recent Support Tickets Box (Dynamic) -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs">
+                <div class="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-ticket text-[#0067b8] dark:text-sky-400 text-sm"></i>
+                        <h4 class="text-sm font-extrabold text-slate-900 dark:text-white">Support Tickets</h4>
+                    </div>
+                    <a href="{{ route('user.tickets.create') }}" class="text-[11px] font-bold text-[#0067b8] dark:text-sky-400 hover:underline">
+                        + New Ticket
+                    </a>
+                </div>
+
+                <div class="mt-3.5 space-y-3">
+                    @forelse($recentTickets as $ticket)
+                        <a href="{{ route('user.tickets.show', $ticket->id) }}" class="block p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/40 dark:hover:bg-slate-800/70 border border-slate-100 dark:border-slate-800 transition-all">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="font-mono text-[11px] font-bold text-[#0067b8] dark:text-sky-400">
+                                    #{{ $ticket->ticket_number }}
+                                </span>
+                                <span class="text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border {{ $ticket->status_badge }}">
+                                    {{ str_replace('_', ' ', $ticket->status) }}
+                                </span>
+                            </div>
+                            <p class="text-xs font-bold text-slate-900 dark:text-white mt-1 line-clamp-1">
+                                {{ $ticket->subject }}
+                            </p>
+                            <p class="text-[10px] text-slate-400 mt-1">
+                                {{ $ticket->created_at->diffForHumans() }} • {{ ucfirst($ticket->department) }}
+                            </p>
+                        </a>
+                    @empty
+                        <div class="text-center py-4 text-xs text-slate-400">
+                            <p>No support tickets raised.</p>
+                            <a href="{{ route('user.tickets.create') }}" class="text-[#0067b8] dark:text-sky-400 font-bold mt-1 inline-block">Need help? Open a Ticket &rarr;</a>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- 3. Security & Password Box -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm shrink-0">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-900 dark:text-white">Account Security</h4>
+                        <p class="text-[11px] text-slate-400">Protect your Microsoft account</p>
+                    </div>
+                </div>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-3 leading-relaxed">
+                    Keep your reseller club login credentials up to date.
+                </p>
+                <a href="{{ route('user.password') }}" class="mt-4 w-full border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-key text-xs text-amber-500"></i>
                     <span>Change Password</span>
                 </a>
-
-                <div class="px-3 pb-2 pt-5 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                    Quick Links
-                </div>
-
-                <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors">
-                    <i class="fa-solid fa-arrow-up-right-from-square text-sm w-5 text-center text-slate-400 dark:text-slate-500"></i>
-                    <span>Live Storefront</span>
-                </a>
-
-                <a href="https://wa.me/8801342325558" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors">
-                    <i class="fa-brands fa-whatsapp text-sm w-5 text-center"></i>
-                    <span>WhatsApp Support</span>
-                </a>
-            </nav>
-        </div>
-
-        <!-- Sidebar Bottom: User Card -->
-        <div class="p-4 border-t border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/60">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3 min-w-0">
-                    @if($user->photo)
-                        <img src="{{ asset($user->photo) }}" class="w-9 h-9 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700" alt="{{ $user->name }}" />
-                    @else
-                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#0067b8] to-sky-400 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
-                            {{ strtoupper(substr($user->name, 0, 1)) }}
-                        </div>
-                    @endif
-                    <div class="min-w-0 flex-1">
-                        <p class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ $user->name }}</p>
-                        <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">{{ $user->email }}</p>
-                    </div>
-                </div>
-                <form action="{{ route('logout') }}" method="POST" class="shrink-0">
-                    @csrf
-                    <button type="submit" class="p-2 text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 rounded-xl transition-colors cursor-pointer" title="Sign Out">
-                        <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-
-    </aside>
-
-    <!-- ========================================== -->
-    <!-- 2. MAIN VIEW AREA (Navbar + Dashboard)     -->
-    <!-- ========================================== -->
-    <div class="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
-
-        <!-- Top Navbar -->
-        <header class="h-16 sm:h-20 bg-white dark:bg-slate-900 border-b border-slate-200/90 dark:border-slate-800 px-4 sm:px-8 flex items-center justify-between shrink-0 z-30">
-            
-            <!-- Left: Mobile Toggle & Breadcrumb -->
-            <div class="flex items-center gap-3 sm:gap-4">
-                <button onclick="toggleSidebar()" type="button" class="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                    <i class="fa-solid fa-bars-staggered text-base"></i>
-                </button>
-                <div>
-                    <h1 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-                        Portal Dashboard
-                    </h1>
-                    <p class="text-xs text-slate-400 dark:text-slate-500 hidden sm:block">
-                        Manage Microsoft 365 license, cloud storage & security
-                    </p>
-                </div>
             </div>
 
-            <!-- Right: Actions (Storefront, Dark Mode, Notifications, User Dropdown) -->
-            <div class="flex items-center gap-2 sm:gap-3">
-
-                <!-- Live Storefront Quick Link -->
-                <a href="{{ route('home') }}" target="_blank" class="hidden md:flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-[#0067b8] dark:hover:text-sky-400 px-3 py-2 rounded-xl border border-slate-200/80 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                    <i class="fa-solid fa-store text-xs text-[#0067b8] dark:text-sky-400"></i>
-                    <span>Storefront</span>
-                </a>
-
-                <!-- Dark / Light Mode Toggler -->
-                <button onclick="toggleDarkMode()" type="button" class="p-2 text-slate-700 dark:text-amber-400 hover:text-[#0067b8] dark:hover:text-amber-300 transition-colors focus:outline-none cursor-pointer flex items-center justify-center" title="Toggle Theme">
-                    <i class="fa-solid fa-moon text-base dark:hidden"></i>
-                    <i class="fa-solid fa-sun text-base hidden dark:inline-block"></i>
-                </button>
-
-                <!-- Notification Dropdown -->
-                <div class="relative" id="notification-wrapper">
-                    <button onclick="toggleDropdown('notification-menu')" type="button" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-[#0067b8] dark:hover:text-sky-400 flex items-center justify-center hover:scale-105 active:scale-95 transition-all relative cursor-pointer" title="Notifications">
-                        <i class="fa-regular fa-bell text-sm"></i>
-                        <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-slate-900 animate-pulse"></span>
-                    </button>
-
-                    <!-- Notifications Dropdown Menu -->
-                    <div id="notification-menu" class="hidden absolute right-0 mt-2 w-80 sm:w-88 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xl p-4 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-                            <h3 class="text-xs font-bold text-slate-900 dark:text-white">Notifications</h3>
-                            <span class="text-[10px] font-bold bg-sky-100 dark:bg-sky-950 text-[#0067b8] dark:text-sky-400 px-2 py-0.5 rounded-full">3 New</span>
-                        </div>
-                        <div class="py-2 divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-                            <div class="py-2.5 flex items-start gap-3">
-                                <div class="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center shrink-0 text-xs mt-0.5">
-                                    <i class="fa-solid fa-shield-check"></i>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-slate-900 dark:text-white leading-tight">License Active</p>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Microsoft 365 Personal provisioned successfully.</p>
-                                    <span class="text-[10px] text-slate-400 mt-1 block">Just now</span>
-                                </div>
-                            </div>
-                            <div class="py-2.5 flex items-start gap-3">
-                                <div class="w-7 h-7 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-600 flex items-center justify-center shrink-0 text-xs mt-0.5">
-                                    <i class="fa-solid fa-cloud"></i>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-slate-900 dark:text-white leading-tight">1 TB Cloud Storage</p>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">OneDrive cloud capacity allocated to your account.</p>
-                                    <span class="text-[10px] text-slate-400 mt-1 block">2 hours ago</span>
-                                </div>
-                            </div>
-                            <div class="py-2.5 flex items-start gap-3">
-                                <div class="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 flex items-center justify-center shrink-0 text-xs mt-0.5">
-                                    <i class="fa-solid fa-envelope-circle-check"></i>
-                                </div>
-                                <div>
-                                    <p class="font-bold text-slate-900 dark:text-white leading-tight">bKash Verified</p>
-                                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Annual subscription payment receipt ready.</p>
-                                    <span class="text-[10px] text-slate-400 mt-1 block">1 day ago</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pt-2 border-t border-slate-100 dark:border-slate-800 text-center">
-                            <button onclick="toggleDropdown('notification-menu')" class="text-[11px] font-bold text-[#0067b8] dark:text-sky-400 hover:underline">
-                                Mark all as read
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- User Profile Dropdown -->
-                <div class="relative" id="user-dropdown-wrapper">
-                    <button onclick="toggleDropdown('user-dropdown-menu')" type="button" class="flex items-center gap-2.5 p-1.5 sm:px-3 sm:py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-200/70 dark:hover:bg-slate-700/60 transition-all cursor-pointer">
-                        @if($user->photo)
-                            <img src="{{ asset($user->photo) }}" class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg object-cover" alt="{{ $user->name }}" />
-                        @else
-                            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#0067b8] text-white font-bold text-xs flex items-center justify-center shadow-xs">
-                                {{ strtoupper(substr($user->name, 0, 1)) }}
-                            </div>
-                        @endif
-                        <div class="hidden sm:block text-left">
-                            <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">{{ $user->name }}</p>
-                            <p class="text-[10px] text-slate-400 leading-tight">Customer</p>
-                        </div>
-                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 hidden sm:block"></i>
-                    </button>
-
-                    <!-- User Dropdown Menu -->
-                    <div id="user-dropdown-menu" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                        
-                        <!-- Header inside dropdown -->
-                        <div class="p-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 rounded-xl mb-1">
-                            <p class="text-xs font-extrabold text-slate-900 dark:text-white">{{ $user->name }}</p>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">{{ $user->email }}</p>
-                            <div class="mt-2 flex items-center gap-1.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                                <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Account Active</span>
-                            </div>
-                        </div>
-
-                        <!-- Menu Items -->
-                        <div class="space-y-1">
-                            <a href="{{ route('user.profile') }}" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left">
-                                <i class="fa-regular fa-user text-xs w-4 text-center text-slate-400"></i>
-                                <span>Profile Information</span>
-                            </a>
-
-                            <a href="{{ route('user.password') }}" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left">
-                                <i class="fa-solid fa-key text-xs w-4 text-center text-slate-400"></i>
-                                <span>Change Password</span>
-                            </a>
-
-                            <a href="#subscriptions" onclick="toggleDropdown('user-dropdown-menu');" class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-                                <i class="fa-solid fa-shield-halved text-xs w-4 text-center text-slate-400"></i>
-                                <span>My Subscriptions</span>
-                            </a>
-                        </div>
-
-                        <!-- Divider -->
-                        <div class="my-1.5 border-t border-slate-100 dark:border-slate-800"></div>
-
-                        <!-- Logout Button -->
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors text-left cursor-pointer">
-                                <i class="fa-solid fa-arrow-right-from-bracket text-xs w-4 text-center"></i>
-                                <span>Sign Out</span>
-                            </button>
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-        </header>
-
-        <!-- Main Dashboard Scrollable Canvas -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6 sm:space-y-8">
-
-            <!-- 1. Modern Welcome Hero Banner -->
-            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-[#072448] to-[#0067b8] text-white p-6 sm:p-9 shadow-lg">
-                <!-- Decorative Glow Background Circles -->
-                <div class="absolute -right-12 -top-12 w-64 h-64 rounded-full bg-sky-500/20 blur-3xl pointer-events-none"></div>
-                <div class="absolute right-1/3 -bottom-16 w-64 h-64 rounded-full bg-blue-600/20 blur-3xl pointer-events-none"></div>
-
-                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div>
-                        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-sky-200 border border-white/15 mb-3">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                            <span>Official Microsoft CSP Provisioned</span>
-                        </div>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                            Hello, {{ $user->name }}!
-                        </h2>
-                        <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
-                            Welcome to your Microsoft 365 cloud management portal. View active licenses, download official desktop apps, and access 1 TB OneDrive storage.
-                        </p>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-3">
-                        <a href="{{ route('home') }}#plans" target="_blank" class="bg-white hover:bg-slate-100 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md active:scale-95">
-                            <i class="fa-solid fa-cart-shopping text-xs text-[#0067b8]"></i>
-                            <span>Order New License</span>
-                        </a>
-                        <a href="https://wa.me/8801342325558" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md active:scale-95">
-                            <i class="fa-brands fa-whatsapp text-sm"></i>
-                            <span>WhatsApp Support</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. Top 3 Stat Metric Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                
-                <!-- Stat 1: Subscriptions -->
-                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-[#0067b8] dark:text-sky-400 flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid fa-key"></i>
+            <!-- 4. Dedicated Dhaka Support Hotline -->
+            <div class="bg-gradient-to-br from-emerald-900 via-slate-900 to-slate-900 text-white rounded-3xl p-6 shadow-md border border-emerald-900/60">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center text-lg shrink-0">
+                        <i class="fa-brands fa-whatsapp"></i>
                     </div>
                     <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Active Subscriptions</p>
-                        <p class="text-lg font-extrabold text-slate-900 dark:text-white mt-0.5">1 License (M365 Personal)</p>
-                        <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
-                            <i class="fa-solid fa-circle-check text-[10px]"></i> Active & Verified
-                        </span>
+                        <h4 class="text-sm font-extrabold text-white">Dhaka Helpdesk</h4>
+                        <p class="text-[11px] text-emerald-300">24/7 Priority CSP Support</p>
                     </div>
                 </div>
-
-                <!-- Stat 2: Cloud Storage -->
-                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid fa-cloud"></i>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cloud Storage</p>
-                        <p class="text-lg font-extrabold text-slate-900 dark:text-white mt-0.5">1 TB OneDrive Included</p>
-                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-1.5 overflow-hidden">
-                            <div class="bg-purple-500 h-1.5 rounded-full w-[12%]"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Stat 3: Validity Period -->
-                <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid fa-rotate text-emerald-600"></i>
-                    </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Validity Period</p>
-                        <p class="text-lg font-extrabold text-slate-900 dark:text-white mt-0.5">365 Days Remaining</p>
-                        <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Auto-renew enabled</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- 3. Grid: Active License Suite & Profile Info -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <!-- Left Column (2 Cols): Active Subscription & Apps -->
-                <div class="lg:col-span-2 space-y-8" id="subscriptions">
-                    
-                    <!-- Subscription Card -->
-                    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 shadow-xs">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
-                            <div>
-                                <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-full">
-                                    Official Microsoft CSP Provisioned
-                                </span>
-                                <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mt-2">
-                                    Microsoft 365 Personal Subscription
-                                </h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                                    Linked Account: <span class="font-semibold text-slate-700 dark:text-slate-300">{{ $user->email }}</span>
-                                </p>
-                            </div>
-                            <div class="text-left sm:text-right">
-                                <span class="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl">
-                                    Annual Plan (৳6,500/yr)
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Included Office Apps Grid -->
-                        <div class="mt-6" id="apps-suite">
-                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Included Apps & Services</h4>
-                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
-                                
-                                <!-- Word -->
-                                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-[#185abd] text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                                        W
-                                    </div>
-                                    <div>
-                                        <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Word</p>
-                                        <p class="text-[11px] text-slate-400">Full Premium</p>
-                                    </div>
-                                </div>
-
-                                <!-- Excel -->
-                                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-[#107c41] text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                                        X
-                                    </div>
-                                    <div>
-                                        <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Excel</p>
-                                        <p class="text-[11px] text-slate-400">Full Premium</p>
-                                    </div>
-                                </div>
-
-                                <!-- PowerPoint -->
-                                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-[#c43e1c] text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                                        P
-                                    </div>
-                                    <div>
-                                        <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">PowerPoint</p>
-                                        <p class="text-[11px] text-slate-400">Full Premium</p>
-                                    </div>
-                                </div>
-
-                                <!-- Outlook -->
-                                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-[#0078d4] text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                                        O
-                                    </div>
-                                    <div>
-                                        <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Outlook</p>
-                                        <p class="text-[11px] text-slate-400">50GB Mailbox</p>
-                                    </div>
-                                </div>
-
-                                <!-- OneDrive -->
-                                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center gap-3" id="cloud-storage">
-                                    <div class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                                        <i class="fa-solid fa-cloud text-xs"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">OneDrive</p>
-                                        <p class="text-[11px] text-slate-400">1 TB Cloud</p>
-                                    </div>
-                                </div>
-
-                                <!-- Copilot AI -->
-                                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center gap-3">
-                                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-500 via-pink-500 to-amber-400 text-white flex items-center justify-center font-bold text-sm shadow-xs">
-                                        <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs font-bold text-slate-900 dark:text-white leading-tight">Copilot AI</p>
-                                        <p class="text-[11px] text-slate-400">Integrated</p>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- Direct Launch Office Portal Action -->
-                        <div class="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
-                                Official Microsoft portal for installations & cloud sync:
-                            </p>
-                            <a href="https://portal.office.com" target="_blank" class="w-full sm:w-auto bg-[#0067b8] hover:bg-[#005a9e] text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all">
-                                <span>Sign In to Office.com</span>
-                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Recent Transactions & Receipts Table -->
-                    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 shadow-xs" id="transactions">
-                        <div class="flex items-center justify-between mb-5">
-                            <div>
-                                <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Recent Transactions & Invoices</h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">History of Microsoft 365 cloud subscription payments.</p>
-                            </div>
-                            <span class="text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-xl">
-                                1 Order
-                            </span>
-                        </div>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs">
-                                <thead>
-                                    <tr class="border-b border-slate-100 dark:border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                                        <th class="pb-3">Invoice ID</th>
-                                        <th class="pb-3">Plan</th>
-                                        <th class="pb-3">Payment Method</th>
-                                        <th class="pb-3">Amount</th>
-                                        <th class="pb-3">Status</th>
-                                        <th class="pb-3 text-right">Receipt</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-                                    <tr>
-                                        <td class="py-3.5 font-mono font-bold text-slate-900 dark:text-white">
-                                            #M365-{{ date('Y') }}-{{ rand(1000, 9999) }}
-                                        </td>
-                                        <td class="py-3.5 font-semibold text-slate-900 dark:text-white">
-                                            M365 Personal (1 Year)
-                                        </td>
-                                        <td class="py-3.5">
-                                            <span class="inline-flex items-center gap-1 font-semibold text-pink-600 dark:text-pink-400">
-                                                <i class="fa-solid fa-mobile-screen-button text-xs"></i> bKash Online
-                                            </span>
-                                        </td>
-                                        <td class="py-3.5 font-extrabold text-slate-900 dark:text-white">
-                                            ৳6,500
-                                        </td>
-                                        <td class="py-3.5">
-                                            <span class="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-bold text-[11px] bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Paid & Active
-                                            </span>
-                                        </td>
-                                        <td class="py-3.5 text-right">
-                                            <button onclick="alert('Receipt PDF downloaded for current billing cycle.')" class="text-[#0067b8] dark:text-sky-400 hover:underline font-bold text-xs">
-                                                <i class="fa-solid fa-file-arrow-down text-xs"></i> PDF
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-
-                <!-- Right Column (1 Col): Profile, Security & Dhaka Support -->
-                <div class="space-y-6">
-
-                    <!-- Profile Information Box -->
-                    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs">
-                        <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-                            <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Profile Information</h3>
-                            <span class="text-[10px] font-bold uppercase bg-sky-50 dark:bg-sky-950/60 text-[#0067b8] dark:text-sky-400 border border-sky-100 dark:border-sky-800 px-2 py-0.5 rounded-md">
-                                {{ strtoupper($user->role) }}
-                            </span>
-                        </div>
-
-                        <div class="mt-4 space-y-4 text-xs">
-                            <div>
-                                <p class="text-slate-400 font-bold uppercase text-[10px]">Name</p>
-                                <p class="text-slate-900 dark:text-white font-bold mt-0.5 text-sm">{{ $user->name }}</p>
-                            </div>
-
-                            <div>
-                                <p class="text-slate-400 font-bold uppercase text-[10px]">Email</p>
-                                <p class="text-slate-900 dark:text-white font-medium mt-0.5">{{ $user->email }}</p>
-                            </div>
-
-                            <div>
-                                <p class="text-slate-400 font-bold uppercase text-[10px]">Phone Number</p>
-                                <p class="text-slate-900 dark:text-white font-medium mt-0.5">{{ $user->phone ?? '+880 1XXXXXXXXX' }}</p>
-                            </div>
-
-                            <div>
-                                <p class="text-slate-400 font-bold uppercase text-[10px]">Member Since</p>
-                                <p class="text-slate-900 dark:text-white font-medium mt-0.5">{{ $user->created_at->format('M d, Y') }}</p>
-                            </div>
-
-                            <div class="pt-2">
-                                <a href="{{ route('user.profile') }}" class="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5">
-                                    <i class="fa-regular fa-pen-to-square text-xs"></i>
-                                    <span>Edit Profile Details</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Security & Password Box -->
-                    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-sm shrink-0">
-                                <i class="fa-solid fa-lock"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-slate-900 dark:text-white">Account Security</h4>
-                                <p class="text-[11px] text-slate-400">Manage your portal password</p>
-                            </div>
-                        </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3 leading-relaxed">
-                            Keep your Microsoft Reseller account secure by setting a strong password.
-                        </p>
-                        <a href="{{ route('user.password') }}" class="mt-4 w-full border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-key text-xs text-amber-500"></i>
-                            <span>Change Password</span>
-                        </a>
-                    </div>
-
-                    <!-- Dedicated Dhaka Support Hotline -->
-                    <div class="bg-gradient-to-br from-emerald-900 via-slate-900 to-slate-900 text-white rounded-3xl p-6 shadow-md border border-emerald-900/60">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center text-lg shrink-0">
-                                <i class="fa-brands fa-whatsapp"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-extrabold text-white">Dedicated Support</h4>
-                                <p class="text-[11px] text-emerald-300">Dhaka Desk • 24/7 Priority</p>
-                            </div>
-                        </div>
-                        <p class="text-xs text-slate-300 mt-3">
-                            Need help activating apps, installing on PC/Mac, or configuring 1 TB OneDrive?
-                        </p>
-                        <div class="mt-4 space-y-2">
-                            <a href="https://wa.me/8801342325558" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-sm">
-                                <i class="fa-brands fa-whatsapp text-sm"></i>
-                                <span>Message on WhatsApp</span>
-                            </a>
-                            <a href="tel:+8801342325558" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
-                                <i class="fa-solid fa-phone text-xs"></i>
-                                <span>Call +880 1342-325558</span>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </main>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 3. MODALS (Profile & Change Password)      -->
-    <!-- ========================================== -->
-
-    <!-- Profile Modal -->
-    <div id="profile-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-6 sm:p-7 transform scale-95 transition-transform duration-200">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-sky-50 dark:bg-sky-950 text-[#0067b8] dark:text-sky-400 flex items-center justify-center">
-                        <i class="fa-regular fa-user text-sm"></i>
-                    </div>
-                    <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Profile Information</h3>
-                </div>
-                <button onclick="closeModal('profile-modal')" class="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                    <i class="fa-solid fa-xmark text-base"></i>
-                </button>
-            </div>
-
-            <div class="mt-5 space-y-4 text-xs">
-                <div>
-                    <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Full Name</label>
-                    <input type="text" value="{{ $user->name }}" readonly class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 font-medium">
-                </div>
-                <div>
-                    <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Email Address</label>
-                    <input type="email" value="{{ $user->email }}" readonly class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 font-medium">
-                </div>
-                <div>
-                    <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Phone Number</label>
-                    <input type="text" value="{{ $user->phone ?? '+880 1XXXXXXXXX' }}" readonly class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 font-medium">
-                </div>
-                <div>
-                    <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Account Role & Status</label>
-                    <div class="flex items-center gap-2">
-                        <span class="px-3 py-1 rounded-xl bg-sky-50 dark:bg-sky-950 text-[#0067b8] dark:text-sky-400 font-bold uppercase text-[10px]">User Portal</span>
-                        <span class="px-3 py-1 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]">Active</span>
-                    </div>
+                <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+                    Need instant help activating Office apps, configuring 1TB OneDrive, or upgrading licenses?
+                </p>
+                <div class="mt-4 space-y-2">
+                    <a href="https://wa.me/8801342325558" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-sm">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>Message on WhatsApp</span>
+                    </a>
+                    <a href="tel:+8801342325558" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
+                        <i class="fa-solid fa-phone text-xs"></i>
+                        <span>Call +880 1342-325558</span>
+                    </a>
                 </div>
             </div>
 
-            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
-                <button onclick="closeModal('profile-modal')" class="bg-[#0067b8] hover:bg-[#005a9e] text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all">
-                    Done
-                </button>
-            </div>
         </div>
+
     </div>
 
-    <!-- Password Modal -->
-    <div id="password-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl max-w-md w-full p-6 sm:p-7 transform scale-95 transition-transform duration-200">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-                        <i class="fa-solid fa-key text-sm"></i>
-                    </div>
-                    <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Change Password</h3>
-                </div>
-                <button onclick="closeModal('password-modal')" class="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                    <i class="fa-solid fa-xmark text-base"></i>
-                </button>
-            </div>
-
-            <div class="mt-5 space-y-4 text-xs">
-                <div>
-                    <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Current Password</label>
-                    <input type="password" placeholder="••••••••" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 font-medium focus:ring-2 focus:ring-[#0067b8]">
-                </div>
-                <div>
-                    <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">New Password</label>
-                    <input type="password" placeholder="Minimum 8 characters" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 font-medium focus:ring-2 focus:ring-[#0067b8]">
-                </div>
-                <div>
-                    <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Confirm New Password</label>
-                    <input type="password" placeholder="Re-enter new password" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-200 font-medium focus:ring-2 focus:ring-[#0067b8]">
-                </div>
-            </div>
-
-            <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2.5">
-                <button onclick="closeModal('password-modal')" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-50 dark:hover:bg-slate-800">
-                    Cancel
-                </button>
-                <button onclick="alert('Password updated successfully.'); closeModal('password-modal');" class="bg-[#0067b8] hover:bg-[#005a9e] text-white font-bold px-5 py-2.5 rounded-xl text-xs transition-all">
-                    Update Password
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 4. JAVASCRIPT CONTROLLERS                  -->
-    <!-- ========================================== -->
-    <script>
-        // Sidebar Toggle for Mobile
-        function toggleSidebar() {
-            const sidebar = document.getElementById('main-sidebar');
-            const backdrop = document.getElementById('sidebar-backdrop');
-            
-            if (sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.remove('-translate-x-full');
-                backdrop.classList.remove('opacity-0', 'pointer-events-none');
-                backdrop.classList.add('opacity-100');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                backdrop.classList.remove('opacity-100');
-                backdrop.classList.add('opacity-0', 'pointer-events-none');
-            }
-        }
-
-        // Generic Dropdown Toggle
-        function toggleDropdown(menuId) {
-            const menu = document.getElementById(menuId);
-            const otherMenuId = menuId === 'user-dropdown-menu' ? 'notification-menu' : 'user-dropdown-menu';
-            const otherMenu = document.getElementById(otherMenuId);
-            
-            if (otherMenu) otherMenu.classList.add('hidden');
-            if (menu) menu.classList.toggle('hidden');
-        }
-
-        // Close dropdowns on outside click
-        window.addEventListener('click', function(e) {
-            const userWrapper = document.getElementById('user-dropdown-wrapper');
-            const notifWrapper = document.getElementById('notification-wrapper');
-            const userMenu = document.getElementById('user-dropdown-menu');
-            const notifMenu = document.getElementById('notification-menu');
-
-            if (userWrapper && !userWrapper.contains(e.target) && userMenu) {
-                userMenu.classList.add('hidden');
-            }
-            if (notifWrapper && !notifWrapper.contains(e.target) && notifMenu) {
-                notifMenu.classList.add('hidden');
-            }
-        });
-
-        // Modal Controllers
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('opacity-0', 'pointer-events-none');
-                modal.classList.add('opacity-100');
-                const content = modal.querySelector('div');
-                if (content) {
-                    content.classList.remove('scale-95');
-                    content.classList.add('scale-100');
-                }
-            }
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.add('opacity-0', 'pointer-events-none');
-                modal.classList.remove('opacity-100');
-                const content = modal.querySelector('div');
-                if (content) {
-                    content.classList.add('scale-95');
-                    content.classList.remove('scale-100');
-                }
-            }
-        }
-    </script>
-</body>
-</html>
+</div>
+@endsection

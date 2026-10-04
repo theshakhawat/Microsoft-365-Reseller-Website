@@ -16,6 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => RoleCheck::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'payment/moneybag/ipn',
+            'user/payment/ipn',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

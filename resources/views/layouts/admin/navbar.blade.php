@@ -35,6 +35,15 @@
             <span>Live Website</span>
         </a>
 
+        <!-- System Quick Refresh & Optimize Button -->
+        <form action="{{ route('admin.clear-cache') }}" method="POST" class="inline-block" onsubmit="const btn = this.querySelector('button'); const icon = this.querySelector('i'); icon.classList.add('fa-spin'); btn.disabled = true;">
+            @csrf
+            <button type="submit" class="flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 sm:px-3.5 sm:py-2 rounded-xl border border-slate-200/80 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-800 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/40 transition-all cursor-pointer shadow-2xs group" title="Clear Cache, Views, Routes, Config & Link Storage">
+                <i class="fa-solid fa-arrows-rotate text-xs text-emerald-600 dark:text-emerald-400 group-hover:rotate-180 transition-transform duration-300"></i>
+                <span class="hidden sm:inline">Refresh System</span>
+            </button>
+        </form>
+
         <!-- Dark / Light Mode Toggler -->
         <button onclick="toggleDarkMode()" type="button" class="p-2.5 text-slate-700 dark:text-amber-400 hover:text-[#0067b8] dark:hover:text-amber-300 transition-colors focus:outline-none cursor-pointer flex items-center justify-center bg-transparent" title="Toggle Theme">
             <i class="fa-solid fa-moon text-base dark:hidden"></i>
@@ -42,10 +51,28 @@
         </button>
 
         <!-- Upgraded Notification Dropdown -->
+        <!-- Upgraded Notification Dropdown -->
+        @php
+            $adminNotifications = \App\Models\AppNotification::where(function ($q) {
+                $q->whereNull('user_id')
+                  ->orWhere('target_role', 'admin')
+                  ->orWhere('user_id', Auth::id());
+            })->latest()->take(5)->get();
+
+            $totalUnreadAlerts = \App\Models\AppNotification::where(function ($q) {
+                $q->whereNull('user_id')
+                  ->orWhere('target_role', 'admin')
+                  ->orWhere('user_id', Auth::id());
+            })->where('is_read', false)->count();
+        @endphp
         <div class="relative" id="notification-wrapper">
             <button onclick="toggleDropdown('notification-menu')" type="button" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-[#0067b8] dark:hover:text-sky-400 flex items-center justify-center hover:scale-105 active:scale-95 transition-all relative cursor-pointer" title="Notifications">
                 <i class="fa-regular fa-bell text-sm"></i>
-                <span class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-white dark:ring-slate-900 animate-pulse"></span>
+                @if($totalUnreadAlerts > 0)
+                    <span class="absolute top-1.5 right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[9px] font-black text-white ring-2 ring-white dark:ring-slate-900">
+                        {{ $totalUnreadAlerts > 9 ? '9+' : $totalUnreadAlerts }}
+                    </span>
+                @endif
             </button>
 
             <!-- Dropdown Menu -->
@@ -53,57 +80,52 @@
                 
                 <div class="p-4 bg-slate-50/70 dark:bg-slate-800/40 flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <h3 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">System Notifications</h3>
-                        <span class="text-[10px] font-bold bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full">3 New</span>
-                    </div>
-                    <button type="button" class="text-[11px] font-semibold text-[#0067b8] dark:text-sky-400 hover:underline cursor-pointer">Mark all read</button>
-                </div>
-
-                <div class="max-h-[340px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-                    <div class="p-3.5 flex items-start gap-3 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
-                        <div class="w-8 h-8 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800 text-amber-600 flex items-center justify-center shrink-0 text-xs mt-0.5">
-                            <i class="fa-solid fa-receipt"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between">
-                                <p class="font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#0067b8] dark:group-hover:text-sky-400 transition-colors">5 New Orders Pending</p>
-                                <span class="text-[10px] text-slate-400 shrink-0">5m ago</span>
-                            </div>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">bKash & Nagad payments awaiting CSP license provisioning approval.</p>
-                            <span class="inline-block mt-1.5 text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 px-2 py-0.5 rounded-md">Action Required</span>
-                        </div>
-                    </div>
-
-                    <div class="p-3.5 flex items-start gap-3 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
-                        <div class="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800 text-purple-600 flex items-center justify-center shrink-0 text-xs mt-0.5">
-                            <i class="fa-solid fa-user-check"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between">
-                                <p class="font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#0067b8] dark:group-hover:text-sky-400 transition-colors">Customer Registered</p>
-                                <span class="text-[10px] text-slate-400 shrink-0">1h ago</span>
-                            </div>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">Tanvir Ahmed signed up for Microsoft 365 Business Standard.</p>
-                        </div>
-                    </div>
-
-                    <div class="p-3.5 flex items-start gap-3 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors cursor-pointer group">
-                        <div class="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-600 flex items-center justify-center shrink-0 text-xs mt-0.5">
-                            <i class="fa-solid fa-shield-check"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center justify-between">
-                                <p class="font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#0067b8] dark:group-hover:text-sky-400 transition-colors">Security Auto-Backup</p>
-                                <span class="text-[10px] text-slate-400 shrink-0">3h ago</span>
-                            </div>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">Daily database & user credentials backup completed successfully.</p>
-                        </div>
+                        <h3 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">System & Support Alerts</h3>
+                        @if($totalUnreadAlerts > 0)
+                            <span class="text-[10px] font-bold bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full">{{ $totalUnreadAlerts }} Unread</span>
+                        @else
+                            <span class="text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded-full">All Up to date</span>
+                        @endif
                     </div>
                 </div>
 
-                <div class="p-2.5 bg-slate-50/50 dark:bg-slate-800/30 text-center">
-                    <a href="{{ route('admin.dashboard') }}#orders" class="text-xs font-bold text-[#0067b8] dark:text-sky-400 hover:underline">
-                        View All Order Inquiries &rarr;
+                <div class="max-h-[360px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+                    @forelse($adminNotifications as $notif)
+                        <a href="{{ route('admin.notifications.read-and-redirect', $notif->id) }}" class="p-3.5 flex items-start gap-3 {{ !$notif->is_read ? 'bg-amber-50/30 dark:bg-amber-950/20' : '' }} hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors block group">
+                            <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs mt-0.5
+                                @if($notif->color === 'emerald') bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 border border-emerald-200 dark:border-emerald-800
+                                @elseif($notif->color === 'amber') bg-amber-50 dark:bg-amber-950/60 text-amber-600 border border-amber-200 dark:border-amber-800
+                                @elseif($notif->color === 'rose') bg-rose-50 dark:bg-rose-950/60 text-rose-600 border border-rose-200 dark:border-rose-800
+                                @elseif($notif->color === 'purple') bg-purple-50 dark:bg-purple-950/60 text-purple-600 border border-purple-200 dark:border-purple-800
+                                @else bg-blue-50 dark:bg-blue-950/60 text-[#0067b8] dark:text-sky-400 border border-blue-200 dark:border-blue-800 @endif">
+                                <i class="{{ $notif->icon ?: 'fa-solid fa-bell' }}"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-1">
+                                    <p class="font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#0067b8] dark:group-hover:text-sky-400 transition-colors truncate">{{ $notif->title }}</p>
+                                    <span class="text-[10px] text-slate-400 shrink-0">{{ $notif->created_at->diffForHumans(null, true) }}</span>
+                                </div>
+                                <p class="text-[11px] text-slate-600 dark:text-slate-300 font-medium truncate mt-0.5">{{ $notif->message }}</p>
+                                @if(!$notif->is_read)
+                                    <span class="inline-block mt-1 text-[9px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 px-1.5 py-0.5 rounded">Action Needed</span>
+                                @endif
+                            </div>
+                        </a>
+                    @empty
+                        <div class="p-6 text-center text-slate-400 text-xs">
+                            <i class="fa-regular fa-bell-slash text-2xl mb-2 text-slate-300 block"></i>
+                            No recent notification alerts.
+                        </div>
+                    @endforelse
+                </div>
+
+                <div class="p-2.5 bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between px-4 text-xs">
+                    <a href="{{ route('admin.notifications.index') }}" class="font-bold text-[#0067b8] dark:text-sky-400 hover:underline flex items-center gap-1.5">
+                        <i class="fa-solid fa-bell text-[10px]"></i>
+                        <span>All Notifications Center</span>
+                    </a>
+                    <a href="{{ route('admin.orders.index') }}" class="font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">
+                        <span>Orders &rarr;</span>
                     </a>
                 </div>
             </div>

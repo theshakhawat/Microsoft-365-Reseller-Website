@@ -3,10 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', config('app.name', 'Microsoft 365 Reseller') . ' | Official Subscriptions & Cloud Licensing Bangladesh')</title>
-    <meta name="description" content="Official Microsoft 365, Office Apps, and Copilot AI subscription reseller in Bangladesh. Instant BDT payment via bKash/Nagad, automated license provisioning, and 24/7 Dhaka support.">
-    <link rel="icon" type="image/png" href="{{ asset('assets/img/favicon.png') }}">
-    <link rel="shortcut icon" href="{{ asset('assets/img/favicon.png') }}">
+    <title>@yield('title', site_setting('site_title', 'Microsoft Office Club | Official Subscriptions & Cloud Licensing Bangladesh'))</title>
+    <meta name="description" content="@yield('meta_description', site_setting('meta_description', 'Official Microsoft 365, Office Apps, and Copilot AI subscription reseller in Bangladesh. Instant BDT payment via bKash/Nagad, automated license provisioning, and 24/7 Dhaka support.'))">
+    <meta name="keywords" content="@yield('meta_keywords', site_setting('meta_keywords', 'microsoft 365 bangladesh, buy office 365 dhaka, genuine microsoft license, bkash payment microsoft, copilot ai bangladesh'))">
+    <meta name="author" content="{{ site_setting('meta_author', 'Microsoft Office Club Bangladesh') }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('og_title', site_setting('og_title', site_setting('site_title', 'Microsoft Office Club')))">
+    <meta property="og:description" content="@yield('og_description', site_setting('og_description', site_setting('meta_description', 'Official Microsoft 365 Subscriptions in Bangladesh')))">
+    <meta property="og:image" content="{{ site_file_url('og_image', 'assets/img/Microsoft Office Club Logo.png') }}">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="{{ site_setting('twitter_card', 'summary_large_image') }}">
+    <meta name="twitter:url" content="{{ url()->current() }}">
+    <meta name="twitter:title" content="@yield('og_title', site_setting('og_title', site_setting('site_title', 'Microsoft Office Club')))">
+    <meta name="twitter:description" content="@yield('og_description', site_setting('og_description', site_setting('meta_description', 'Official Microsoft 365 Subscriptions in Bangladesh')))">
+    <meta name="twitter:image" content="{{ site_file_url('og_image', 'assets/img/Microsoft Office Club Logo.png') }}">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="{{ site_file_url('favicon', 'assets/img/favicon.png') }}">
+    <link rel="shortcut icon" href="{{ site_file_url('favicon', 'assets/img/favicon.png') }}">
+
+    @if(site_setting('google_analytics_id'))
+    <!-- Google Analytics (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ site_setting('google_analytics_id') }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ site_setting('google_analytics_id') }}');
+    </script>
+    @endif
+
+    {!! site_setting('custom_head_scripts') !!}
 
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -151,9 +182,26 @@
     <!-- ========================================== -->
     <!-- TOP ANNOUNCEMENT RIBBON (Microsoft Style)  -->
     <!-- ========================================== -->
-    <div class="bg-gradient-to-r from-slate-900 via-brand-950 to-slate-900 text-white text-xs border-b border-slate-800/80">
+    @if(site_is_enabled('top_announcement_enabled', true))
+    @php
+        $bgStyle = site_setting('top_announcement_bg_style', 'navy');
+        $bgClasses = match($bgStyle) {
+            'blue' => 'bg-gradient-to-r from-[#0067b8] via-[#005da6] to-[#004e8c] text-white border-b border-blue-700/80',
+            'emerald' => 'bg-gradient-to-r from-emerald-950 via-slate-950 to-emerald-950 text-white border-b border-emerald-800/60',
+            'dark' => 'bg-slate-950 text-white border-b border-slate-800',
+            default => 'bg-gradient-to-r from-slate-900 via-brand-950 to-slate-900 text-white border-b border-slate-800/80',
+        };
+        $iconType = site_setting('top_announcement_icon', 'microsoft_squares');
+        $badgeText = site_setting('top_announcement_badge', 'Official Microsoft Reseller');
+        $announceText = site_setting('top_announcement_text', 'Purchase plan via bKash, Nagad & Cards');
+        $linkIcon = site_setting('top_announcement_link_icon', 'fa-brands fa-whatsapp');
+        $linkText = site_setting('top_announcement_link_text', 'WhatsApp Helpline: +880 1342-325558');
+        $linkUrl = site_setting('top_announcement_link', 'https://wa.me/' . site_setting('whatsapp_raw_number', '8801342325558'));
+    @endphp
+    <div class="{{ $bgClasses }} text-xs transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-between gap-2">
             <div class="flex items-center gap-2 text-slate-300">
+                @if($iconType === 'microsoft_squares' || empty($iconType))
                 <!-- Microsoft 4-Color Squares Mini Icon -->
                 <div class="grid grid-cols-2 gap-0.5 w-3.5 h-3.5 shrink-0">
                     <div class="bg-[#f25022] rounded-[1px]"></div>
@@ -161,22 +209,62 @@
                     <div class="bg-[#00a4ef] rounded-[1px]"></div>
                     <div class="bg-[#ffb900] rounded-[1px]"></div>
                 </div>
+                @elseif($iconType !== 'none')
+                <i class="{{ $iconType }} text-xs text-sky-400 shrink-0"></i>
+                @endif
+
                 <span class="font-medium text-[11px] sm:text-xs">
-                    <strong class="text-white">Official Microsoft Reseller</strong> • Purchase plan via bKash, Nagad & Cards
+                    @if(!empty($badgeText))
+                    <strong class="text-white font-bold">{{ $badgeText }}</strong> •
+                    @endif
+                    @php
+                        $cleanedAnnounce = $announceText;
+                        if (!empty($badgeText) && !empty($cleanedAnnounce)) {
+                            $pattern = '/^' . preg_quote($badgeText, '/') . '\s*[•\-\|]?\s*/i';
+                            $cleanedAnnounce = preg_replace($pattern, '', $cleanedAnnounce);
+                        }
+                    @endphp
+                    <span>{!! $cleanedAnnounce !!}</span>
                 </span>
             </div>
+            @if(!empty($linkText))
             <div class="flex items-center gap-4 text-[11px]">
-                <a href="https://wa.me/8801342325558" target="_blank" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1 transition-colors">
-                    <i class="fa-brands fa-whatsapp"></i>
-                    <span>WhatsApp Helpline: +880 1342-325558</span>
+                <a href="{{ $linkUrl }}" target="_blank" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1.5 transition-colors">
+                    @if(!empty($linkIcon))
+                    <i class="{{ $linkIcon }}"></i>
+                    @endif
+                    <span>{{ $linkText }}</span>
                 </a>
             </div>
+            @endif
         </div>
     </div>
+    @endif
 
     <!-- ========================================== -->
     <!-- COMPONENT: NAVBAR (Microsoft Fluent Style) -->
     <!-- ========================================== -->
+    @php
+        $rawNavItems = site_setting('navbar_menu_items');
+        $navItems = [];
+        if (!empty($rawNavItems)) {
+            $decoded = is_array($rawNavItems) ? $rawNavItems : json_decode($rawNavItems, true);
+            if (is_array($decoded)) {
+                $navItems = $decoded;
+            }
+        }
+        if (empty($navItems)) {
+            $navItems = [
+                ['label' => 'Key Features', 'url' => '#key-features', 'enabled' => '1'],
+                ['label' => 'Included Apps', 'url' => '#included-apps', 'enabled' => '1'],
+                ['label' => 'Plans & Pricing', 'url' => '#plans', 'enabled' => '1'],
+                ['label' => 'AI Features', 'url' => '#ai-features', 'enabled' => '1'],
+                ['label' => 'How It Works', 'url' => '#how-it-works', 'enabled' => '1'],
+                ['label' => 'FAQ', 'url' => '#faq', 'enabled' => '1'],
+                ['label' => 'Contact', 'url' => '#contact-support', 'enabled' => '1'],
+            ];
+        }
+    @endphp
     <header id="navbar" class="sticky top-0 z-50 transition-all duration-300 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-18 py-2">
@@ -184,19 +272,25 @@
                 <!-- Brand Logo (Left) -->
                 <div class="flex items-center shrink-0">
                     <a href="{{ url('/') }}" class="flex items-center gap-3 group">
-                        <img class="h-10 sm:h-12 w-auto object-contain" src="{{ asset('assets/img/Microsoft Office Club Logo.png') }}" alt="Microsoft Office Club Bangladesh" />
+                        <img class="h-10 sm:h-12 w-auto object-contain" src="{{ site_file_url('header_logo', 'assets/img/Microsoft Office Club Logo.png') }}" alt="{{ site_setting('site_name', 'Microsoft Office Club') }}" />
                     </a>
                 </div>
 
                 <!-- Desktop Navigation Links (Centered with bottom border hover bar) -->
                 <nav class="hidden lg:flex items-center justify-center gap-7 text-[13px] font-semibold mx-auto">
-                    <a href="#copilot-showcase" class="nav-link-item text-slate-700 hover:text-[#0067b8] dark:text-slate-300 dark:hover:text-[#38bdf8]">Copilot AI</a>
-                    <a href="#included-apps" class="nav-link-item text-slate-700 hover:text-[#0067b8] dark:text-slate-300 dark:hover:text-[#38bdf8]">Included Apps</a>
-                    <a href="#plans" class="nav-link-item text-slate-700 hover:text-[#0067b8] dark:text-slate-300 dark:hover:text-[#38bdf8]">Plans & Pricing</a>
-                    <a href="#ai-features" class="nav-link-item text-slate-700 hover:text-[#0067b8] dark:text-slate-300 dark:hover:text-[#38bdf8]">AI Features</a>
-                    <a href="#how-it-works" class="nav-link-item text-slate-700 hover:text-[#0067b8] dark:text-slate-300 dark:hover:text-[#38bdf8]">How It Works</a>
-                    <a href="#faq" class="nav-link-item text-slate-700 hover:text-[#0067b8] dark:text-slate-300 dark:hover:text-[#38bdf8]">FAQ</a>
-                    <a href="#contact-support" class="nav-link-item text-slate-700 hover:text-[#0067b8] dark:text-slate-300 dark:hover:text-[#38bdf8]">Contact</a>
+                    @foreach($navItems as $item)
+                        @if(($item['enabled'] ?? '1') == '1' || ($item['enabled'] ?? false) === true)
+                            @php
+                                $itemUrl = $item['url'];
+                                if (str_starts_with($itemUrl, '#') && !request()->is('/')) {
+                                    $itemUrl = url('/' . $itemUrl);
+                                }
+                            @endphp
+                            <a href="{{ $itemUrl }}" target="{{ $item['target'] ?? '_self' }}" class="nav-link-item text-slate-700 hover:text-[#0067b8] dark:text-slate-300 dark:hover:text-[#38bdf8] transition-colors">
+                                {{ $item['label'] }}
+                            </a>
+                        @endif
+                    @endforeach
                 </nav>
 
                 <!-- Desktop Action Links (Right) & Theme Toggle -->
@@ -270,7 +364,7 @@
     <aside id="mobile-sidebar" class="fixed top-0 right-0 bottom-0 w-[285px] sm:w-[320px] bg-white dark:bg-slate-900 z-[9999] shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between lg:hidden border-l border-slate-200 dark:border-slate-800" aria-label="Mobile Navigation">
         <!-- Sidebar Header -->
         <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/80">
-            <img class="h-8 w-auto object-contain" src="{{ asset('assets/img/Microsoft Office Club Logo.png') }}" alt="Microsoft Office Club" />
+            <img class="h-8 w-auto object-contain" src="{{ site_file_url('header_logo', 'assets/img/Microsoft Office Club Logo.png') }}" alt="{{ site_setting('site_name', 'Microsoft Office Club') }}" />
             <button id="mobile-sidebar-close" type="button" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-colors focus:outline-none" aria-label="Close Menu">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
@@ -288,34 +382,39 @@
             </a>
             @endauth
 
-            <a href="#copilot-showcase" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-[#0067b8] dark:hover:text-sky-400 transition-colors">
-                <i class="fa-solid fa-wand-magic-sparkles text-purple-600 text-xs w-4 text-center"></i>
-                <span>Copilot AI</span>
-            </a>
-            <a href="#included-apps" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-[#0067b8] dark:hover:text-sky-400 transition-colors">
-                <i class="fa-solid fa-cubes text-[#0067b8] text-xs w-4 text-center"></i>
-                <span>Included Apps</span>
-            </a>
-            <a href="#plans" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-bold text-[#0067b8] dark:text-sky-400 bg-sky-50/70 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50 transition-colors">
-                <i class="fa-solid fa-tags text-[#0067b8] dark:text-sky-400 text-xs w-4 text-center"></i>
-                <span>Plans & Pricing</span>
-            </a>
-            <a href="#ai-features" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-[#0067b8] dark:hover:text-sky-400 transition-colors">
-                <i class="fa-solid fa-brain text-indigo-600 text-xs w-4 text-center"></i>
-                <span>AI Features</span>
-            </a>
-            <a href="#how-it-works" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-[#0067b8] dark:hover:text-sky-400 transition-colors">
-                <i class="fa-solid fa-list-check text-emerald-600 text-xs w-4 text-center"></i>
-                <span>How It Works</span>
-            </a>
-            <a href="#faq" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-[#0067b8] dark:hover:text-sky-400 transition-colors">
-                <i class="fa-solid fa-circle-question text-sky-600 text-xs w-4 text-center"></i>
-                <span>FAQ</span>
-            </a>
-            <a href="#contact-support" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-[#0067b8] dark:hover:text-sky-400 transition-colors">
-                <i class="fa-solid fa-headset text-amber-600 text-xs w-4 text-center"></i>
-                <span>Contact Support</span>
-            </a>
+            @foreach($navItems as $item)
+                @if(($item['enabled'] ?? '1') == '1' || ($item['enabled'] ?? false) === true)
+                    @php
+                        $itemUrl = $item['url'];
+                        if (str_starts_with($itemUrl, '#') && !request()->is('/')) {
+                            $itemUrl = url('/' . $itemUrl);
+                        }
+                        // Smart icon assignment based on link target or title
+                        $labelLower = strtolower($item['label'] ?? '');
+                        $urlLower = strtolower($item['url'] ?? '');
+                        $iconClass = 'fa-solid fa-link text-slate-400';
+                        if (str_contains($labelLower, 'app') || str_contains($urlLower, 'app')) {
+                            $iconClass = 'fa-solid fa-cubes text-[#0067b8]';
+                        } elseif (str_contains($labelLower, 'plan') || str_contains($labelLower, 'pricing') || str_contains($urlLower, 'plan')) {
+                            $iconClass = 'fa-solid fa-tags text-emerald-500';
+                        } elseif (str_contains($labelLower, 'ai') || str_contains($labelLower, 'copilot') || str_contains($urlLower, 'ai')) {
+                            $iconClass = 'fa-solid fa-brain text-purple-500';
+                        } elseif (str_contains($labelLower, 'work') || str_contains($urlLower, 'work')) {
+                            $iconClass = 'fa-solid fa-list-check text-indigo-500';
+                        } elseif (str_contains($labelLower, 'feature') || str_contains($urlLower, 'feature')) {
+                            $iconClass = 'fa-solid fa-wand-magic-sparkles text-sky-500';
+                        } elseif (str_contains($labelLower, 'faq') || str_contains($urlLower, 'faq')) {
+                            $iconClass = 'fa-solid fa-circle-question text-amber-500';
+                        } elseif (str_contains($labelLower, 'contact') || str_contains($urlLower, 'contact')) {
+                            $iconClass = 'fa-solid fa-headset text-rose-500';
+                        }
+                    @endphp
+                    <a href="{{ $itemUrl }}" target="{{ $item['target'] ?? '_self' }}" class="mobile-nav-link flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-[#0067b8] dark:hover:text-sky-400 transition-colors">
+                        <i class="{{ $iconClass }} text-xs w-4 text-center"></i>
+                        <span>{{ $item['label'] }}</span>
+                    </a>
+                @endif
+            @endforeach
         </nav>
 
         <!-- Sidebar Footer Auth Buttons -->

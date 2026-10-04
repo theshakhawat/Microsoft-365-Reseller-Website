@@ -89,7 +89,7 @@ class AdminUserController extends Controller
             $photoPath = 'uploads/profile/' . $filename;
         }
 
-        User::create([
+        $newUser = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'phone'    => $request->phone,
@@ -98,6 +98,9 @@ class AdminUserController extends Controller
             'photo'    => $photoPath,
             'status'   => $request->boolean('status', true),
         ]);
+
+        // Dispatch Welcome Email Job
+        \App\Jobs\SendWelcomeEmailJob::dispatch($newUser);
 
         $roleTitle = $request->role === 'admin' ? 'Administrator' : 'Customer';
 

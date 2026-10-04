@@ -132,7 +132,7 @@
                             <label for="password" class="block text-xs font-bold text-slate-700 dark:text-slate-300">
                                 Password
                             </label>
-                            <a href="#" class="text-[11px] font-semibold text-[#0067b8] dark:text-sky-400 hover:underline">
+                            <a href="{{ route('password.request') }}" class="text-[11px] font-semibold text-[#0067b8] dark:text-sky-400 hover:underline">
                                 Forgot password?
                             </a>
                         </div>

@@ -49,7 +49,7 @@
                 <p class="text-xl font-black text-slate-900 dark:text-white mt-0.5">{{ $stats['total'] }}</p>
             </div>
             <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#0067b8] dark:text-sky-400 flex items-center justify-center text-base">
-                <i class="fa-solid fa-grid-2-plus"></i>
+                <i class="fa-solid fa-gift"></i>
             </div>
         </div>
 
@@ -129,7 +129,7 @@
             </div>
         @empty
             <div class="col-span-full py-16 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8">
-                <i class="fa-solid fa-grid-2-plus text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
+                <i class="fa-solid fa-gift text-4xl text-slate-300 dark:text-slate-600 mb-3"></i>
                 <h4 class="text-base font-bold text-slate-800 dark:text-slate-200">No Benefit Cards Found</h4>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">Click below to add your first benefit card.</p>
                 <a href="{{ route('admin.more-benefits.create') }}" class="bg-[#0067b8] text-white font-bold px-5 py-2.5 rounded-xl text-xs inline-flex items-center gap-2">
