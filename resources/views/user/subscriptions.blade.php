@@ -169,7 +169,7 @@
                                     <span>Sign in to Office.com</span>
                                     <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                                 </a>
-                                <a href="https://wa.me/8801342325558" target="_blank" class="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all">
+                                <a href="https://wa.me/{{ site_setting('whatsapp_raw_number', '8801342325558') }}?text={{ urlencode('Hello, I need help activating license: ' . $sub->license_email) }}" target="_blank" class="w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all">
                                     <i class="fa-brands fa-whatsapp text-sm"></i>
                                     <span>Help Activating License</span>
                                 </a>

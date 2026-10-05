@@ -8,9 +8,9 @@
     <div class="flex-1 flex flex-col overflow-y-auto">
         
         <!-- Brand Logo Header -->
-        <div class="h-16 sm:h-20 px-6 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80">
+        <div class="h-16 sm:h-20 px-5 sm:px-6 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80">
             <a href="{{ route('home') }}" class="flex items-center gap-2.5">
-                <img class="h-8 sm:h-9 w-auto object-contain" src="{{ site_file_url('header_logo', 'assets/img/Microsoft Office Club Logo.png') }}" alt="{{ site_setting('site_name', 'Microsoft Office Club') }}" />
+                <img class="h-10 sm:h-12 w-auto max-w-[190px] object-contain transition-all" src="{{ site_file_url('header_logo', 'assets/img/Microsoft Office Club Logo.png') }}" alt="{{ site_setting('site_name', 'Microsoft Office Club') }}" />
             </a>
             <button onclick="toggleSidebar()" type="button" class="lg:hidden p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -127,7 +127,7 @@
             </a>
 
             <!-- Whatsapp Support -->
-            <a href="https://wa.me/8801342325558" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors">
+            <a href="https://wa.me/{{ site_setting('whatsapp_raw_number', '8801342325558') }}?text={{ urlencode(site_setting('whatsapp_chat_message', 'Hello, I need assistance with Microsoft Office Club.')) }}" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors">
                 <i class="fa-brands fa-whatsapp text-sm w-5 text-center"></i>
                 <span>Whatsapp Support</span>
             </a>

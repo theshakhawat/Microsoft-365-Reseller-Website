@@ -3,14 +3,8 @@
 @section('title', 'User Portal Dashboard - Microsoft Office Club')
 
 @section('breadcrumb')
-    <div>
-        <h1 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-            Portal Dashboard
-        </h1>
-        <p class="text-xs text-slate-400 dark:text-slate-500 hidden sm:block">
-            Manage your Microsoft 365 licenses, cloud storage, orders & support
-        </p>
-    </div>
+    <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 dark:text-slate-600"></i>
+    <span class="font-bold text-slate-900 dark:text-white">Dashboard</span>
 @endsection
 
 @section('content')
@@ -59,7 +53,7 @@
                         <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                     </a>
                 @endif
-                <a href="https://wa.me/8801342325558" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md active:scale-95">
+                <a href="https://wa.me/{{ site_setting('whatsapp_raw_number', '8801342325558') }}?text={{ urlencode(site_setting('whatsapp_chat_message', 'Hello, I need assistance with Microsoft Office Club.')) }}" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition-all shadow-md active:scale-95">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                     <span>WhatsApp Desk</span>
                 </a>
@@ -586,13 +580,13 @@
                     Need instant help activating Office apps, configuring 1TB OneDrive, or upgrading licenses?
                 </p>
                 <div class="mt-4 space-y-2">
-                    <a href="https://wa.me/8801342325558" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-sm">
+                    <a href="https://wa.me/{{ site_setting('whatsapp_raw_number', '8801342325558') }}?text={{ urlencode(site_setting('whatsapp_chat_message', 'Hello, I need assistance with Microsoft Office Club.')) }}" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition-all shadow-sm">
                         <i class="fa-brands fa-whatsapp text-sm"></i>
                         <span>Message on WhatsApp</span>
                     </a>
-                    <a href="tel:+8801342325558" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
+                    <a href="tel:{{ site_setting('contact_phone_raw', '+880' . site_setting('whatsapp_raw_number', '8801342325558')) }}" class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 rounded-xl text-xs flex items-center justify-center gap-2 transition-all">
                         <i class="fa-solid fa-phone text-xs"></i>
-                        <span>Call +880 1342-325558</span>
+                        <span>Call {{ site_setting('contact_phone', site_setting('whatsapp_number', '+880 1342-325558')) }}</span>
                     </a>
                 </div>
             </div>

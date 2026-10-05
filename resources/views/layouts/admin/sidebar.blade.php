@@ -8,25 +8,15 @@
     <div class="flex-1 flex flex-col overflow-y-auto">
 
         <!-- Brand Logo Header -->
-        <div class="h-16 sm:h-20 px-6 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80">
+        <div class="h-16 sm:h-20 px-5 sm:px-6 flex items-center justify-between border-b border-slate-100 dark:border-slate-800/80">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5">
-                <img class="h-8 sm:h-9 w-auto object-contain" src="{{ site_file_url('header_logo', 'assets/img/Microsoft Office Club Logo.png') }}" alt="{{ site_setting('site_name', 'Microsoft Office Club') }}" />
+                <img class="h-10 sm:h-12 w-auto max-w-[190px] object-contain transition-all" src="{{ site_file_url('header_logo', 'assets/img/Microsoft Office Club Logo.png') }}" alt="{{ site_setting('site_name', 'Microsoft Office Club') }}" />
             </a>
             <button onclick="toggleSidebar()" type="button" class="lg:hidden p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-400 cursor-pointer">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
 
-        <!-- Admin Badge Alert -->
-        <div class="px-5 pt-4 pb-1">
-            <div class="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl p-2.5 flex items-center gap-2.5">
-                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0"></span>
-                <div class="min-w-0">
-                    <p class="text-[11px] font-bold text-red-700 dark:text-red-400 uppercase tracking-wider leading-none">Admin Control Center</p>
-                    <p class="text-[10px] text-red-600/80 dark:text-red-400/70 truncate mt-0.5">Super Admin Privileges</p>
-                </div>
-            </div>
-        </div>
 
         <!-- Navigation Menu Items -->
         <nav class="px-4 pt-3 space-y-1 flex-1">

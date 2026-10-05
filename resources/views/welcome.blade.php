@@ -26,7 +26,7 @@
         <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
             <!-- Left Column: Copy & Actions (5 cols) -->
-            <div class="lg:col-span-5 space-y-5 text-left" data-aos="fade-right">
+            <div class="lg:col-span-5 space-y-5 text-left">
 
                 <!-- Kicker / Category Tag -->
                 <p class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-[#0067b8] dark:text-sky-400">
@@ -67,7 +67,7 @@
             </div>
 
             <!-- Right Column: Visual Mockup Illustration (7 cols - Larger & Expanded) -->
-            <div class="lg:col-span-7 relative flex items-center justify-center lg:justify-end" data-aos="fade-left" data-aos-delay="100">
+            <div class="lg:col-span-7 relative flex items-center justify-center lg:justify-end">
                 <div class="relative w-full group">
                     <img src="{{ site_file_url('hero_banner_image', 'assets/img/banner.png') }}" alt="{{ site_setting('hero_title', 'Microsoft 365 Productivity Platform & Copilot AI') }}" class="w-full h-auto object-contain max-h-[560px] lg:max-h-[640px] drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
                 </div>
@@ -298,7 +298,7 @@
     <div class="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#fafbfc] dark:from-slate-950 to-transparent pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="max-w-lg text-left" data-aos="fade-right">
+        <div class="max-w-lg text-left" data-aos="fade-top">
             <h2 class="text-2xl sm:text-3xl lg:text-[32px] font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.2]">
                 Your favorite apps<br>
                 <span class="text-[#0067b8] dark:text-sky-400">in one integrated experience</span>
@@ -473,7 +473,7 @@
 
                     <!-- Action Button -->
                     <div class="mb-8">
-                        <a href="{{ $plan->button_url ?? '#order' }}" target="_blank" class="w-full {{ $plan->is_featured ? 'bg-[#0067b8] hover:bg-[#005da6] dark:bg-sky-600 dark:hover:bg-sky-500 text-white shadow-md hover:shadow-lg' : 'bg-[#0f172a] dark:bg-slate-700 hover:bg-[#0067b8] dark:hover:bg-sky-600 text-white shadow-sm hover:shadow-md' }} font-bold px-7 py-3.5 rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2 group">
+                        <a href="{{ route('user.checkout', ['plan' => $plan->id]) ?? '#order' }}" target="_blank" class="w-full {{ $plan->is_featured ? 'bg-[#0067b8] hover:bg-[#005da6] dark:bg-sky-600 dark:hover:bg-sky-500 text-white shadow-md hover:shadow-lg' : 'bg-[#0f172a] dark:bg-slate-700 hover:bg-[#0067b8] dark:hover:bg-sky-600 text-white shadow-sm hover:shadow-md' }} font-bold px-7 py-3.5 rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2 group">
                             <span>{{ $plan->button_text }}</span>
                             <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
                         </a>
@@ -708,7 +708,7 @@
         <div class="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
 
             <!-- Left Column: Visual Mockup with Devices Image -->
-            <div class="lg:col-span-7 relative flex items-center justify-center lg:justify-start" data-aos="fade-right">
+            <div class="lg:col-span-7 relative flex items-center justify-center lg:justify-start" data-aos="fade-top">
                 <div class="relative w-full max-w-2xl group">
                     <div class="absolute -inset-4 bg-gradient-to-r from-blue-400/15 via-purple-400/10 to-cyan-400/15 rounded-3xl blur-2xl opacity-70 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                     <img src="{{ asset('assets/img/Microsoft 365 Dashboard Across Devices.png') }}" alt="Work from anywhere on any device" class="relative z-10 w-full h-auto object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
@@ -716,7 +716,7 @@
             </div>
 
             <!-- Right Column: Content -->
-            <div class="lg:col-span-5 space-y-4 sm:space-y-6 text-left" data-aos="fade-left">
+            <div class="lg:col-span-5 space-y-4 sm:space-y-6 text-left" data-aos="fade-top" data-aos-delay="100">
                 <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.18]">
                     Work from anywhere<br>
                     <span>on any device</span>
@@ -1086,13 +1086,13 @@
                 <span>View Annual Plans</span>
                 <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
             </a>
-            <a href="https://wa.me/8801342325558?text=Hello%20I%20want%20to%20activate%20Microsoft%20365" target="_blank" class="w-full sm:w-auto bg-[#25d366] hover:bg-[#20bd5a] text-slate-950 font-bold px-7 py-3.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg hover:shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 group active:scale-95">
+            <a href="https://wa.me/{{ site_setting('whatsapp_raw_number', '8801342325558') }}?text={{ urlencode(site_setting('whatsapp_chat_message', 'Hello I want to activate Microsoft 365')) }}" target="_blank" class="w-full sm:w-auto bg-[#25d366] hover:bg-[#20bd5a] text-slate-950 font-bold px-7 py-3.5 rounded-xl text-xs sm:text-sm transition-all shadow-lg hover:shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 group active:scale-95">
                 <i class="fa-brands fa-whatsapp text-base"></i>
-                <span>WhatsApp: +880 1342-325558</span>
+                <span>WhatsApp: {{ site_setting('whatsapp_number', '+880 1342-325558') }}</span>
             </a>
-            <a href="tel:096490123756" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-6 py-3.5 rounded-xl text-xs sm:text-sm border border-white/20 transition-all shadow-md flex items-center justify-center gap-2 active:scale-95">
+            <a href="tel:{{ site_setting('contact_phone_raw', '+88096490123756') }}" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold px-6 py-3.5 rounded-xl text-xs sm:text-sm border border-white/20 transition-all shadow-md flex items-center justify-center gap-2 active:scale-95">
                 <i class="fa-solid fa-phone text-xs text-sky-300"></i>
-                <span>096490123756</span>
+                <span>{{ site_setting('contact_phone', '096490123756') }}</span>
             </a>
         </div>
     </div>

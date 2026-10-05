@@ -99,6 +99,7 @@ class DashboardController extends Controller
             'ordersTrend',
             'pmLabels',
             'pmSeries',
+            'plans',
             'planLabels',
             'planSeries',
             'pendingOrders',

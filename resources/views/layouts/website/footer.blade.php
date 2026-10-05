@@ -12,32 +12,12 @@
                 </p>
 
                 <!-- Accepted Payment Badges -->
-                @php
-                    $paymentMethodsList = array_filter(array_map('trim', explode(',', site_setting('accepted_payment_methods_text', 'bKash (Personal & Merchant), Nagad, Visa / Mastercard / AMEX'))));
-                @endphp
-                @if(count($paymentMethodsList) > 0)
                 <div class="pt-2">
                     <p class="text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">Accepted Payment Methods</p>
                     <div class="flex flex-wrap items-center gap-2">
-                        @foreach($paymentMethodsList as $methodName)
-                            @php $methodLower = strtolower($methodName); @endphp
-                            @if(str_contains($methodLower, 'bkash'))
-                                <span class="bg-pink-50 dark:bg-pink-950/70 border border-pink-200 dark:border-pink-700/50 text-pink-700 dark:text-pink-300 px-2.5 py-1 rounded text-[11px] font-bold flex items-center gap-1.5 shadow-2xs">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-pink-500 dark:bg-pink-400"></span> {{ $methodName }}
-                                </span>
-                            @elseif(str_contains($methodLower, 'nagad'))
-                                <span class="bg-orange-50 dark:bg-orange-950/70 border border-orange-200 dark:border-orange-700/50 text-orange-700 dark:text-orange-300 px-2.5 py-1 rounded text-[11px] font-bold flex items-center gap-1.5 shadow-2xs">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-orange-500 dark:bg-orange-400"></span> {{ $methodName }}
-                                </span>
-                            @else
-                                <span class="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded text-[11px] font-semibold shadow-2xs">
-                                    {{ $methodName }}
-                                </span>
-                            @endif
-                        @endforeach
+                        <img src="{{ asset('assets/img/payment-mehtod.png') }}" alt="Accepted Payment Methods" class="h-10 w-auto object-contain" />
                     </div>
                 </div>
-                @endif
 
                 <!-- Social Links -->
                 <div class="flex items-center gap-3 text-slate-500 dark:text-slate-400 pt-2">
@@ -119,7 +99,7 @@
                     @if(site_setting('support_status_badge'))
                     <li class="pt-2">
                         <span class="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded text-[10px] font-semibold shadow-2xs">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span> {{ site_setting('support_status_badge', 'Support Available 24/7') }}
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span> {{ site_setting('support_status_badge', '') }}
                         </span>
                     </li>
                     @endif

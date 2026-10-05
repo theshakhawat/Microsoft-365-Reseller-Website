@@ -215,7 +215,7 @@
 
                 <span class="font-medium text-[11px] sm:text-xs">
                     @if(!empty($badgeText))
-                    <strong class="text-white font-bold">{{ $badgeText }}</strong> •
+                    <strong class="text-white font-bold">{{ $badgeText }}</strong>
                     @endif
                     @php
                         $cleanedAnnounce = $announceText;
@@ -295,7 +295,7 @@
 
                 <!-- Desktop Action Links (Right) & Theme Toggle -->
                 <div class="hidden lg:flex items-center gap-5 text-[13px] font-semibold shrink-0">
-                    
+
                     <!-- Dark Mode Toggle Button (Desktop) -->
                     <button id="theme-toggle" type="button" onclick="toggleDarkMode()" class="p-2 text-slate-700 dark:text-amber-400 hover:text-[#0067b8] dark:hover:text-amber-300 transition-colors focus:outline-none cursor-pointer flex items-center justify-center" title="Toggle Theme">
                         <i class="fa-solid fa-moon text-base dark:hidden"></i>

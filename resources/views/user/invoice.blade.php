@@ -130,8 +130,8 @@
         <!-- Footer / Notice -->
         <div class="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-xs text-slate-400">
             <div>
-                <p class="font-bold text-slate-700">Thank you for choosing Microsoft Office Club Bangladesh!</p>
-                <p class="text-[11px] mt-0.5">For activation help or questions, WhatsApp us at +880 1342-325558</p>
+                <p class="font-bold text-slate-700">Thank you for choosing {{ site_setting('site_name', 'Microsoft Office Club') }}!</p>
+                <p class="text-[11px] mt-0.5">For activation help or questions, WhatsApp us at {{ site_setting('whatsapp_number', '+880 1342-325558') }}</p>
             </div>
             <div class="flex items-center gap-2">
                 <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">

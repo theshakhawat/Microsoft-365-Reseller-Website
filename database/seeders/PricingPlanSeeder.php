@@ -16,7 +16,7 @@ class PricingPlanSeeder extends Seeder
             ['name' => 'Microsoft 365 Basic'],
             [
                 'badge'            => null,
-                'price_bdt'        => '৳2,490',
+                'price_bdt'        => '৳10',
                 'billing_period'   => 'year',
                 'price_usd'        => '$19.99/yr',
                 'terms_text'       => 'Subscription automatically renews unless canceled in Microsoft account. See terms.',
@@ -42,7 +42,7 @@ class PricingPlanSeeder extends Seeder
             ['name' => 'Microsoft 365 Personal'],
             [
                 'badge'            => 'Most Popular',
-                'price_bdt'        => '৳6,500',
+                'price_bdt'        => '৳10',
                 'billing_period'   => 'year',
                 'price_usd'        => '$99.99/yr',
                 'terms_text'       => 'Subscription automatically renews unless canceled in Microsoft account. See terms.',

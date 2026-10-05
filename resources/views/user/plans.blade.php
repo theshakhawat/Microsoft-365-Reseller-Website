@@ -178,7 +178,7 @@
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-4">
                     New pricing plans will be listed soon. Please check back later.
                 </p>
-                <a href="https://wa.me/8801342325558" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-xs">
+                <a href="https://wa.me/{{ site_setting('whatsapp_raw_number', '8801342325558') }}?text={{ urlencode(site_setting('whatsapp_chat_message', 'Hello, I want to inquire about Microsoft 365 plans.')) }}" target="_blank" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-xs">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                     <span>Contact on WhatsApp</span>
                 </a>
@@ -195,7 +195,7 @@
             </p>
         </div>
         <div class="flex items-center gap-3 shrink-0">
-            <a href="https://wa.me/8801342325558" target="_blank" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs inline-flex items-center gap-2 shadow-md shadow-emerald-600/20 transition-all">
+            <a href="https://wa.me/{{ site_setting('whatsapp_raw_number', '8801342325558') }}?text={{ urlencode('Hello, I need a custom enterprise or multi-seat Microsoft 365 plan.') }}" target="_blank" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs inline-flex items-center gap-2 shadow-md shadow-emerald-600/20 transition-all">
                 <i class="fa-brands fa-whatsapp text-sm"></i>
                 <span>Chat on WhatsApp</span>
             </a>

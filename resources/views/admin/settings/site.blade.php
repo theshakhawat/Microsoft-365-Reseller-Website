@@ -37,7 +37,7 @@
 
     <!-- Main Settings Form Container -->
     <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden">
-        
+
         <!-- Tab Navigation Bar -->
         <div class="border-b border-slate-200/90 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/70 px-4 sm:px-6 pt-3 flex flex-wrap gap-1">
             <button type="button" onclick="switchSettingsTab('general')" id="tab-btn-general" class="settings-tab-btn flex items-center gap-2 px-4 py-3 text-xs font-bold rounded-t-xl transition-all border-b-2 border-[#0067b8] text-[#0067b8] bg-white dark:bg-slate-900 shadow-xs">
@@ -96,7 +96,7 @@
 
                 <!-- Logos & Favicon Upload Row -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    
+
                     <!-- Header Logo Card -->
                     <div class="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 flex flex-col justify-between space-y-4">
                         <div>
@@ -104,7 +104,7 @@
                                 Header Logo (Navbar)
                             </label>
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Recommended: PNG / SVG with transparent background (Max 4MB).</p>
-                            
+
                             <div class="h-20 w-full rounded-xl bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center p-2 relative overflow-hidden group">
                                 <img id="preview_header_logo" src="{{ site_file_url('header_logo', 'assets/img/Microsoft Office Club Logo.png') }}" alt="Header Logo Preview" class="max-h-16 max-w-full object-contain">
                             </div>
@@ -122,7 +122,7 @@
                                 Footer Logo
                             </label>
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Logo displayed in the footer section. (PNG/SVG recommended).</p>
-                            
+
                             <div class="h-20 w-full rounded-xl bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center p-2 relative overflow-hidden group">
                                 <img id="preview_footer_logo" src="{{ site_file_url('footer_logo', 'assets/img/Microsoft Office Club Logo.png') }}" alt="Footer Logo Preview" class="max-h-16 max-w-full object-contain">
                             </div>
@@ -140,7 +140,7 @@
                                 Browser Favicon
                             </label>
                             <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Square icon (32x32 or 64x64) in .ico, .png, or .svg format.</p>
-                            
+
                             <div class="h-20 w-full rounded-xl bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center p-2 relative overflow-hidden group">
                                 <img id="preview_favicon" src="{{ site_file_url('favicon', 'assets/img/favicon.png') }}" alt="Favicon Preview" class="w-10 h-10 object-contain">
                             </div>
@@ -414,7 +414,7 @@
 
                     <!-- Images Upload Row -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        
+
                         <!-- Hero Banner Mockup Graphic -->
                         <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex flex-col justify-between space-y-3">
                             <div>
@@ -422,7 +422,7 @@
                                     Hero Graphic / Laptop Mockup Image
                                 </label>
                                 <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">Recommended: PNG / WebP with transparent background (Max 4MB).</p>
-                                
+
                                 <div class="h-32 w-full rounded-lg bg-slate-50 dark:bg-slate-950 border border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center p-2 relative overflow-hidden group">
                                     <img id="preview_hero_banner_image" src="{{ site_file_url('hero_banner_image', 'assets/img/banner.png') }}" alt="Hero Banner Preview" class="max-h-28 max-w-full object-contain">
                                 </div>
@@ -440,7 +440,7 @@
                                     Hero Ambient Background Pattern
                                 </label>
                                 <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">Subtle ambient backdrop layer (Default: bg.png).</p>
-                                
+
                                 <div class="h-32 w-full rounded-lg bg-slate-50 dark:bg-slate-950 border border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center p-2 relative overflow-hidden group">
                                     <img id="preview_hero_bg_image" src="{{ site_file_url('hero_bg_image', 'assets/img/bg.png') }}" alt="Hero BG Preview" class="max-h-28 max-w-full object-cover">
                                 </div>
@@ -455,7 +455,7 @@
 
                     <!-- Textual Content Inputs -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        
+
                         <div>
                             <label for="hero_badge_text" class="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
                                 Kicker / Tagline Badge Text
@@ -546,7 +546,7 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        
+
                         <div class="md:col-span-2">
                             <label for="cta_banner_title" class="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
                                 CTA Banner Headline
@@ -755,7 +755,7 @@
                         <label for="support_status_badge" class="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5">
                             Support Status Badge Text
                         </label>
-                        <input type="text" name="support_status_badge" id="support_status_badge" value="{{ old('support_status_badge', $settings['support_status_badge'] ?? 'Support Available 24/7') }}" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] focus:border-transparent outline-none transition-all">
+                        <input type="text" name="support_status_badge" id="support_status_badge" value="{{ old('support_status_badge', $settings['support_status_badge'] ?? "") }}" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] focus:border-transparent outline-none transition-all">
                     </div>
 
                     <div class="md:col-span-2">
@@ -884,7 +884,7 @@
                 <!-- Open Graph (Facebook / Social Share) -->
                 <div>
                     <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-4">Open Graph (Social Share Card)</h4>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="md:col-span-2 space-y-4">
                             <div>
@@ -919,7 +919,7 @@
                                     Social Share Preview Image
                                 </label>
                                 <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-3">Recommended: 1200 x 630 px (JPEG/PNG).</p>
-                                
+
                                 <div class="h-28 w-full rounded-xl bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center p-2 relative overflow-hidden group">
                                     <img id="preview_og_image" src="{{ site_file_url('og_image', 'assets/img/Microsoft Office Club Logo.png') }}" alt="OG Preview Image" class="max-h-24 max-w-full object-contain">
                                 </div>

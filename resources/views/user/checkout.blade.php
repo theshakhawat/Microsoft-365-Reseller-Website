@@ -434,7 +434,7 @@
                         <p class="text-[11px] text-emerald-300">Chat directly with our Dhaka CSP Desk</p>
                     </div>
                 </div>
-                <a href="https://wa.me/8801342325558?text={{ urlencode('Hello, I am at checkout for ' . $plan->name . '. I need assistance.') }}" target="_blank" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-all">
+                <a href="https://wa.me/{{ site_setting('whatsapp_raw_number', '8801342325558') }}?text={{ urlencode('Hello, I am at checkout for ' . $plan->name . '. I need assistance.') }}" target="_blank" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 transition-all">
                     Chat Now
                 </a>
             </div>

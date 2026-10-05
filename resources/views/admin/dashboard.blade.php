@@ -4,12 +4,7 @@
 
 @section('breadcrumb')
     <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 dark:text-slate-600"></i>
-    <span class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-        <span>Command Center Dashboard</span>
-        <span class="text-[10px] font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/60 px-2 py-0.5 rounded-full">
-            Live System
-        </span>
-    </span>
+    <span class="font-bold text-slate-900 dark:text-white">Dashboard</span>
 @endsection
 
 @section('content')
@@ -320,19 +315,56 @@
         </div>
 
         <!-- Right 1 Col: Active License Distribution by Plan -->
-        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-                <div>
-                    <h3 class="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group text-sky-500"></i>
-                        <span>Active Licenses by Plan</span>
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-0.5">Provisioned seats breakdown.</p>
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group text-sky-500"></i>
+                            <span>Active Licenses by Plan</span>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Provisioned seats breakdown.</p>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-xl bg-sky-50 dark:bg-sky-950/60 text-[#0067b8] dark:text-sky-400 font-bold text-xs border border-sky-200/60 dark:border-sky-800/60 shrink-0">
+                        {{ $stats['active_licenses'] }} Active
+                    </span>
+                </div>
+
+                <div class="mt-2 flex items-center justify-center" id="plan-distribution-chart" style="min-height: 220px;">
+                    <!-- RadialBar Chart Target -->
                 </div>
             </div>
 
-            <div class="mt-4" id="plan-distribution-chart" style="min-height: 250px;">
-                <!-- Bar Chart Target -->
+            <!-- Detailed Plan Breakdown List with Progress Bars -->
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                @php
+                    $planColors = ['#0067b8', '#00a4ef', '#10b981', '#8b5cf6', '#f59e0b', '#ec4899'];
+                    $totalActiveSeats = (int) $stats['active_licenses'];
+                @endphp
+                @forelse($plans as $idx => $plan)
+                    @php
+                        $color = $planColors[$idx % count($planColors)];
+                        $seatCount = $plan->subscriptions_count ?? 0;
+                        $percent = $totalActiveSeats > 0 ? round(($seatCount / $totalActiveSeats) * 100) : 0;
+                    @endphp
+                    <div class="space-y-1.5">
+                        <div class="flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-2xs" style="background-color: {{ $color }};"></span>
+                                <span class="font-bold text-slate-800 dark:text-slate-200 truncate">{{ $plan->name }}</span>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <span class="font-extrabold text-slate-900 dark:text-white">{{ $seatCount }} <span class="text-[10px] font-normal text-slate-400">seats</span></span>
+                                <span class="text-[10px] font-bold text-slate-400 w-8 text-right">{{ $percent }}%</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-700 ease-out" style="width: {{ $percent }}%; background-color: {{ $color }};"></div>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-xs text-slate-400 text-center py-2">No plans available.</p>
+                @endforelse
             </div>
         </div>
 
@@ -683,48 +715,86 @@
         const pmChart = new ApexCharts(document.querySelector("#payment-method-chart"), pmOptions);
         pmChart.render();
 
-        // 3. PLAN ACTIVE SUBSCRIPTION BAR CHART
+        // 3. PLAN ACTIVE SUBSCRIPTION RADIALBAR CHART
         const planLabels = @json($planLabels);
-        const planSeries = @json($planSeries);
+        const planSeriesCounts = @json($planSeries);
+        const totalActiveSeats = {{ (int) $stats['active_licenses'] }};
+
+        let planPercentages = [];
+        if (totalActiveSeats > 0) {
+            planPercentages = planSeriesCounts.map(count => Math.round((count / totalActiveSeats) * 100));
+        } else {
+            planPercentages = planSeriesCounts.map(() => 0);
+        }
 
         const planOptions = {
-            series: [{
-                name: 'Active Licenses',
-                data: planSeries.length > 0 ? planSeries : [0]
-            }],
+            series: planPercentages.length > 0 ? planPercentages : [0],
             chart: {
-                type: 'bar',
                 height: 250,
-                toolbar: { show: false },
+                type: 'radialBar',
                 fontFamily: 'Plus Jakarta Sans, sans-serif'
             },
-            colors: ['#0067b8'],
             plotOptions: {
-                bar: {
-                    borderRadius: 8,
-                    horizontal: true,
-                    distributed: false,
-                    barHeight: '45%'
+                radialBar: {
+                    offsetY: 0,
+                    startAngle: 0,
+                    endAngle: 360,
+                    hollow: {
+                        margin: 6,
+                        size: '30%',
+                        background: 'transparent',
+                    },
+                    track: {
+                        show: true,
+                        background: isDark ? '#1e293b' : '#f1f5f9',
+                        strokeWidth: '95%',
+                        opacity: 1,
+                        margin: 5
+                    },
+                    dataLabels: {
+                        name: {
+                            show: true,
+                            fontSize: '11px',
+                            fontWeight: 600,
+                            color: textColor,
+                            offsetY: -8
+                        },
+                        value: {
+                            show: true,
+                            fontSize: '15px',
+                            fontWeight: 800,
+                            color: isDark ? '#ffffff' : '#0f172a',
+                            offsetY: 4,
+                            formatter: function (val, opts) {
+                                const index = (opts && typeof opts.seriesIndex !== 'undefined') ? opts.seriesIndex : 0;
+                                const count = planSeriesCounts[index] !== undefined ? planSeriesCounts[index] : 0;
+                                return count + ' Seats (' + val + '%)';
+                            }
+                        },
+                        total: {
+                            show: true,
+                            label: 'Total Active',
+                            color: textColor,
+                            fontSize: '11px',
+                            fontWeight: 700,
+                            formatter: function () {
+                                return totalActiveSeats + ' Seats';
+                            }
+                        }
+                    }
                 }
             },
-            dataLabels: {
-                enabled: true,
-                style: { fontSize: '11px', fontWeight: 800 }
+            colors: ['#0067b8', '#00a4ef', '#10b981', '#8b5cf6', '#f59e0b', '#ec4899'],
+            labels: planLabels.length > 0 ? planLabels : ['No Plans'],
+            legend: {
+                show: false
             },
-            xaxis: {
-                categories: planLabels.length > 0 ? planLabels : ['None'],
-                labels: { style: { colors: textColor, fontSize: '11px' } },
-                axisBorder: { show: false },
-                axisTicks: { show: false }
+            stroke: {
+                lineCap: 'round'
             },
-            yaxis: {
-                labels: { style: { colors: textColor, fontSize: '11px', fontWeight: 600 } }
-            },
-            grid: {
-                borderColor: gridColor,
-                strokeDashArray: 4
-            },
-            tooltip: { theme: isDark ? 'dark' : 'light' }
+            tooltip: {
+                theme: isDark ? 'dark' : 'light'
+            }
         };
 
         const planChart = new ApexCharts(document.querySelector("#plan-distribution-chart"), planOptions);
