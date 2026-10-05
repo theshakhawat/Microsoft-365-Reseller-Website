@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppNotification;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\PaymentMethod;
@@ -421,18 +422,6 @@ class UserController extends Controller
                 ]);
             }
 
-            // Customer Notification
-            \App\Models\AppNotification::send([
-                'user_id'     => $user->id,
-                'target_role' => 'user',
-                'title'       => "100% Free License Activated! 🎉",
-                'message'     => "Your order #{$order->order_number} for {$order->plan_name} was redeemed for free with 100% coupon and is now ACTIVE.",
-                'type'        => 'subscription',
-                'action_url'  => route('user.subscriptions', [], false),
-                'icon'        => 'fa-solid fa-gift',
-                'color'       => 'emerald',
-            ]);
-
             // Admin Notification
             \App\Models\AppNotification::send([
                 'user_id'     => null,
@@ -465,7 +454,7 @@ class UserController extends Controller
             'recipient_email'     => $request->contact_email,
             'recipient_phone'     => $request->contact_phone,
             'notes'               => $request->notes,
-            'payment_status'      => 'pending',
+            'payment_status'      => 'cancelled',
         ]);
 
         if ($appliedCoupon) {
@@ -484,17 +473,6 @@ class UserController extends Controller
             'color'       => 'amber',
         ]);
 
-        // Send App Notification to Customer
-        \App\Models\AppNotification::send([
-            'user_id'     => $user->id,
-            'target_role' => 'user',
-            'title'       => "Order Placed: #{$order->order_number}",
-            'message'     => "Your order for {$order->plan_name} (৳" . number_format($order->payable_amount, 2) . ") has been submitted.",
-            'type'        => 'order',
-            'action_url'  => route('user.orders', [], false),
-            'icon'        => 'fa-solid fa-cart-shopping',
-            'color'       => 'blue',
-        ]);
 
         // If payment method is automated gateway Moneybag
         if ($paymentMethod->slug === 'moneybag') {
