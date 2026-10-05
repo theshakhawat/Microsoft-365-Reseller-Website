@@ -101,7 +101,23 @@ class AuthController extends Controller
             'status' => true,
         ]);
 
-        // Dispatch asynchronous Welcome Email via Laravel Queue
+        // 1. Send in-app notification to all Admins immediately
+        try {
+            \App\Models\AppNotification::send([
+                'user_id'     => null,
+                'target_role' => 'admin',
+                'title'       => 'New Customer Registered',
+                'message'     => "{$user->name} ({$user->email}) has just registered a new customer account.",
+                'type'        => 'user',
+                'action_url'  => route('admin.users.edit', $user->id, false),
+                'icon'        => 'fa-solid fa-user-plus',
+                'color'       => 'emerald',
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("Failed to create admin registration notification: " . $e->getMessage());
+        }
+
+        // 2. Dispatch asynchronous Welcome Email & Admin notification email via Laravel Queue
         \App\Jobs\SendWelcomeEmailJob::dispatch($user);
 
         Auth::login($user);

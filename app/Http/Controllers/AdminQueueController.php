@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
@@ -12,16 +14,16 @@ use Illuminate\View\View;
 class AdminQueueController extends Controller
 {
     /**
-     * Display background queue jobs, failed jobs, and batches.
+     * Display background queue jobs, failed jobs, batches, and success history.
      */
     public function index(Request $request): View
     {
-        $activeTab = $request->query('tab', 'pending'); // pending, failed, batches
+        $activeTab = $request->query('tab', 'pending'); // pending, failed, successful, batches
 
         // 1. Pending & Running Jobs
-        $pendingJobs = [];
         $runningCount = 0;
         $pendingCount = 0;
+        $totalPending = 0;
 
         if (Schema::hasTable('jobs')) {
             $rawJobs = DB::table('jobs')->orderBy('id', 'desc')->paginate(20, ['*'], 'pending_page');
@@ -29,8 +31,6 @@ class AdminQueueController extends Controller
             $pendingJobs = $rawJobs->through(function ($job) use (&$runningCount, &$pendingCount) {
                 $payload = json_decode($job->payload, true) ?: [];
                 $displayName = $payload['displayName'] ?? ($payload['data']['commandName'] ?? 'Unknown Job');
-                
-                // Shorten class name for cleaner display
                 $shortName = class_basename($displayName);
 
                 $isReserved = !empty($job->reserved_at);
@@ -58,12 +58,10 @@ class AdminQueueController extends Controller
             $runningCount = DB::table('jobs')->whereNotNull('reserved_at')->count();
         } else {
             $pendingJobs = collect();
-            $totalPending = 0;
-            $runningCount = 0;
         }
 
         // 2. Failed Jobs
-        $failedJobs = [];
+        $failedJobs = collect();
         $failedCount = 0;
 
         if (Schema::hasTable('failed_jobs')) {
@@ -74,7 +72,6 @@ class AdminQueueController extends Controller
                 $displayName = $payload['displayName'] ?? ($payload['data']['commandName'] ?? 'Unknown Job');
                 $shortName = class_basename($displayName);
 
-                // Extract error message from first line of exception
                 $lines = explode("\n", $job->exception);
                 $firstError = $lines[0] ?? 'Unknown Exception';
 
@@ -93,13 +90,10 @@ class AdminQueueController extends Controller
             });
 
             $failedCount = DB::table('failed_jobs')->count();
-        } else {
-            $failedJobs = collect();
-            $failedCount = 0;
         }
 
         // 3. Batches
-        $batches = [];
+        $batches = collect();
         $batchesCount = 0;
 
         if (Schema::hasTable('job_batches')) {
@@ -124,10 +118,11 @@ class AdminQueueController extends Controller
             });
 
             $batchesCount = DB::table('job_batches')->count();
-        } else {
-            $batches = collect();
-            $batchesCount = 0;
         }
+
+        // 4. Last 10 Successful Jobs
+        $successfulJobs = Cache::get('recent_successful_jobs', []);
+        $successCount = count($successfulJobs);
 
         $queueDriver = config('queue.default', 'database');
 
@@ -136,12 +131,84 @@ class AdminQueueController extends Controller
             'pendingJobs',
             'failedJobs',
             'batches',
+            'successfulJobs',
             'totalPending',
             'runningCount',
             'failedCount',
             'batchesCount',
+            'successCount',
             'queueDriver'
         ));
+    }
+
+    /**
+     * Get real-time queue metrics and job items for live dashboard updates.
+     */
+    public function metrics(): JsonResponse
+    {
+        $totalPending = 0;
+        $runningCount = 0;
+        $pendingItems = [];
+
+        if (Schema::hasTable('jobs')) {
+            $totalPending = DB::table('jobs')->count();
+            $runningCount = DB::table('jobs')->whereNotNull('reserved_at')->count();
+
+            $raw = DB::table('jobs')->orderBy('id', 'desc')->take(20)->get();
+            foreach ($raw as $job) {
+                $payload = json_decode($job->payload, true) ?: [];
+                $displayName = $payload['displayName'] ?? ($payload['data']['commandName'] ?? 'Unknown Job');
+                $isReserved = !empty($job->reserved_at);
+
+                $pendingItems[] = [
+                    'id'           => $job->id,
+                    'queue'        => $job->queue,
+                    'display_name' => $displayName,
+                    'short_name'   => class_basename($displayName),
+                    'attempts'     => $job->attempts,
+                    'is_reserved'  => $isReserved,
+                    'status'       => $isReserved ? 'Running' : 'Pending',
+                    'queued_at'    => date('Y-m-d H:i:s', $job->created_at),
+                ];
+            }
+        }
+
+        $failedCount = 0;
+        $failedItems = [];
+        if (Schema::hasTable('failed_jobs')) {
+            $failedCount = DB::table('failed_jobs')->count();
+            $rawFailed = DB::table('failed_jobs')->orderBy('id', 'desc')->take(20)->get();
+            foreach ($rawFailed as $job) {
+                $payload = json_decode($job->payload, true) ?: [];
+                $displayName = $payload['displayName'] ?? ($payload['data']['commandName'] ?? 'Unknown Job');
+                $lines = explode("\n", $job->exception);
+
+                $failedItems[] = [
+                    'id'           => $job->id,
+                    'uuid'         => $job->uuid,
+                    'queue'        => $job->queue,
+                    'short_name'   => class_basename($displayName),
+                    'first_error'  => $lines[0] ?? 'Exception',
+                    'failed_at'    => $job->failed_at,
+                ];
+            }
+        }
+
+        $batchesCount = Schema::hasTable('job_batches') ? DB::table('job_batches')->count() : 0;
+        $successfulJobs = Cache::get('recent_successful_jobs', []);
+        $successCount = count($successfulJobs);
+
+        return response()->json([
+            'total_pending'   => $totalPending,
+            'running_count'   => $runningCount,
+            'failed_count'    => $failedCount,
+            'batches_count'   => $batchesCount,
+            'success_count'   => $successCount,
+            'pending_jobs'    => $pendingItems,
+            'failed_jobs'     => $failedItems,
+            'successful_jobs' => $successfulJobs,
+            'timestamp'       => now()->format('h:i:s A'),
+        ]);
     }
 
     /**

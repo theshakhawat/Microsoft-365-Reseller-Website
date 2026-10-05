@@ -24,8 +24,14 @@ class AdminUserController extends Controller
         }
 
         $search = $request->query('search');
+        $status = $request->query('status');
 
-        $users = User::where('role', $role)
+        $users = User::when($role !== 'all', function ($query) use ($role) {
+                $query->where('role', $role);
+            })
+            ->when($status === 'online', function ($query) {
+                $query->where('last_seen_at', '>=', now()->subMinutes(5));
+            })
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
@@ -33,7 +39,7 @@ class AdminUserController extends Controller
                       ->orWhere('phone', 'like', "%{$search}%");
                 });
             })
-            ->latest()
+            ->latest('last_seen_at')
             ->paginate(10)
             ->withQueryString();
 
@@ -42,9 +48,10 @@ class AdminUserController extends Controller
             'active_customers' => User::where('role', 'user')->where('status', true)->count(),
             'total_admins' => User::where('role', 'admin')->count(),
             'active_admins' => User::where('role', 'admin')->where('status', true)->count(),
+            'online_now' => User::where('last_seen_at', '>=', now()->subMinutes(5))->count(),
         ];
 
-        return view('admin.users.index', compact('users', 'role', 'search', 'stats'));
+        return view('admin.users.index', compact('users', 'role', 'search', 'stats', 'status'));
     }
 
     /**

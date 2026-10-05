@@ -59,11 +59,9 @@
         <div class="relative" id="user-notification-wrapper">
             <button onclick="toggleDropdown('user-notification-menu')" type="button" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-[#0067b8] dark:hover:text-sky-400 flex items-center justify-center hover:scale-105 active:scale-95 transition-all relative cursor-pointer shrink-0" title="Notifications">
                 <i class="fa-regular fa-bell text-xs sm:text-sm"></i>
-                @if($totalUserUnread > 0)
-                    <span class="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-blue-600 px-1 text-[9px] font-black text-white ring-2 ring-white dark:ring-slate-900">
-                        {{ $totalUserUnread > 9 ? '9+' : $totalUserUnread }}
-                    </span>
-                @endif
+                <span id="user-navbar-notif-badge" class="notification-unread-count-badge absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-blue-600 px-1 text-[9px] font-black text-white ring-2 ring-white dark:ring-slate-900 {{ $totalUserUnread > 0 ? '' : 'hidden' }}">
+                    {{ $totalUserUnread > 9 ? '9+' : $totalUserUnread }}
+                </span>
             </button>
 
             <!-- Dropdown Menu Card -->
@@ -73,16 +71,14 @@
                 <div class="p-3.5 sm:p-4 bg-slate-50/70 dark:bg-slate-800/40 flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <h3 class="text-xs font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">Account Alerts</h3>
-                        @if($totalUserUnread > 0)
-                            <span class="text-[10px] font-bold bg-blue-100 dark:bg-blue-950 text-[#0067b8] dark:text-sky-400 px-2 py-0.5 rounded-full">{{ $totalUserUnread }} New</span>
-                        @else
-                            <span class="text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded-full">All Caught Up</span>
-                        @endif
+                        <span id="user-navbar-unread-text" class="text-[10px] font-bold {{ $totalUserUnread > 0 ? 'bg-blue-100 dark:bg-blue-950 text-[#0067b8] dark:text-sky-400' : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400' }} px-2 py-0.5 rounded-full">
+                            {{ $totalUserUnread > 0 ? $totalUserUnread . ' New' : 'All Caught Up' }}
+                        </span>
                     </div>
                 </div>
 
                 <!-- Notification Feed -->
-                <div class="max-h-[320px] sm:max-h-[360px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 text-xs">
+                <div id="user-navbar-notif-list" class="max-h-[320px] sm:max-h-[360px] overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 text-xs">
                     @forelse($userNotifications as $notif)
                         <a href="{{ route('user.notifications.read-and-redirect', $notif->id) }}" class="p-3.5 flex items-start gap-3 {{ !$notif->is_read ? 'bg-blue-50/30 dark:bg-blue-950/20' : '' }} hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors block group">
                             <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs mt-0.5
@@ -105,7 +101,7 @@
                             </div>
                         </a>
                     @empty
-                        <div class="p-6 text-center text-slate-400 text-xs">
+                        <div class="empty-notif-placeholder p-6 text-center text-slate-400 text-xs">
                             <i class="fa-regular fa-bell-slash text-2xl mb-2 text-slate-300 block"></i>
                             No notifications found. All caught up!
                         </div>

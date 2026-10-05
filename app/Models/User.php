@@ -26,6 +26,8 @@ class User extends Authenticatable
         'password',
         'role',
         'status',
+        'push_notifications_enabled',
+        'last_seen_at',
     ];
 
     /**
@@ -49,6 +51,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'status' => 'boolean',
+            'push_notifications_enabled' => 'boolean',
+            'last_seen_at' => 'datetime',
         ];
     }
 

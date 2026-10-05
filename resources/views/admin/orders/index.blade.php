@@ -33,7 +33,11 @@
                     Verify incoming customer orders, review payment proof, and approve license activation.
                 </p>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('admin.payments.create') }}" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-2 shadow-sm shadow-emerald-600/20 transition-all cursor-pointer">
+                    <i class="fa-solid fa-hand-holding-dollar text-xs"></i>
+                    <span>+ Record Office Payment</span>
+                </a>
                 <a href="{{ route('admin.subscriptions.create') }}" class="px-4 py-2.5 rounded-xl bg-[#0067b8] hover:bg-[#005a9e] text-white font-bold text-xs flex items-center gap-2 shadow-sm shadow-[#0067b8]/20 transition-all">
                     <i class="fa-solid fa-plus text-xs"></i>
                     <span>Manual Subscription</span>

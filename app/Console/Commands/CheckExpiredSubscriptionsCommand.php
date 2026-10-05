@@ -70,7 +70,23 @@ class CheckExpiredSubscriptionsCommand extends Command
                 Log::warning("Failed to send in-app expiration notice for subscription #{$subscription->id}: " . $e->getMessage());
             }
 
-            // 2. Dispatch queued expiration email
+            // 2. Send in-app notification to Admin
+            try {
+                AppNotification::send([
+                    'user_id'     => null,
+                    'target_role' => 'admin',
+                    'title'       => "Subscription Expired: {$subscription->license_email}",
+                    'message'     => "Customer {$subscription->user->name}'s {$subscription->plan_name} subscription has expired.",
+                    'type'        => 'subscription',
+                    'action_url'  => route('admin.subscriptions.index'),
+                    'icon'        => 'fa-solid fa-clock-rotate-left',
+                    'color'       => 'amber',
+                ]);
+            } catch (\Throwable $e) {
+                Log::warning("Failed to send admin expiration notice: " . $e->getMessage());
+            }
+
+            // 3. Dispatch queued expiration email
             try {
                 SendSubscriptionStatusEmailJob::dispatch($subscription->fresh(), 'expired');
             } catch (\Throwable $e) {

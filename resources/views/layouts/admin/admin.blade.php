@@ -296,6 +296,10 @@
             }
         });
     </script>
+
+    <!-- Realtime Push Notifications Partial -->
+    @include('partials.realtime-notifications')
+
     @stack('scripts')
 </body>
 </html>

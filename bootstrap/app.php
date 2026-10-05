@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleCheck::class,
         ]);
 
+        $middleware->web(append: [
+            \App\Http\Middleware\UpdateUserActivity::class,
+        ]);
+
         $middleware->validateCsrfTokens(except: [
             'payment/moneybag/ipn',
             'user/payment/ipn',

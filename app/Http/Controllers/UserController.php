@@ -236,7 +236,7 @@ class UserController extends Controller
 
         if ($coupon->min_order_amount && $orderTotal < $coupon->min_order_amount) {
             return response()->json([
-                'success' => false, 
+                'success' => false,
                 'message' => 'Minimum order amount for this coupon is ৳' . number_format($coupon->min_order_amount, 2)
             ], 422);
         }
@@ -365,8 +365,8 @@ class UserController extends Controller
                 ?? Subscription::where('user_id', $user->id)->latest()->first();
 
             if ($existingActiveSub) {
-                $baseExpiry = ($existingActiveSub->expires_at && $existingActiveSub->expires_at->isFuture()) 
-                    ? $existingActiveSub->expires_at 
+                $baseExpiry = ($existingActiveSub->expires_at && $existingActiveSub->expires_at->isFuture())
+                    ? $existingActiveSub->expires_at
                     : now();
 
                 $isSamePlan = ($existingActiveSub->pricing_plan_id && $existingActiveSub->pricing_plan_id == $plan->id)

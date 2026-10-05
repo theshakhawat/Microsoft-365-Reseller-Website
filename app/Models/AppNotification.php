@@ -62,7 +62,7 @@ class AppNotification extends Model
     }
 
     /**
-     * Helper to send notification easily from anywhere in the app
+     * Helper to send notification easily from anywhere in the app and broadcast realtime via Pusher.
      */
     public static function send(array $data): self
     {
@@ -76,7 +76,7 @@ class AppNotification extends Model
             $actionUrl = $path;
         }
 
-        return self::create([
+        $notification = self::create([
             'user_id'     => $data['user_id'] ?? null,
             'target_role' => $data['target_role'] ?? null,
             'title'       => $data['title'] ?? 'Notification',
@@ -87,5 +87,33 @@ class AppNotification extends Model
             'color'       => $data['color'] ?? 'blue',
             'is_read'     => false,
         ]);
+
+        // Broadcast immediately over Pusher WebSockets (synchronous broadcast)
+        try {
+            if (site_is_enabled('pusher_enabled', true)) {
+                $payload = [
+                    'id'         => $notification->id,
+                    'title'      => $notification->title,
+                    'message'    => $notification->message,
+                    'type'       => $notification->type,
+                    'action_url' => $notification->action_url,
+                    'icon'       => $notification->icon,
+                    'color'      => $notification->color,
+                    'created_at' => $notification->created_at ? $notification->created_at->toIso8601String() : now()->toIso8601String(),
+                    'time_ago'   => 'Just now',
+                    'sound'      => true,
+                ];
+
+                event(new \App\Events\RealtimeNotificationEvent(
+                    $notification->target_role,
+                    $notification->user_id,
+                    $payload
+                ));
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Pusher realtime broadcast failed: ' . $e->getMessage());
+        }
+
+        return $notification;
     }
 }

@@ -193,8 +193,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/subscriptions/{subscription}/extend', [App\Http\Controllers\AdminSubscriptionController::class, 'extend'])->name('subscriptions.extend');
     Route::delete('/subscriptions/{subscription}', [App\Http\Controllers\AdminSubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
 
-    // Payments & Transactions Log
+    // Payments & Manual / Office Payments Entry
     Route::get('/payments', [App\Http\Controllers\AdminPaymentController::class, 'index'])->name('payments.index');
+    Route::get('/payments/create', [App\Http\Controllers\AdminPaymentController::class, 'create'])->name('payments.create');
+    Route::post('/payments/manual', [App\Http\Controllers\AdminPaymentController::class, 'storeManual'])->name('payments.store-manual');
 
     // Support Tickets Administration
     Route::get('/tickets', [App\Http\Controllers\AdminTicketController::class, 'index'])->name('tickets.index');
@@ -205,11 +207,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Dedicated Admin Notifications Page & Actions
     Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'adminIndex'])->name('notifications.index');
-    Route::get('/notifications/{notification}/go', [App\Http\Controllers\NotificationController::class, 'adminReadAndRedirect'])->name('notifications.read-and-redirect');
     Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'adminMarkAllRead'])->name('notifications.mark-all-read');
-    Route::post('/notifications/delete-all', [App\Http\Controllers\NotificationController::class, 'adminDeleteAll'])->name('notifications.delete-all');
-    Route::post('/notifications/{notification}/toggle-read', [App\Http\Controllers\NotificationController::class, 'adminToggleRead'])->name('notifications.toggle-read');
-    Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'adminDestroy'])->name('notifications.destroy');
+    Route::match(['post', 'delete'], '/notifications/delete-all', [App\Http\Controllers\NotificationController::class, 'adminDeleteAll'])->name('notifications.delete-all');
+    Route::get('/notifications/{notification}/go', [App\Http\Controllers\NotificationController::class, 'adminReadAndRedirect'])->name('notifications.read-and-redirect')->whereNumber('notification');
+    Route::post('/notifications/{notification}/toggle-read', [App\Http\Controllers\NotificationController::class, 'adminToggleRead'])->name('notifications.toggle-read')->whereNumber('notification');
+    Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'adminDestroy'])->name('notifications.destroy')->whereNumber('notification');
 
     // Dedicated Site, Footer, Branding & SEO Settings
     Route::get('/site-settings', [App\Http\Controllers\AdminSiteSettingController::class, 'index'])->name('site-settings.index');
@@ -227,6 +229,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Background Jobs & Queue Monitor
     Route::get('/queue-jobs', [App\Http\Controllers\AdminQueueController::class, 'index'])->name('queue.index');
+    Route::get('/queue-jobs/metrics', [App\Http\Controllers\AdminQueueController::class, 'metrics'])->name('queue.metrics');
     Route::post('/queue-jobs/restart', [App\Http\Controllers\AdminQueueController::class, 'restartWorkers'])->name('queue.restart');
     Route::post('/queue-jobs/retry-all', [App\Http\Controllers\AdminQueueController::class, 'retryAll'])->name('queue.retry-all');
     Route::post('/queue-jobs/flush-failed', [App\Http\Controllers\AdminQueueController::class, 'flushFailedJobs'])->name('queue.flush-failed');
@@ -263,11 +266,11 @@ Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(f
 
     // Dedicated User Notifications Page & Actions
     Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'userIndex'])->name('notifications');
-    Route::get('/notifications/{notification}/go', [App\Http\Controllers\NotificationController::class, 'userReadAndRedirect'])->name('notifications.read-and-redirect');
     Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'userMarkAllRead'])->name('notifications.mark-all-read');
-    Route::post('/notifications/delete-all', [App\Http\Controllers\NotificationController::class, 'userDeleteAll'])->name('notifications.delete-all');
-    Route::post('/notifications/{notification}/toggle-read', [App\Http\Controllers\NotificationController::class, 'userToggleRead'])->name('notifications.toggle-read');
-    Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'userDestroy'])->name('notifications.destroy');
+    Route::match(['post', 'delete'], '/notifications/delete-all', [App\Http\Controllers\NotificationController::class, 'userDeleteAll'])->name('notifications.delete-all');
+    Route::get('/notifications/{notification}/go', [App\Http\Controllers\NotificationController::class, 'userReadAndRedirect'])->name('notifications.read-and-redirect')->whereNumber('notification');
+    Route::post('/notifications/{notification}/toggle-read', [App\Http\Controllers\NotificationController::class, 'userToggleRead'])->name('notifications.toggle-read')->whereNumber('notification');
+    Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'userDestroy'])->name('notifications.destroy')->whereNumber('notification');
 
     // User Support Tickets
     Route::get('/tickets', [App\Http\Controllers\UserTicketController::class, 'index'])->name('tickets');

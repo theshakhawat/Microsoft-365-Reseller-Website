@@ -54,23 +54,23 @@
 
                 <div id="users-submenu" class="{{ request()->routeIs('admin.users.*') ? '' : 'hidden' }} pl-4 pr-1 py-1 space-y-1">
                     <!-- Customers Option -->
-                    <a href="{{ route('admin.users.index', ['role' => 'user']) }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold {{ request()->routeIs('admin.users.index') && request('role', 'user') === 'user' ? 'bg-[#0067b8] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }} transition-colors">
+                    <a href="{{ route('admin.users.index', ['role' => 'user']) }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold {{ request()->routeIs('admin.users.index') && request('role', 'user') === 'user' && request('status') !== 'online' ? 'bg-[#0067b8] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }} transition-colors">
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-user-group text-xs w-4 text-center {{ request()->routeIs('admin.users.index') && request('role', 'user') === 'user' ? 'text-white' : 'text-slate-400' }}"></i>
+                            <i class="fa-solid fa-user-group text-xs w-4 text-center {{ request()->routeIs('admin.users.index') && request('role', 'user') === 'user' && request('status') !== 'online' ? 'text-white' : 'text-slate-400' }}"></i>
                             <span>Customers</span>
                         </div>
-                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full {{ request()->routeIs('admin.users.index') && request('role', 'user') === 'user' ? 'bg-white/20 text-white' : 'bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400' }}">
+                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full {{ request()->routeIs('admin.users.index') && request('role', 'user') === 'user' && request('status') !== 'online' ? 'bg-white/20 text-white' : 'bg-slate-200/80 dark:bg-slate-800 text-slate-600 dark:text-slate-400' }}">
                             {{ \App\Models\User::where('role', 'user')->count() }}
                         </span>
                     </a>
 
                     <!-- Admins Option -->
-                    <a href="{{ route('admin.users.index', ['role' => 'admin']) }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold {{ request()->routeIs('admin.users.index') && request('role') === 'admin' ? 'bg-[#0067b8] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }} transition-colors">
+                    <a href="{{ route('admin.users.index', ['role' => 'admin']) }}" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold {{ request()->routeIs('admin.users.index') && request('role') === 'admin' && request('status') !== 'online' ? 'bg-[#0067b8] text-white font-bold shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60' }} transition-colors">
                         <div class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-user-shield text-xs w-4 text-center {{ request()->routeIs('admin.users.index') && request('role') === 'admin' ? 'text-white' : 'text-slate-400' }}"></i>
+                            <i class="fa-solid fa-user-shield text-xs w-4 text-center {{ request()->routeIs('admin.users.index') && request('role') === 'admin' && request('status') !== 'online' ? 'text-white' : 'text-slate-400' }}"></i>
                             <span>Admins</span>
                         </div>
-                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full {{ request()->routeIs('admin.users.index') && request('role') === 'admin' ? 'bg-white/20 text-white' : 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300' }}">
+                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full {{ request()->routeIs('admin.users.index') && request('role') === 'admin' && request('status') !== 'online' ? 'bg-white/20 text-white' : 'bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300' }}">
                             {{ \App\Models\User::where('role', 'admin')->count() }}
                         </span>
                     </a>

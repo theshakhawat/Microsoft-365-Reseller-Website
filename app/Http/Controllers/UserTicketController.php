@@ -99,7 +99,7 @@ class UserTicketController extends Controller
             'is_read_by_user'  => true,
         ]);
 
-        // Send App Notification to Admins
+        // Send App Notification to Admins ONLY
         \App\Models\AppNotification::send([
             'user_id'     => null,
             'target_role' => 'admin',
@@ -109,18 +109,6 @@ class UserTicketController extends Controller
             'action_url'  => route('admin.tickets.show', $ticket->id, false),
             'icon'        => 'fa-solid fa-headset',
             'color'       => $ticket->priority === 'urgent' ? 'rose' : 'blue',
-        ]);
-
-        // Send App Notification to Customer
-        \App\Models\AppNotification::send([
-            'user_id'     => $user->id,
-            'target_role' => 'user',
-            'title'       => "Ticket Created: #{$ticket->ticket_number}",
-            'message'     => "Your support ticket '{$ticket->subject}' has been submitted. Our team will assist you soon.",
-            'type'        => 'ticket',
-            'action_url'  => route('user.tickets.show', $ticket->id, false),
-            'icon'        => 'fa-solid fa-headset',
-            'color'       => 'blue',
         ]);
 
         return redirect()->route('user.tickets.show', $ticket->id)
@@ -226,6 +214,18 @@ class UserTicketController extends Controller
 
         $ticket->update([
             'status' => 'closed',
+        ]);
+
+        // Send App Notification to Admins
+        \App\Models\AppNotification::send([
+            'user_id'     => null,
+            'target_role' => 'admin',
+            'title'       => "Ticket Closed by Customer: #{$ticket->ticket_number}",
+            'message'     => "Customer {$user->name} closed ticket '{$ticket->subject}'.",
+            'type'        => 'ticket',
+            'action_url'  => route('admin.tickets.show', $ticket->id),
+            'icon'        => 'fa-solid fa-headset',
+            'color'       => 'slate',
         ]);
 
         return back()->with('success', "Ticket #{$ticket->ticket_number} marked as closed.");
