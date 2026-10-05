@@ -64,13 +64,17 @@ class SiteSetting extends Model
      */
     public static function getAllSettings(): array
     {
-        return Cache::rememberForever(static::CACHE_KEY, function () {
-            try {
-                return static::pluck('value', 'key')->toArray();
-            } catch (\Throwable $e) {
-                return [];
-            }
-        });
+        try {
+            return Cache::rememberForever(static::CACHE_KEY, function () {
+                try {
+                    return static::pluck('value', 'key')->toArray();
+                } catch (\Throwable $e) {
+                    return [];
+                }
+            });
+        } catch (\Throwable $e) {
+            return [];
+        }
     }
 
     /**

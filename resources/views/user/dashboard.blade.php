@@ -65,7 +65,7 @@
     <!-- 2. TOP 4 DYNAMIC KPI STAT METRIC CARDS                            -->
     <!-- ================================================================= -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-        
+
         <!-- Stat 1: License Status -->
         <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 shadow-xs flex items-center gap-4 transition-all hover:border-[#0067b8]/40 dark:hover:border-sky-500/40">
             <div class="w-12 h-12 rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-[#0067b8] dark:text-sky-400 flex items-center justify-center text-xl shrink-0">
@@ -142,12 +142,12 @@
     <!-- 3. MAIN CONTENT 2-COLUMN GRID                                     -->
     <!-- ================================================================= -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         <!-- ============================================================= -->
         <!-- LEFT COLUMN (2 Cols): Active License, Apps & Quick Setup      -->
         <!-- ============================================================= -->
         <div class="lg:col-span-2 space-y-8">
-            
+
             <!-- 3.1 ACTIVE LICENSE / SUBSCRIPTION OVERVIEW -->
             @if($activeSubscription)
                 <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 shadow-xs">
@@ -181,7 +181,7 @@
                                 </span>
                             </div>
                             <div class="text-slate-500 dark:text-slate-400 text-[11px]">
-                                Cycle: <span class="font-bold text-slate-700 dark:text-slate-300">{{ $activeSubscription->starts_at ? $activeSubscription->starts_at->format('M d, Y') : 'Active' }}</span> &rarr; 
+                                Cycle: <span class="font-bold text-slate-700 dark:text-slate-300">{{ $activeSubscription->starts_at ? $activeSubscription->starts_at->format('M d, Y') : 'Active' }}</span> &rarr;
                                 <span class="font-bold text-slate-700 dark:text-slate-300">{{ $activeSubscription->expires_at ? $activeSubscription->expires_at->format('M d, Y') : 'Perpetual' }}</span>
                             </div>
                         </div>
@@ -207,7 +207,7 @@
                     <div class="mt-6" id="apps-suite">
                         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Included Apps & Premium Cloud Features</h4>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3.5">
-                            
+
                             <!-- Word -->
                             <a href="https://word.office.com" target="_blank" class="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-100 dark:border-slate-800 flex items-center gap-3 transition-all group">
                                 <div class="w-9 h-9 rounded-xl bg-[#185abd] text-white flex items-center justify-center font-bold text-sm shadow-xs group-hover:scale-105 transition-transform">
@@ -572,7 +572,7 @@
                         <i class="fa-brands fa-whatsapp"></i>
                     </div>
                     <div>
-                        <h4 class="text-sm font-extrabold text-white">Dhaka Helpdesk</h4>
+                        <h4 class="text-sm font-extrabold text-white">Helpdesk</h4>
                         <p class="text-[11px] text-emerald-300">24/7 Priority CSP Support</p>
                     </div>
                 </div>
