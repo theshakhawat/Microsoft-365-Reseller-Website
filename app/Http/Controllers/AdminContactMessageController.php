@@ -97,6 +97,20 @@ class AdminContactMessageController extends Controller
     }
 
     /**
+     * Update notification email settings for contact inquiries and system alerts.
+     */
+    public function updateSettings(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'admin_notification_email' => ['required', 'email', 'max:255'],
+        ]);
+
+        \App\Models\SiteSetting::set('admin_notification_email', trim($validated['admin_notification_email']), 'contact');
+
+        return redirect()->back()->with('success', 'Admin notification recipient email updated to ' . $validated['admin_notification_email'] . ' successfully.');
+    }
+
+    /**
      * Remove the specified contact message from storage.
      */
     public function destroy(ContactMessage $contactMessage): RedirectResponse

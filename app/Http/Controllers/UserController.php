@@ -422,7 +422,7 @@ class UserController extends Controller
                 ]);
             }
 
-            // Admin Notification
+            // Admin Notification & Alert Email
             \App\Models\AppNotification::send([
                 'user_id'     => null,
                 'target_role' => 'admin',
@@ -433,6 +433,14 @@ class UserController extends Controller
                 'icon'        => 'fa-solid fa-gift',
                 'color'       => 'emerald',
             ]);
+
+            try {
+                \App\Jobs\SendOrderPlacedEmailJob::dispatch($order->fresh());
+                \App\Jobs\SendPaymentSuccessEmailJob::dispatch($order->fresh());
+                \App\Jobs\SendAdminNewOrderAlertJob::dispatch($order->fresh());
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error("Error dispatching emails for free order #{$order->order_number}: " . $e->getMessage());
+            }
 
             return redirect()->route('user.subscriptions')->with('success', "Congratulations! 100% Free Promo Coupon applied. Your order #{$order->order_number} has been activated successfully!");
         }
@@ -473,6 +481,12 @@ class UserController extends Controller
             'color'       => 'amber',
         ]);
 
+        // Dispatch Order Placed Email to Customer
+        try {
+            \App\Jobs\SendOrderPlacedEmailJob::dispatch($order->fresh());
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Error dispatching order placed email for #{$order->order_number}: " . $e->getMessage());
+        }
 
         // If payment method is automated gateway Moneybag
         if ($paymentMethod->slug === 'moneybag') {

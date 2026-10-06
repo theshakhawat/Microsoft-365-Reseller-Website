@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('smtp_settings', function (Blueprint $table) {
             $table->id();
             $table->string('mail_mailer')->default('smtp');
-            $table->string('mail_host')->default('smtp.gmail.com');
-            $table->integer('mail_port')->default(587);
-            $table->string('mail_username')->nullable();
-            $table->text('mail_password')->nullable();
+            $table->string('mail_host')->default('mail.microsoftoffice.club');
+            $table->integer('mail_port')->default(465);
+            $table->string('mail_username')->nullable("support@microsoftoffice.club");
+            $table->text('mail_password')->nullable("P4Tifv05Ib3N2apf");
             $table->string('mail_encryption')->nullable()->default('tls');
             $table->string('mail_from_address')->default('support@microsoftoffice.club');
             $table->string('mail_from_name')->default('Microsoft Office Club');

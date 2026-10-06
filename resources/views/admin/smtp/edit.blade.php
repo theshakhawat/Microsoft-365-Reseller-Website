@@ -28,8 +28,13 @@
         <div class="bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 px-5 py-4 rounded-2xl flex items-start gap-3 shadow-xs">
             <i class="fa-solid fa-circle-check text-lg text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5"></i>
             <div>
-                <p class="text-xs sm:text-sm font-bold">Email Sent Successfully!</p>
+                <p class="text-xs sm:text-sm font-bold">Queued Test Email Dispatched!</p>
                 <p class="text-xs mt-0.5">{{ session('test_success') }}</p>
+                <div class="mt-2 flex items-center gap-2">
+                    <a href="{{ route('admin.queue.index') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-400 underline hover:no-underline">
+                        <i class="fa-solid fa-layer-group text-[10px]"></i> View in Queue Monitor
+                    </a>
+                </div>
             </div>
         </div>
     @endif
@@ -99,7 +104,7 @@
             </h3>
             <span class="text-[11px] text-slate-400">Click to autofill Host, Port & Encryption</span>
         </div>
-        
+
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
             <button type="button" onclick="applyPreset('gmail')" class="p-2.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 hover:border-[#0067b8] dark:hover:border-sky-400 hover:shadow-md transition-all text-left group cursor-pointer">
                 <p class="font-bold text-xs text-slate-800 dark:text-slate-200 group-hover:text-[#0067b8] dark:group-hover:text-sky-400 flex items-center gap-1.5">
@@ -153,7 +158,7 @@
 
     <!-- Main Grid: Configuration Form & Test Email Card -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         <!-- Left: Configuration Form (2 Cols) -->
         <div class="lg:col-span-2">
             <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden">
@@ -318,7 +323,7 @@
 
         <!-- Right: Test Email Tool & Instructions Card (1 Col) -->
         <div class="space-y-6">
-            
+
             <!-- Send Test Email Card -->
             <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 shadow-xs space-y-4">
                 <div class="flex items-center gap-3">
@@ -326,13 +331,13 @@
                         <i class="fa-solid fa-paper-plane"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-extrabold text-slate-900 dark:text-white">Send Test Email</h3>
-                        <p class="text-[11px] text-slate-400">Verify your SMTP connection instantly</p>
+                        <h3 class="text-sm font-extrabold text-slate-900 dark:text-white">Send Queued Test Email</h3>
+                        <p class="text-[11px] text-slate-400">Verify queue worker & SMTP delivery</p>
                     </div>
                 </div>
 
                 <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                    Test your active SMTP configuration by sending an authentic verification message to any inbox.
+                    Dispatches an asynchronous test email job into the queue. The background worker will send it using your database SMTP credentials.
                 </p>
 
                 <form action="{{ route('admin.smtp.test') }}" method="POST" class="space-y-3 pt-2">
@@ -350,7 +355,7 @@
 
                     <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer">
                         <i class="fa-solid fa-paper-plane text-xs"></i>
-                        <span>Send Test Email Now</span>
+                        <span>Queue Test Email Now</span>
                     </button>
                 </form>
             </div>

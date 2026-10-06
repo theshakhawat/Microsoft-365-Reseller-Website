@@ -96,10 +96,16 @@ class AdminSubscriptionController extends Controller
                 'admin_notes'      => $request->admin_notes ?: 'Provisioned and updated by Super Admin.',
             ]);
 
+            try {
+                \App\Jobs\SendSubscriptionStatusEmailJob::dispatch($existingSub->fresh(), $request->status, $request->admin_notes);
+            } catch (\Throwable $e) {
+                Log::error("Error queueing subscription status email on store update: " . $e->getMessage());
+            }
+
             return redirect()->route('admin.subscriptions.index')->with('success', 'Customer subscription updated successfully!');
         }
 
-        Subscription::create([
+        $subscription = Subscription::create([
             'user_id'          => $request->user_id,
             'pricing_plan_id'  => $request->pricing_plan_id,
             'plan_name'        => $request->plan_name,
@@ -112,6 +118,12 @@ class AdminSubscriptionController extends Controller
             'included_apps'    => $plan ? $plan->included_apps : ['word', 'excel', 'powerpoint', 'outlook', 'onedrive', 'copilot'],
             'admin_notes'      => $request->admin_notes ?: 'Manually provisioned by Super Admin.',
         ]);
+
+        try {
+            \App\Jobs\SendSubscriptionStatusEmailJob::dispatch($subscription->fresh(), $request->status, $request->admin_notes);
+        } catch (\Throwable $e) {
+            Log::error("Error queueing subscription status email on store create: " . $e->getMessage());
+        }
 
         return redirect()->route('admin.subscriptions.index')->with('success', 'Subscription created and assigned to customer successfully!');
     }

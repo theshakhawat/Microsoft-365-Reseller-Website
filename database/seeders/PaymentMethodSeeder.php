@@ -20,6 +20,8 @@ class PaymentMethodSeeder extends Seeder
                 'instruction' => 'Fast digital wallet payment and instant invoice clearance.',
                 'sort_order'  => 3,
                 'status'      => true,
+                'base_url' => 'https://api.moneybag.com.bd/api/v2',
+                'merchant_key' => '28703f05.gX9WxeKNcyrtWIuREbhPPpX2YL5Qhv4EMZd2UZFVgM4',
             ],
         ];
 

@@ -240,7 +240,7 @@
 
 @stack('js')
 
-{!! site_setting('custom_footer_scripts') !!}
+{!! site_custom_footer_scripts() !!}
 
 </body>
 </html>

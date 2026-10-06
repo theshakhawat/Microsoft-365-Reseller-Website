@@ -34,11 +34,17 @@ class SendWelcomeEmailJob implements ShouldQueue
     public User $user;
 
     /**
+     * Optional raw password if created by admin
+     */
+    public ?string $password;
+
+    /**
      * Create a new job instance.
      */
-    public function __construct(User $user)
+    public function __construct(User $user, ?string $password = null)
     {
         $this->user = $user;
+        $this->password = $password;
     }
 
     /**
@@ -50,11 +56,12 @@ class SendWelcomeEmailJob implements ShouldQueue
         SmtpSetting::applyConfig();
 
         $user = $this->user;
+        $password = $this->password;
         $appName = site_setting('site_name', config('app.name', 'Microsoft Office Club'));
         $fromAddress = config('mail.from.address', 'support@microsoftoffice.club');
 
         try {
-            $htmlContent = view('emails.welcome', compact('user'))->render();
+            $htmlContent = view('emails.welcome', compact('user', 'password'))->render();
 
             Mail::html($htmlContent, function ($message) use ($user, $appName, $fromAddress) {
                 $message->to($user->email, $user->name)

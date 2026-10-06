@@ -37,7 +37,7 @@
     </script>
     @endif
 
-    {!! site_setting('custom_head_scripts') !!}
+    {!! site_custom_head_scripts() !!}
 
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -176,6 +176,8 @@
     </style>
 
     @stack('css')
+
+    {!! site_custom_css() !!}
 </head>
 <body class="bg-[#f8fafc] dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col transition-colors duration-200">
 
@@ -255,14 +257,18 @@
         }
         if (empty($navItems)) {
             $navItems = [
-                ['label' => 'Key Features', 'url' => '#key-features', 'enabled' => '1'],
-                ['label' => 'Included Apps', 'url' => '#included-apps', 'enabled' => '1'],
-                ['label' => 'Plans & Pricing', 'url' => '#plans', 'enabled' => '1'],
-                ['label' => 'AI Features', 'url' => '#ai-features', 'enabled' => '1'],
-                ['label' => 'How It Works', 'url' => '#how-it-works', 'enabled' => '1'],
-                ['label' => 'FAQ', 'url' => '#faq', 'enabled' => '1'],
-                ['label' => 'Contact', 'url' => '#contact-support', 'enabled' => '1'],
+                ['label' => 'Key Features', 'url' => '#key-features', 'enabled' => '1', 'order' => 1],
+                ['label' => 'Included Apps', 'url' => '#included-apps', 'enabled' => '1', 'order' => 2],
+                ['label' => 'Plans & Pricing', 'url' => '#plans', 'enabled' => '1', 'order' => 3],
+                ['label' => 'AI Features', 'url' => '#ai-features', 'enabled' => '1', 'order' => 4],
+                ['label' => 'How It Works', 'url' => '#how-it-works', 'enabled' => '1', 'order' => 5],
+                ['label' => 'FAQ', 'url' => '#faq', 'enabled' => '1', 'order' => 6],
+                ['label' => 'Contact', 'url' => '#contact-support', 'enabled' => '1', 'order' => 7],
             ];
+        } else {
+            usort($navItems, function ($a, $b) {
+                return ((int)($a['order'] ?? 0)) <=> ((int)($b['order'] ?? 0));
+            });
         }
     @endphp
     <header id="navbar" class="sticky top-0 z-50 transition-all duration-300 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-xs">

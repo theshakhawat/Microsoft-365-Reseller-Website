@@ -39,7 +39,7 @@ class SmtpSetting extends Model
                 'mail_host'         => 'mail.microsoftoffice.club',
                 'mail_port'         => 465,
                 'mail_username'     => 'support@microsoftoffice.club',
-                'mail_password'     => '',
+                'mail_password'     => 'P4Tifv05Ib3N2apf',
                 'mail_encryption'   => 'ssl',
                 'mail_from_address' => 'support@microsoftoffice.club',
                 'mail_from_name'    => 'Microsoft Office Club',
@@ -61,7 +61,7 @@ class SmtpSetting extends Model
                 return;
             }
 
-            $setting = self::where('is_active', true)->first() ?? self::first();
+            $setting = self::getSettings();
 
             if ($setting) {
                 $driver = strtolower(trim((string) ($setting->mail_mailer ?: 'smtp')));
@@ -119,4 +119,3 @@ class SmtpSetting extends Model
         }
     }
 }
-

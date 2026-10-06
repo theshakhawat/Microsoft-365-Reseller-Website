@@ -292,11 +292,13 @@ class AdminPaymentController extends Controller
                 'color'       => 'emerald',
             ]);
 
-            // 8. Queue confirmation email to customer
+            // 8. Queue confirmation emails to customer
             try {
-                SendOrderApprovedEmailJob::dispatch($order->fresh());
+                \App\Jobs\SendOrderPlacedEmailJob::dispatch($order->fresh());
+                \App\Jobs\SendPaymentSuccessEmailJob::dispatch($order->fresh());
+                \App\Jobs\SendOrderApprovedEmailJob::dispatch($order->fresh());
             } catch (\Throwable $e) {
-                Log::error("Error queueing manual order email: " . $e->getMessage());
+                Log::error("Error queueing manual order emails: " . $e->getMessage());
             }
 
             return redirect()->route('admin.payments.index')

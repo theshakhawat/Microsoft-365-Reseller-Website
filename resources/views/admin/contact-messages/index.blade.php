@@ -36,7 +36,7 @@
                 Messages and business inquiries submitted from the storefront Contact Us form.
             </p>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5 sm:gap-3 flex-wrap">
             @if($stats['unread'] > 0)
                 <form action="{{ route('admin.contact-messages.mark-all-read') }}" method="POST">
                     @csrf
@@ -46,10 +46,63 @@
                     </button>
                 </form>
             @endif
+
+            <!-- Notification Settings Toggle Button -->
+            <button type="button" 
+                    onclick="document.getElementById('notificationSettingsCollapse').classList.toggle('hidden')" 
+                    class="bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold px-3.5 py-2.5 rounded-xl text-xs flex items-center gap-2 shadow-xs transition-all cursor-pointer">
+                <i class="fa-solid fa-sliders text-xs text-[#0067b8] dark:text-sky-400"></i>
+                <span>Notification Settings</span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+            </button>
+
             <a href="{{ route('home') }}#contact-support" target="_blank" class="hidden sm:flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-[#0067b8] dark:hover:text-sky-400 px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                 <i class="fa-solid fa-arrow-up-right-from-square text-xs text-[#0067b8] dark:text-sky-400"></i>
                 <span>View Form on Site</span>
             </a>
+        </div>
+    </div>
+
+    <!-- Notification Settings Collapse Panel -->
+    <div id="notificationSettingsCollapse" class="hidden bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-sky-50/80 dark:from-slate-800/90 dark:via-slate-850 dark:to-slate-900 border border-blue-200/80 dark:border-slate-700 p-5 rounded-2xl shadow-sm transition-all">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="max-w-xl">
+                <div class="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-sm">
+                    <span class="w-7 h-7 rounded-lg bg-[#0067b8] text-white flex items-center justify-center text-xs shadow-xs">
+                        <i class="fa-solid fa-envelope-circle-check"></i>
+                    </span>
+                    <span>Admin Notification Recipient Email</span>
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                    Whenever a customer submits the storefront Contact Us form or places a paid order, instant email alerts will be sent to this address.
+                </p>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Active Recipient:</span>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#0067b8]/10 dark:bg-sky-950/60 text-[#0067b8] dark:text-sky-400 border border-[#0067b8]/20 dark:border-sky-800/60">
+                        <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                        {{ site_setting('admin_notification_email', site_setting('contact_email', 'support@microsoftoffice.club')) }}
+                    </span>
+                </div>
+            </div>
+
+            <form action="{{ route('admin.contact-messages.update-settings') }}" method="POST" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
+                @csrf
+                <div class="relative min-w-[280px]">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                        <i class="fa-solid fa-at text-xs"></i>
+                    </div>
+                    <input type="email" 
+                           name="admin_notification_email" 
+                           value="{{ site_setting('admin_notification_email', site_setting('contact_email', 'support@microsoftoffice.club')) }}" 
+                           required 
+                           placeholder="admin@microsoftoffice.club" 
+                           class="w-full pl-9 pr-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl text-xs font-semibold focus:ring-2 focus:ring-[#0067b8] focus:border-transparent outline-none transition-all shadow-xs">
+                </div>
+                <button type="submit" class="bg-[#0067b8] hover:bg-[#005da6] text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer whitespace-nowrap">
+                    <i class="fa-solid fa-floppy-disk text-xs"></i>
+                    <span>Save Settings</span>
+                </button>
+            </form>
         </div>
     </div>
 

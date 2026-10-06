@@ -127,6 +127,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Contact Messages & Inquiries Management CRUD Routes
     Route::get('/contact-messages', [App\Http\Controllers\AdminContactMessageController::class, 'index'])->name('contact-messages.index');
+    Route::post('/contact-messages/settings', [App\Http\Controllers\AdminContactMessageController::class, 'updateSettings'])->name('contact-messages.update-settings');
     Route::post('/contact-messages/mark-all-read', [App\Http\Controllers\AdminContactMessageController::class, 'markAllAsRead'])->name('contact-messages.mark-all-read');
     Route::get('/contact-messages/{contactMessage}', [App\Http\Controllers\AdminContactMessageController::class, 'show'])->name('contact-messages.show');
     Route::post('/contact-messages/{contactMessage}/toggle-read', [App\Http\Controllers\AdminContactMessageController::class, 'toggleRead'])->name('contact-messages.toggle-read');
@@ -219,7 +220,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Dedicated SMTP & Mail Server Configuration
     Route::get('/smtp', [App\Http\Controllers\AdminSmtpController::class, 'edit'])->name('smtp.edit');
-    Route::put('/smtp', [App\Http\Controllers\AdminSmtpController::class, 'update'])->name('smtp.update');
+    Route::match(['put', 'post'], '/smtp', [App\Http\Controllers\AdminSmtpController::class, 'update'])->name('smtp.update');
     Route::post('/smtp/test', [App\Http\Controllers\AdminSmtpController::class, 'testMail'])->name('smtp.test');
 
     // System & Application Logs Viewer

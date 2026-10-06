@@ -217,7 +217,15 @@ class MoneybagPaymentController extends Controller
         Log::warning('Moneybag Failed Callback', $request->all());
 
         if ($orderNumber) {
-            Order::where('order_number', $orderNumber)->update(['payment_status' => 'failed']);
+            $order = Order::where('order_number', $orderNumber)->first();
+            if ($order) {
+                $order->update(['payment_status' => 'failed']);
+                try {
+                    \App\Jobs\SendPaymentFailedEmailJob::dispatch($order->fresh());
+                } catch (\Throwable $e) {
+                    Log::error("Failed to dispatch payment failed email: " . $e->getMessage());
+                }
+            }
         }
 
         return redirect()->route('user.orders')->with('error', 'Payment transaction failed or was declined by the provider.');
@@ -351,5 +359,13 @@ class MoneybagPaymentController extends Controller
             'icon'        => 'fa-solid fa-money-bill-wave',
             'color'       => 'emerald',
         ]);
+
+        // Dispatch Confirmation & Admin Alert Emails
+        try {
+            \App\Jobs\SendPaymentSuccessEmailJob::dispatch($order->fresh());
+            \App\Jobs\SendAdminNewOrderAlertJob::dispatch($order->fresh());
+        } catch (\Throwable $e) {
+            Log::error("Failed to dispatch payment success/admin alert email for Order #{$order->order_number}: " . $e->getMessage());
+        }
     }
 }

@@ -30,6 +30,29 @@ class ContactController extends Controller
             'user_agent' => $request->userAgent(),
         ]);
 
+        // 1. Send in-app notification to all Admins
+        try {
+            \App\Models\AppNotification::send([
+                'user_id'     => null,
+                'target_role' => 'admin',
+                'title'       => 'New Contact Form Inquiry',
+                'message'     => "{$message->name} ({$message->email}) sent an inquiry from the storefront contact form.",
+                'type'        => 'contact',
+                'action_url'  => route('admin.contact-messages.show', $message->id, false),
+                'icon'        => 'fa-solid fa-envelope',
+                'color'       => 'blue',
+            ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("Failed to create contact inquiry in-app notification: " . $e->getMessage());
+        }
+
+        // 2. Dispatch Email notification to configured Admin Notification Email
+        try {
+            \App\Jobs\SendContactInquiryEmailJob::dispatch($message);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to dispatch contact inquiry email job: " . $e->getMessage());
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Thank you! Your message has been received. Our Microsoft specialist team will contact you shortly.',

@@ -1,0 +1,8 @@
+[05-Oct-2026 10:15:37 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Route as Route because the name is already in use in /home/nettnisite/microsoftoffice.club/routes/web.php on line 16
+[05-Oct-2026 10:15:51 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Route as Route because the name is already in use in /home/nettnisite/microsoftoffice.club/routes/web.php on line 16
+[05-Oct-2026 10:15:57 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Route as Route because the name is already in use in /home/nettnisite/microsoftoffice.club/routes/web.php on line 16
+[05-Oct-2026 10:15:59 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Route as Route because the name is already in use in /home/nettnisite/microsoftoffice.club/routes/web.php on line 16
+[05-Oct-2026 10:16:00 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Route as Route because the name is already in use in /home/nettnisite/microsoftoffice.club/routes/web.php on line 16
+[05-Oct-2026 10:16:07 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Route as Route because the name is already in use in /home/nettnisite/microsoftoffice.club/routes/web.php on line 16
+[05-Oct-2026 10:16:11 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Route as Route because the name is already in use in /home/nettnisite/microsoftoffice.club/routes/web.php on line 16
+[05-Oct-2026 10:16:18 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Route as Route because the name is already in use in /home/nettnisite/microsoftoffice.club/routes/web.php on line 16

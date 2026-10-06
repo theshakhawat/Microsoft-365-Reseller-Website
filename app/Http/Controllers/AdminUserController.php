@@ -106,8 +106,12 @@ class AdminUserController extends Controller
             'status'   => $request->boolean('status', true),
         ]);
 
-        // Dispatch Welcome Email Job
-        \App\Jobs\SendWelcomeEmailJob::dispatch($newUser);
+        // Dispatch Welcome Email Job with raw password
+        try {
+            \App\Jobs\SendWelcomeEmailJob::dispatch($newUser, $request->password);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to dispatch welcome email for new user #{$newUser->id}: " . $e->getMessage());
+        }
 
         $roleTitle = $request->role === 'admin' ? 'Administrator' : 'Customer';
 

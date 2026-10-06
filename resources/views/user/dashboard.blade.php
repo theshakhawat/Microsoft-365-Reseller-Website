@@ -48,7 +48,7 @@
                         <i class="fa-solid fa-shield-halved text-xs text-[#0067b8]"></i>
                         <span>Manage Subscription</span>
                     </a>
-                    <a href="https://portal.office.com" target="_blank" class="bg-sky-500/30 hover:bg-sky-500/40 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-sky-400/40 flex items-center gap-2 transition-all active:scale-95">
+                    <a href="https://office.com" target="_blank" class="bg-sky-500/30 hover:bg-sky-500/40 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-sky-400/40 flex items-center gap-2 transition-all active:scale-95">
                         <span>Office.com Portal</span>
                         <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
                     </a>

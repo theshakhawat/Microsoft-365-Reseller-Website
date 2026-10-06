@@ -14,6 +14,9 @@
     <div class="card">
         <p style="margin: 0 0 6px 0; font-size: 13px; color: #64748b;"><strong>Account Details:</strong></p>
         <p style="margin: 0; font-size: 14px;"><strong>Email:</strong> {{ $user->email }}</p>
+        @if(!empty($password))
+            <p style="margin: 4px 0 0 0; font-size: 14px;"><strong>Temporary Password:</strong> <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace;">{{ $password }}</code></p>
+        @endif
         @if($user->phone)
             <p style="margin: 4px 0 0 0; font-size: 14px;"><strong>Phone:</strong> {{ $user->phone }}</p>
         @endif

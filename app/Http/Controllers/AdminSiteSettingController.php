@@ -130,7 +130,7 @@ class AdminSiteSettingController extends Controller
         // Handle Checkbox / Boolean defaults if form submitted for specific tabs
         if ($request->has('settings_form_submitted')) {
             $submittedGroup = $request->input('settings_form_submitted');
-            
+
             if ($submittedGroup === 'general' || $submittedGroup === 'all') {
                 SiteSetting::set('top_announcement_enabled', $request->has('top_announcement_enabled') ? '1' : '0', 'general');
             }
@@ -149,6 +149,32 @@ class AdminSiteSettingController extends Controller
             if ($request->has($key)) {
                 $val = $request->input($key);
                 SiteSetting::set($key, $val, $defaultGroup);
+            }
+        }
+
+        // Handle navbar_menu_items
+        if ($request->has('navbar_items')) {
+            $rawNavbar = $request->input('navbar_items', []);
+            $cleanNavbar = [];
+            if (is_array($rawNavbar)) {
+                $orderIdx = 1;
+                foreach ($rawNavbar as $item) {
+                    if (!empty($item['label']) && !empty($item['url'])) {
+                        $cleanNavbar[] = [
+                            'label' => trim($item['label']),
+                            'url' => trim($item['url']),
+                            'order' => isset($item['order']) && is_numeric($item['order']) ? (int)$item['order'] : $orderIdx,
+                            'target' => in_array($item['target'] ?? '_self', ['_self', '_blank']) ? $item['target'] : '_self',
+                            'enabled' => !empty($item['enabled']) && in_array($item['enabled'], ['1', 1, 'on', true], true) ? '1' : '0',
+                        ];
+                        $orderIdx++;
+                    }
+                }
+                // Sort by order ascending
+                usort($cleanNavbar, function ($a, $b) {
+                    return ((int)($a['order'] ?? 0)) <=> ((int)($b['order'] ?? 0));
+                });
+                SiteSetting::set('navbar_menu_items', json_encode(array_values($cleanNavbar)), 'general');
             }
         }
 

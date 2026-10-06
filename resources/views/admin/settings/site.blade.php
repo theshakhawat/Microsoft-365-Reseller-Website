@@ -281,11 +281,11 @@
                             <i class="fa-solid fa-bars-staggered text-[#0067b8]"></i>
                             <span>Storefront Navbar & Menu Items Customizer</span>
                         </h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customize website navigation links, reorder menu items, set anchor targets, or add custom page links.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customize website navigation links, set display order sequence, configure target anchors, and add custom pages.</p>
                     </div>
-                    <button type="button" onclick="addNavbarRow()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 text-[#0067b8] dark:text-sky-400 font-bold text-xs border border-sky-200 dark:border-sky-800 transition-all cursor-pointer">
+                    <button type="button" onclick="addNavbarRow()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0067b8] hover:bg-[#005da6] text-white font-bold text-xs shadow-md shadow-[#0067b8]/20 transition-all cursor-pointer">
                         <i class="fa-solid fa-plus text-xs"></i>
-                        <span>Add Menu Link</span>
+                        <span>Add New Link</span>
                     </button>
                 </div>
 
@@ -300,14 +300,24 @@
                     }
                     if (empty($adminNavItems)) {
                         $adminNavItems = [
-                            ['label' => 'Key Features', 'url' => '#key-features', 'enabled' => '1', 'target' => '_self'],
-                            ['label' => 'Included Apps', 'url' => '#included-apps', 'enabled' => '1', 'target' => '_self'],
-                            ['label' => 'Plans & Pricing', 'url' => '#plans', 'enabled' => '1', 'target' => '_self'],
-                            ['label' => 'AI Features', 'url' => '#ai-features', 'enabled' => '1', 'target' => '_self'],
-                            ['label' => 'How It Works', 'url' => '#how-it-works', 'enabled' => '1', 'target' => '_self'],
-                            ['label' => 'FAQ', 'url' => '#faq', 'enabled' => '1', 'target' => '_self'],
-                            ['label' => 'Contact', 'url' => '#contact-support', 'enabled' => '1', 'target' => '_self'],
+                            ['label' => 'Key Features', 'url' => '#key-features', 'enabled' => '1', 'order' => 1, 'target' => '_self'],
+                            ['label' => 'Included Apps', 'url' => '#included-apps', 'enabled' => '1', 'order' => 2, 'target' => '_self'],
+                            ['label' => 'Plans & Pricing', 'url' => '#plans', 'enabled' => '1', 'order' => 3, 'target' => '_self'],
+                            ['label' => 'AI Features', 'url' => '#ai-features', 'enabled' => '1', 'order' => 4, 'target' => '_self'],
+                            ['label' => 'How It Works', 'url' => '#how-it-works', 'enabled' => '1', 'order' => 5, 'target' => '_self'],
+                            ['label' => 'FAQ', 'url' => '#faq', 'enabled' => '1', 'order' => 6, 'target' => '_self'],
+                            ['label' => 'Contact', 'url' => '#contact-support', 'enabled' => '1', 'order' => 7, 'target' => '_self'],
                         ];
+                    } else {
+                        foreach ($adminNavItems as $i => &$navItem) {
+                            if (!isset($navItem['order']) || !is_numeric($navItem['order'])) {
+                                $navItem['order'] = $i + 1;
+                            }
+                        }
+                        unset($navItem);
+                        usort($adminNavItems, function ($a, $b) {
+                            return ((int)($a['order'] ?? 0)) <=> ((int)($b['order'] ?? 0));
+                        });
                     }
                 @endphp
 
@@ -317,18 +327,34 @@
                         <table class="w-full text-left text-xs text-slate-600 dark:text-slate-300">
                             <thead>
                                 <tr class="border-b border-slate-200 dark:border-slate-800 text-[11px] font-extrabold uppercase text-slate-400">
-                                    <th class="py-3 px-3">Status</th>
+                                    <th class="py-3 px-3 w-28">Order</th>
+                                    <th class="py-3 px-3 w-20">Status</th>
                                     <th class="py-3 px-3">Menu Label Text</th>
                                     <th class="py-3 px-3">Target Anchor / URL</th>
-                                    <th class="py-3 px-3">Target</th>
-                                    <th class="py-3 px-3 text-right">Action</th>
+                                    <th class="py-3 px-3 w-36">Target</th>
+                                    <th class="py-3 px-3 text-right w-16">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="navbar-items-tbody" class="divide-y divide-slate-200 dark:divide-slate-800">
                                 @foreach($adminNavItems as $index => $nav)
                                 <tr class="nav-item-row group hover:bg-white dark:hover:bg-slate-900/60 transition-colors" data-index="{{ $index }}">
+                                    <!-- Order Input & Quick Sort -->
+                                    <td class="py-3 px-3 align-middle">
+                                        <div class="flex items-center gap-1.5">
+                                            <input type="number" min="1" step="1" name="navbar_items[{{ $index }}][order]" value="{{ $nav['order'] ?? ($index + 1) }}" class="nav-order-input w-14 px-2 py-1.5 text-xs text-center font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none" title="Order sequence number">
+                                            <div class="flex flex-col gap-0.5">
+                                                <button type="button" onclick="moveNavbarRowUp(this)" class="w-6 h-4 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center text-[9px] transition-colors cursor-pointer" title="Move Up">
+                                                    <i class="fa-solid fa-chevron-up"></i>
+                                                </button>
+                                                <button type="button" onclick="moveNavbarRowDown(this)" class="w-6 h-4 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center text-[9px] transition-colors cursor-pointer" title="Move Down">
+                                                    <i class="fa-solid fa-chevron-down"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+
                                     <!-- Enabled Toggle -->
-                                    <td class="py-3 px-3 align-middle w-24">
+                                    <td class="py-3 px-3 align-middle">
                                         <label class="relative inline-flex items-center cursor-pointer">
                                             <input type="checkbox" name="navbar_items[{{ $index }}][enabled]" value="1" {{ (!isset($nav['enabled']) || $nav['enabled'] == '1' || $nav['enabled'] === true) ? 'checked' : '' }} class="sr-only peer">
                                             <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
@@ -337,28 +363,16 @@
 
                                     <!-- Label Input -->
                                     <td class="py-3 px-3 align-middle">
-                                        <input type="text" name="navbar_items[{{ $index }}][label]" value="{{ $nav['label'] ?? '' }}" placeholder="e.g. Plans & Pricing" required class="w-full px-3 py-2 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
+                                        <input type="text" name="navbar_items[{{ $index }}][label]" value="{{ $nav['label'] ?? '' }}" placeholder="e.g. Plans & Pricing" required class="nav-label-input w-full px-3 py-2 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
                                     </td>
 
-                                    <!-- URL / Anchor Input with presets -->
+                                    <!-- URL / Anchor Input (No Preset dropdown) -->
                                     <td class="py-3 px-3 align-middle">
-                                        <div class="flex items-center gap-2">
-                                            <input type="text" name="navbar_items[{{ $index }}][url]" value="{{ $nav['url'] ?? '' }}" placeholder="e.g. #plans or /login" required class="nav-url-input flex-1 px-3 py-2 text-xs font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
-                                            <select onchange="applyPresetToRow(this)" class="px-2.5 py-2 text-[11px] rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-[#0067b8] outline-none">
-                                                <option value="">-- Presets --</option>
-                                                <option value="#key-features" {{ ($nav['url'] ?? '') === '#key-features' ? 'selected' : '' }}>#key-features</option>
-                                                <option value="#included-apps" {{ ($nav['url'] ?? '') === '#included-apps' ? 'selected' : '' }}>#included-apps</option>
-                                                <option value="#plans" {{ ($nav['url'] ?? '') === '#plans' ? 'selected' : '' }}>#plans</option>
-                                                <option value="#ai-features" {{ ($nav['url'] ?? '') === '#ai-features' ? 'selected' : '' }}>#ai-features</option>
-                                                <option value="#how-it-works" {{ ($nav['url'] ?? '') === '#how-it-works' ? 'selected' : '' }}>#how-it-works</option>
-                                                <option value="#faq" {{ ($nav['url'] ?? '') === '#faq' ? 'selected' : '' }}>#faq</option>
-                                                <option value="#contact-support" {{ ($nav['url'] ?? '') === '#contact-support' ? 'selected' : '' }}>#contact-support</option>
-                                            </select>
-                                        </div>
+                                        <input type="text" name="navbar_items[{{ $index }}][url]" value="{{ $nav['url'] ?? '' }}" placeholder="e.g. #plans or /login or https://example.com" required class="nav-url-input w-full px-3 py-2 text-xs font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
                                     </td>
 
                                     <!-- Target -->
-                                    <td class="py-3 px-3 align-middle w-32">
+                                    <td class="py-3 px-3 align-middle">
                                         <select name="navbar_items[{{ $index }}][target]" class="w-full px-2.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
                                             <option value="_self" {{ ($nav['target'] ?? '_self') === '_self' ? 'selected' : '' }}>Same Tab (_self)</option>
                                             <option value="_blank" {{ ($nav['target'] ?? '') === '_blank' ? 'selected' : '' }}>New Tab (_blank)</option>
@@ -366,8 +380,8 @@
                                     </td>
 
                                     <!-- Action -->
-                                    <td class="py-3 px-3 align-middle text-right w-20">
-                                        <button type="button" onclick="removeNavbarRow(this)" class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/80 text-red-600 dark:text-red-400 flex items-center justify-center transition-colors ml-auto" title="Remove Link">
+                                    <td class="py-3 px-3 align-middle text-right">
+                                        <button type="button" onclick="confirmRemoveNavbarRow(this)" class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/80 text-red-600 dark:text-red-400 flex items-center justify-center transition-colors ml-auto cursor-pointer" title="Remove Link">
                                             <i class="fa-solid fa-trash text-xs"></i>
                                         </button>
                                     </td>
@@ -380,7 +394,7 @@
                     <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
                         <p class="text-[11px] text-slate-400">
                             <i class="fa-solid fa-circle-info mr-1 text-[#0067b8]"></i>
-                            Tip: Target anchors like <code>#plans</code> scroll smoothly to sections on the homepage.
+                            Tip: You can change the order numbers (1, 2, 3...) or use the <i class="fa-solid fa-chevron-up text-[9px]"></i> <i class="fa-solid fa-chevron-down text-[9px]"></i> buttons to easily reorder menu items.
                         </p>
                         <button type="button" onclick="resetNavbarDefaults()" class="text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer">
                             <i class="fa-solid fa-rotate-left mr-1"></i> Reset to Default Sections
@@ -945,22 +959,34 @@
                         <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">If provided, official Google tag tracking script is automatically injected.</p>
                     </div>
 
+                    <!-- Custom CSS Field -->
+                    <div>
+                        <label for="custom_css" class="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5 flex items-center gap-2">
+                            <i class="fa-brands fa-css3-alt text-sky-500 text-sm"></i>
+                            <span>Custom CSS Styles (Injected into &lt;head&gt;)</span>
+                        </label>
+                        <textarea name="custom_css" id="custom_css" rows="4" placeholder="/* Custom CSS styling rules */&#10;body {&#10;    /* your styles */&#10;}" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:ring-2 focus:ring-[#0067b8] focus:border-transparent outline-none transition-all">{{ old('custom_css', $settings['custom_css'] ?? '') }}</textarea>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Directly injected into website &lt;head&gt;. You can write raw CSS or wrap inside &lt;style&gt; tags.</p>
+                    </div>
+
+                    <!-- Custom Head Scripts / JS Field -->
                     <div>
                         <label for="custom_head_scripts" class="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5 flex items-center gap-2">
                             <i class="fa-solid fa-code text-[#0067b8]"></i>
-                            <span>Custom &lt;head&gt; Scripts / Verification Meta Tags</span>
+                            <span>Custom &lt;head&gt; Scripts / Verification Meta Tags / JS</span>
                         </label>
-                        <textarea name="custom_head_scripts" id="custom_head_scripts" rows="4" placeholder="<script>...</script> or <meta name='google-site-verification' ...>" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:ring-2 focus:ring-[#0067b8] focus:border-transparent outline-none transition-all">{{ old('custom_head_scripts', $settings['custom_head_scripts'] ?? '') }}</textarea>
-                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Directly injected into the &lt;head&gt; tag before closing.</p>
+                        <textarea name="custom_head_scripts" id="custom_head_scripts" rows="4" placeholder="<script>&#10;    console.log('Head JS running');&#10;</script>&#10;<meta name='google-site-verification' content='...'>" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:ring-2 focus:ring-[#0067b8] focus:border-transparent outline-none transition-all">{{ old('custom_head_scripts', $settings['custom_head_scripts'] ?? '') }}</textarea>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Directly injected into the &lt;head&gt; tag before closing. Supports &lt;script&gt;, &lt;meta&gt;, &lt;link&gt;, or raw JavaScript.</p>
                     </div>
 
+                    <!-- Custom Footer Scripts / JS Field -->
                     <div>
                         <label for="custom_footer_scripts" class="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-1.5 flex items-center gap-2">
                             <i class="fa-solid fa-code text-purple-500"></i>
-                            <span>Custom Footer Scripts (Before &lt;/body&gt;)</span>
+                            <span>Custom Footer Scripts & JS (Before &lt;/body&gt;)</span>
                         </label>
-                        <textarea name="custom_footer_scripts" id="custom_footer_scripts" rows="4" placeholder="<!-- Custom Live Chat or Tracking Scripts -->" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:ring-2 focus:ring-[#0067b8] focus:border-transparent outline-none transition-all">{{ old('custom_footer_scripts', $settings['custom_footer_scripts'] ?? '') }}</textarea>
-                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Directly injected at the very bottom of pages before closing &lt;/body&gt;.</p>
+                        <textarea name="custom_footer_scripts" id="custom_footer_scripts" rows="4" placeholder="<!-- Custom Live Chat or Tracking Scripts -->&#10;<script>&#10;    // Footer JS code&#10;</script>" class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white font-mono focus:ring-2 focus:ring-[#0067b8] focus:border-transparent outline-none transition-all">{{ old('custom_footer_scripts', $settings['custom_footer_scripts'] ?? '') }}</textarea>
+                        <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">Directly injected at the very bottom of pages before closing &lt;/body&gt;. Ideal for live chats, pixel scripts, or footer JavaScript.</p>
                     </div>
                 </div>
             </div>
@@ -1027,96 +1053,171 @@
     }
 
     // Dynamic Navbar Helpers
-    function applyPresetToRow(selectEl) {
-        const val = selectEl.value;
-        if (!val) return;
-        const row = selectEl.closest('.nav-item-row');
-        if (!row) return;
-        const urlInput = row.querySelector('.nav-url-input');
-        if (urlInput) {
-            urlInput.value = val;
-        }
-        selectEl.value = '';
+    let rowToDelete = null;
+
+    function reindexNavbarOrders() {
+        const rows = document.querySelectorAll('#navbar-items-tbody .nav-item-row');
+        rows.forEach((row, i) => {
+            const orderInput = row.querySelector('.nav-order-input');
+            if (orderInput) {
+                orderInput.value = i + 1;
+            }
+        });
     }
 
-    function removeNavbarRow(btn) {
+    function moveNavbarRowUp(btn) {
         const row = btn.closest('.nav-item-row');
-        const tbody = document.getElementById('navbar-items-tbody');
-        if (tbody && tbody.children.length <= 1) {
-            alert('At least one navigation menu item should remain.');
-            return;
-        }
-        if (row) {
-            row.remove();
+        if (!row) return;
+        const prev = row.previousElementSibling;
+        if (prev) {
+            row.parentNode.insertBefore(row, prev);
+            reindexNavbarOrders();
         }
     }
 
-    function addNavbarRow(label = '', url = '', enabled = true, target = '_self') {
+    function moveNavbarRowDown(btn) {
+        const row = btn.closest('.nav-item-row');
+        if (!row) return;
+        const next = row.nextElementSibling;
+        if (next) {
+            row.parentNode.insertBefore(next, row);
+            reindexNavbarOrders();
+        }
+    }
+
+    function addNavbarRow(label = '', url = '', enabled = true, target = '_self', order = null) {
         const tbody = document.getElementById('navbar-items-tbody');
         if (!tbody) return;
-        const newIndex = new Date().getTime();
+        const newIndex = new Date().getTime() + Math.floor(Math.random() * 1000);
+        const currentCount = tbody.querySelectorAll('.nav-item-row').length;
+        const assignedOrder = order !== null ? order : (currentCount + 1);
 
         const tr = document.createElement('tr');
         tr.className = 'nav-item-row group hover:bg-white dark:hover:bg-slate-900/60 transition-colors';
         tr.dataset.index = newIndex;
         tr.innerHTML = `
-            <td class="py-3 px-3 align-middle w-24">
+            <td class="py-3 px-3 align-middle w-28">
+                <div class="flex items-center gap-1.5">
+                    <input type="number" min="1" step="1" name="navbar_items[${newIndex}][order]" value="${assignedOrder}" class="nav-order-input w-14 px-2 py-1.5 text-xs text-center font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none" title="Order sequence number">
+                    <div class="flex flex-col gap-0.5">
+                        <button type="button" onclick="moveNavbarRowUp(this)" class="w-6 h-4 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center text-[9px] transition-colors cursor-pointer" title="Move Up">
+                            <i class="fa-solid fa-chevron-up"></i>
+                        </button>
+                        <button type="button" onclick="moveNavbarRowDown(this)" class="w-6 h-4 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center text-[9px] transition-colors cursor-pointer" title="Move Down">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </div>
+            </td>
+            <td class="py-3 px-3 align-middle w-20">
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" name="navbar_items[${newIndex}][enabled]" value="1" ${enabled ? 'checked' : ''} class="sr-only peer">
                     <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
                 </label>
             </td>
             <td class="py-3 px-3 align-middle">
-                <input type="text" name="navbar_items[${newIndex}][label]" value="${label}" placeholder="e.g. New Link" required class="w-full px-3 py-2 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
+                <input type="text" name="navbar_items[${newIndex}][label]" value="${label}" placeholder="e.g. New Page" required class="nav-label-input w-full px-3 py-2 text-xs font-bold rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
             </td>
             <td class="py-3 px-3 align-middle">
-                <div class="flex items-center gap-2">
-                    <input type="text" name="navbar_items[${newIndex}][url]" value="${url}" placeholder="e.g. #plans or /login" required class="nav-url-input flex-1 px-3 py-2 text-xs font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
-                    <select onchange="applyPresetToRow(this)" class="px-2.5 py-2 text-[11px] rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-[#0067b8] outline-none">
-                        <option value="">-- Presets --</option>
-                        <option value="#key-features">#key-features</option>
-                        <option value="#included-apps">#included-apps</option>
-                        <option value="#plans">#plans</option>
-                        <option value="#ai-features">#ai-features</option>
-                        <option value="#how-it-works">#how-it-works</option>
-                        <option value="#faq">#faq</option>
-                        <option value="#contact-support">#contact-support</option>
-                    </select>
-                </div>
+                <input type="text" name="navbar_items[${newIndex}][url]" value="${url}" placeholder="e.g. #plans or /login or https://example.com" required class="nav-url-input w-full px-3 py-2 text-xs font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
             </td>
-            <td class="py-3 px-3 align-middle w-32">
+            <td class="py-3 px-3 align-middle w-36">
                 <select name="navbar_items[${newIndex}][target]" class="w-full px-2.5 py-2 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-white focus:ring-2 focus:ring-[#0067b8] outline-none">
                     <option value="_self" ${target === '_self' ? 'selected' : ''}>Same Tab (_self)</option>
                     <option value="_blank" ${target === '_blank' ? 'selected' : ''}>New Tab (_blank)</option>
                 </select>
             </td>
-            <td class="py-3 px-3 align-middle text-right w-20">
-                <button type="button" onclick="removeNavbarRow(this)" class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/80 text-red-600 dark:text-red-400 flex items-center justify-center transition-colors ml-auto" title="Remove Link">
+            <td class="py-3 px-3 align-middle text-right w-16">
+                <button type="button" onclick="confirmRemoveNavbarRow(this)" class="w-8 h-8 rounded-xl bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/80 text-red-600 dark:text-red-400 flex items-center justify-center transition-colors ml-auto cursor-pointer" title="Remove Link">
                     <i class="fa-solid fa-trash text-xs"></i>
                 </button>
             </td>
         `;
         tbody.appendChild(tr);
+
+        // Auto focus new input if empty addition
+        if (!label) {
+            setTimeout(() => {
+                const labelInp = tr.querySelector('.nav-label-input');
+                if (labelInp) labelInp.focus();
+            }, 50);
+        }
+    }
+
+    function confirmRemoveNavbarRow(btn) {
+        const tbody = document.getElementById('navbar-items-tbody');
+        if (tbody && tbody.querySelectorAll('.nav-item-row').length <= 1) {
+            showNavAlert('At least one navigation menu item must remain.');
+            return;
+        }
+        rowToDelete = btn.closest('.nav-item-row');
+        if (!rowToDelete) return;
+        const labelInput = rowToDelete.querySelector('.nav-label-input');
+        const labelText = labelInput && labelInput.value.trim() ? labelInput.value.trim() : 'this link';
+        document.getElementById('navDeleteItemTitle').textContent = `"${labelText}"`;
+        document.getElementById('navDeleteModal').classList.remove('hidden');
+    }
+
+    function closeNavDeleteModal() {
+        document.getElementById('navDeleteModal').classList.add('hidden');
+        rowToDelete = null;
+    }
+
+    function executeDeleteNavbarRow() {
+        if (rowToDelete) {
+            rowToDelete.remove();
+            reindexNavbarOrders();
+            rowToDelete = null;
+        }
+        closeNavDeleteModal();
     }
 
     function resetNavbarDefaults() {
-        if (!confirm('Are you sure you want to restore the default navigation menu links?')) return;
+        document.getElementById('navResetModal').classList.remove('hidden');
+    }
+
+    function closeNavResetModal() {
+        document.getElementById('navResetModal').classList.add('hidden');
+    }
+
+    function executeResetNavbarDefaults() {
+        closeNavResetModal();
         const tbody = document.getElementById('navbar-items-tbody');
         if (!tbody) return;
         tbody.innerHTML = '';
         const defaultItems = [
-            { label: 'Key Features', url: '#key-features' },
-            { label: 'Included Apps', url: '#included-apps' },
-            { label: 'Plans & Pricing', url: '#plans' },
-            { label: 'AI Features', url: '#ai-features' },
-            { label: 'How It Works', url: '#how-it-works' },
-            { label: 'FAQ', url: '#faq' },
-            { label: 'Contact', url: '#contact-support' }
+            { label: 'Key Features', url: '#key-features', order: 1 },
+            { label: 'Included Apps', url: '#included-apps', order: 2 },
+            { label: 'Plans & Pricing', url: '#plans', order: 3 },
+            { label: 'AI Features', url: '#ai-features', order: 4 },
+            { label: 'How It Works', url: '#how-it-works', order: 5 },
+            { label: 'FAQ', url: '#faq', order: 6 },
+            { label: 'Contact', url: '#contact-support', order: 7 }
         ];
         defaultItems.forEach(item => {
-            addNavbarRow(item.label, item.url, true, '_self');
+            addNavbarRow(item.label, item.url, true, '_self', item.order);
         });
     }
+
+    function showNavAlert(msg) {
+        document.getElementById('navAlertModalMessage').textContent = msg;
+        document.getElementById('navAlertModal').classList.remove('hidden');
+    }
+
+    function closeNavAlertModal() {
+        document.getElementById('navAlertModal').classList.add('hidden');
+    }
+
+    // Modal background click handlers
+    document.getElementById('navDeleteModal')?.addEventListener('click', function(e) {
+        if (e.target === this) closeNavDeleteModal();
+    });
+    document.getElementById('navResetModal')?.addEventListener('click', function(e) {
+        if (e.target === this) closeNavResetModal();
+    });
+    document.getElementById('navAlertModal')?.addEventListener('click', function(e) {
+        if (e.target === this) closeNavAlertModal();
+    });
 
     // Initialize initial tab on load
     document.addEventListener('DOMContentLoaded', function() {
@@ -1126,4 +1227,70 @@
         }
     });
 </script>
+
+<!-- Custom Navbar Link Delete Modal -->
+<div id="navDeleteModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 max-w-md w-full shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+        <div class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center text-xl mx-auto">
+            <i class="fa-solid fa-trash-can"></i>
+        </div>
+
+        <div class="text-center space-y-2">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Remove Navigation Link</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                Are you sure you want to remove <span id="navDeleteItemTitle" class="font-bold text-slate-800 dark:text-slate-200">this link</span> from the navbar menu?
+            </p>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+            <button type="button" onclick="closeNavDeleteModal()" class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+                Cancel
+            </button>
+            <button type="button" onclick="executeDeleteNavbarRow()" class="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md shadow-rose-600/20 transition-colors cursor-pointer">
+                Yes, Remove Link
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Navbar Reset Defaults Modal -->
+<div id="navResetModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 max-w-md w-full shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl mx-auto">
+            <i class="fa-solid fa-rotate-left"></i>
+        </div>
+
+        <div class="text-center space-y-2">
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Reset Navigation Menu</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                Are you sure you want to restore the default 7 navigation links? Any custom menu items will be replaced.
+            </p>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+            <button type="button" onclick="closeNavResetModal()" class="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+                Cancel
+            </button>
+            <button type="button" onclick="executeResetNavbarDefaults()" class="flex-1 py-2.5 px-4 rounded-xl bg-[#0067b8] hover:bg-[#005da6] text-white text-xs font-bold shadow-md shadow-[#0067b8]/20 transition-colors cursor-pointer">
+                Yes, Restore Defaults
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Navbar Warning Alert Modal -->
+<div id="navAlertModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 max-w-md w-full shadow-2xl space-y-4 animate-in fade-in zoom-in-95 duration-150 text-center">
+        <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl mx-auto">
+            <i class="fa-solid fa-circle-exclamation"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Action Not Allowed</h3>
+        <p id="navAlertModalMessage" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            At least one navigation menu item must remain.
+        </p>
+        <button type="button" onclick="closeNavAlertModal()" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-xs font-bold transition-colors cursor-pointer">
+            Understood
+        </button>
+    </div>
+</div>
 @endsection

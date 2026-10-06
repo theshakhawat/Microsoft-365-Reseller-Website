@@ -23,20 +23,20 @@ return new class extends Migration
             $table->string('coupon_code')->nullable();
             $table->decimal('discount_amount', 10, 2)->default(0);
             $table->decimal('payable_amount', 10, 2)->default(0);
-
+            
             // Recipient Account Info
             $table->string('recipient_name')->nullable();
             $table->string('recipient_email')->nullable();
             $table->string('recipient_phone')->nullable();
             $table->text('notes')->nullable();
-
+            
             // Payment Gateway info
             $table->string('payment_status')->default('pending'); // pending, paid, failed, cancelled
             $table->string('gateway_txn_id')->nullable();
             $table->string('gateway_txn_number')->nullable();
             $table->text('gateway_response')->nullable();
             $table->timestamp('paid_at')->nullable();
-
+            
             $table->timestamps();
         });
     }

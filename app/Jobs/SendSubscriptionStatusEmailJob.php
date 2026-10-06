@@ -78,6 +78,7 @@ class SendSubscriptionStatusEmailJob implements ShouldQueue
         $notes = $this->notes;
 
         $subject = match($status) {
+            'active'    => "Subscription Activated & Ready - {$subscription->plan_name} | {$appName}",
             'suspended' => "Subscription Suspended - {$subscription->plan_name} | {$appName}",
             'expired'   => "Subscription Expired - {$subscription->plan_name} | {$appName}",
             'extended'  => "Subscription Validity Extended - {$subscription->plan_name} | {$appName}",

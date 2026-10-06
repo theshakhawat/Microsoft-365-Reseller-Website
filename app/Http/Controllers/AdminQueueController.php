@@ -27,7 +27,7 @@ class AdminQueueController extends Controller
 
         if (Schema::hasTable('jobs')) {
             $rawJobs = DB::table('jobs')->orderBy('id', 'desc')->paginate(20, ['*'], 'pending_page');
-            
+
             $pendingJobs = $rawJobs->through(function ($job) use (&$runningCount, &$pendingCount) {
                 $payload = json_decode($job->payload, true) ?: [];
                 $displayName = $payload['displayName'] ?? ($payload['data']['commandName'] ?? 'Unknown Job');
@@ -66,7 +66,7 @@ class AdminQueueController extends Controller
 
         if (Schema::hasTable('failed_jobs')) {
             $rawFailed = DB::table('failed_jobs')->orderBy('id', 'desc')->paginate(20, ['*'], 'failed_page');
-            
+
             $failedJobs = $rawFailed->through(function ($job) {
                 $payload = json_decode($job->payload, true) ?: [];
                 $displayName = $payload['displayName'] ?? ($payload['data']['commandName'] ?? 'Unknown Job');
@@ -98,10 +98,10 @@ class AdminQueueController extends Controller
 
         if (Schema::hasTable('job_batches')) {
             $rawBatches = DB::table('job_batches')->orderBy('created_at', 'desc')->paginate(20, ['*'], 'batches_page');
-            
+
             $batches = $rawBatches->through(function ($batch) {
-                $progress = $batch->total_jobs > 0 
-                    ? round((($batch->total_jobs - $batch->pending_jobs) / $batch->total_jobs) * 100) 
+                $progress = $batch->total_jobs > 0
+                    ? round((($batch->total_jobs - $batch->pending_jobs) / $batch->total_jobs) * 100)
                     : 0;
 
                 return [
@@ -225,26 +225,75 @@ class AdminQueueController extends Controller
     }
 
     /**
-     * Retry a specific failed job.
+     * Retry a specific failed job: Move it from failed_jobs back to jobs (pending queue).
      */
     public function retryJob(string $id): RedirectResponse
     {
         try {
-            Artisan::call('queue:retry', ['id' => [$id]]);
-            return back()->with('success', "Failed job #{$id} has been pushed back onto the queue for execution.");
+            $failedJob = DB::table('failed_jobs')
+                ->where('id', $id)
+                ->orWhere('uuid', $id)
+                ->first();
+
+            if (!$failedJob) {
+                return back()->with('error', "Failed job #{$id} not found in the database.");
+            }
+
+            $jobId = $failedJob->id;
+            $queueName = $failedJob->queue ?: 'default';
+
+            // Insert into active pending jobs table
+            DB::table('jobs')->insert([
+                'queue'        => $queueName,
+                'payload'      => $failedJob->payload,
+                'attempts'     => 0,
+                'reserved_at'  => null,
+                'available_at' => time(),
+                'created_at'   => time(),
+            ]);
+
+            // Remove from failed_jobs table
+            DB::table('failed_jobs')->where('id', $jobId)->delete();
+
+            return redirect()->route('admin.queue.index', ['tab' => 'pending'])
+                ->with('success', "Failed job #{$jobId} has been moved to Pending & Running Queue. It will execute when worker starts.");
         } catch (\Throwable $e) {
             return back()->with('error', "Failed to retry job: " . $e->getMessage());
         }
     }
 
     /**
-     * Retry all failed jobs.
+     * Retry all failed jobs: Move all from failed_jobs to jobs (pending queue).
      */
     public function retryAll(): RedirectResponse
     {
         try {
-            Artisan::call('queue:retry', ['id' => ['all']]);
-            return back()->with('success', 'All failed jobs have been pushed back onto the queue for retry.');
+            if (!Schema::hasTable('failed_jobs')) {
+                return back()->with('info', 'No failed jobs table found.');
+            }
+
+            $failedJobs = DB::table('failed_jobs')->get();
+            $count = $failedJobs->count();
+
+            if ($count === 0) {
+                return back()->with('info', 'There are no failed jobs to retry.');
+            }
+
+            foreach ($failedJobs as $job) {
+                DB::table('jobs')->insert([
+                    'queue'        => $job->queue ?: 'default',
+                    'payload'      => $job->payload,
+                    'attempts'     => 0,
+                    'reserved_at'  => null,
+                    'available_at' => time(),
+                    'created_at'   => time(),
+                ]);
+            }
+
+            DB::table('failed_jobs')->delete();
+
+            return redirect()->route('admin.queue.index', ['tab' => 'pending'])
+                ->with('success', "All {$count} failed jobs have been moved to Pending & Running Queue. They will execute when worker starts.");
         } catch (\Throwable $e) {
             return back()->with('error', 'Failed to retry all jobs: ' . $e->getMessage());
         }
@@ -256,6 +305,16 @@ class AdminQueueController extends Controller
     public function deleteFailedJob(string $id): RedirectResponse
     {
         try {
+            $failedJob = DB::table('failed_jobs')
+                ->where('id', $id)
+                ->orWhere('uuid', $id)
+                ->first();
+
+            if ($failedJob) {
+                DB::table('failed_jobs')->where('id', $failedJob->id)->delete();
+                return back()->with('success', "Failed job #{$failedJob->id} deleted successfully.");
+            }
+
             Artisan::call('queue:forget', ['id' => $id]);
             return back()->with('success', "Failed job #{$id} deleted successfully.");
         } catch (\Throwable $e) {
@@ -269,7 +328,11 @@ class AdminQueueController extends Controller
     public function flushFailedJobs(): RedirectResponse
     {
         try {
-            Artisan::call('queue:flush');
+            if (Schema::hasTable('failed_jobs')) {
+                DB::table('failed_jobs')->delete();
+            } else {
+                Artisan::call('queue:flush');
+            }
             return back()->with('success', 'All failed jobs have been cleared from database.');
         } catch (\Throwable $e) {
             return back()->with('error', 'Failed to flush failed jobs: ' . $e->getMessage());
