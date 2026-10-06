@@ -481,13 +481,6 @@ class UserController extends Controller
             'color'       => 'amber',
         ]);
 
-        // Dispatch Order Placed Email to Customer
-        try {
-            \App\Jobs\SendOrderPlacedEmailJob::dispatch($order->fresh());
-        } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::error("Error dispatching order placed email for #{$order->order_number}: " . $e->getMessage());
-        }
-
         // If payment method is automated gateway Moneybag
         if ($paymentMethod->slug === 'moneybag') {
             return redirect()->route('user.payment.initiate', ['order_number' => $order->order_number]);
